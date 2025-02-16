@@ -53,7 +53,17 @@
   Ajoute une commande à l’historique (accessible avec les flèches ↑/↓).  
 
 - **`isatty`** :  
-  Vérifie si un descripteur de fichier est un terminal (ex : `STDIN_FILENO`).  
+  Vérifie si un descripteur de fichier est un terminal (ex : `STDIN_FILENO`). 
+
+- **`rl_*`** :
+  functions: Manage prompt behavior (e.g., refresh the display after signals).  
+
+---
+
+### **6. Miscellaneous**
+
+- `tgetent`, `tgetflag`, `tgetnum`, `tgetstr`, `tgoto`, `tputs`  
+   Terminal capability functions (used for cursor movement or screen manipulation, if needed)
 
 ---
 
