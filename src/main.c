@@ -6,11 +6,17 @@
 /*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:38:59 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/18 16:13:46 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/02/18 16:49:18 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	handle_signals(void)
+{
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+}
 
 int	main(int argc, char **argv, char **env)
 {
@@ -25,6 +31,7 @@ int	main(int argc, char **argv, char **env)
 		printf("Usage : minishell doesn't take argument\n");
 		return (0);
 	}
+	handle_signals();
 	handle_env(env, &head);
 	print_stack(&head);
 	while (1)

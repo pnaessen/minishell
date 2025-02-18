@@ -6,7 +6,7 @@
 /*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/18 15:03:07 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/02/18 16:52:27 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,24 @@ typedef struct s_env
 	struct s_env	*next;
 }					t_env;
 
+typedef struct s_cmd
+{
+	char			**args;
+	int				argc;
+}					t_cmd;
+
+typedef struct s_shell
+{
+	t_env			*env;
+	int				exit_status;
+	char			**envp;
+}					t_shell;
+
 # include "libft.h"
 # include <fcntl.h>
 # include <readline/history.h>
 # include <readline/readline.h>
+# include <signal.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <sys/wait.h>
