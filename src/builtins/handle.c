@@ -1,23 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   echo.c                                             :+:      :+:    :+:   */
+/*   handle.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/15 15:38:57 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/18 15:00:48 by pnaessen         ###   ########lyon.fr   */
+/*   Created: 2025/02/18 14:43:00 by pnaessen          #+#    #+#             */
+/*   Updated: 2025/02/18 15:32:45 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// int	echo(t_ast *ast)
-// {
-// 	int i;
-
-// 	i = 1;
-// 	if (ast->args[i] && !ft_strcmp(ast->args[i], "-n"))
-// 	{
-// 	}
-// }
+void	check_build_in(char *str, )
+{
+	if (ft_strcmp(str, "pwd") == 0)
+		pwd();
+	else if (ft_strcmp(str, "echo") == 0)
+		fonction;
+	else if (ft_strcmp(str, "cd") == 0)
+		fonction;
+	else if (ft_strcmp(str, "export") == 0)
+		fonction;
+	else if (ft_strcmp(str, "unset") == 0)
+		fonction;
+	else if (ft_strcmp(str, "env") == 0)
+		fonction;
+	else if (ft_strcmp(str, "exit") == 0)
+		fonction;
+	else
+		return (1);
+	return (0);
+}

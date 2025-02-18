@@ -1,23 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   echo.c                                             :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/15 15:38:57 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/18 15:00:48 by pnaessen         ###   ########lyon.fr   */
+/*   Created: 2025/02/18 14:45:10 by pnaessen          #+#    #+#             */
+/*   Updated: 2025/02/18 14:58:37 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// int	echo(t_ast *ast)
-// {
-// 	int i;
+int	ft_strcmp(char *src, char *cmp)
+{
+	size_t i;
+	unsigned char *t1;
+	unsigned char *t2;
 
-// 	i = 1;
-// 	if (ast->args[i] && !ft_strcmp(ast->args[i], "-n"))
-// 	{
-// 	}
-// }
+	t1 = (unsigned char *)src;
+	t2 = (unsigned char *)cmp;
+	i = 0;
+	while (t1[i])
+	{
+		if (t1[i] != t2[i])
+			return (t1[i] - t2[i]);
+		i++;
+	}
+	return (0);
+}
