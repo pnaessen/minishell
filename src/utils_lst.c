@@ -6,7 +6,7 @@
 /*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 14:44:37 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/18 14:45:04 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/02/19 13:00:12 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,9 @@ void	handle_env(char **env, t_env **head)
 		new_node = malloc(sizeof(t_env));
 		if (!new_node)
 			return ;
-		new_node->str = env[i];
+		new_node->str = ft_strdup(env[i]);
+		if (!new_node->str)
+			return ;
 		new_node->next = NULL;
 		lstadd_back(head, new_node);
 		i++;
@@ -45,16 +47,17 @@ void	lstadd_back(t_env **head, t_env *new_node)
 	}
 }
 
-void	print_stack(t_env **head)
+int	print_stack(t_env **head)
 {
 	t_env	*current;
 
 	if (*head == NULL)
-		return ;
+		return (1);
 	current = *head;
 	while (current != NULL)
 	{
-		printf("node = %s\n", current->str);
+		printf("%s\n", current->str);
 		current = current->next;
 	}
+	return (0);
 }

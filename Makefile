@@ -2,7 +2,7 @@ NAME := minishell
 
 SRC:= $(addprefix $(SRC_DIR),main.c utils.c utils_lst.c)
 BUILTINS_SRC:=$(addprefix $(BUILTINS_DIR), echo.c handle.c pwd.c)
-SRC += $(addprefix $(BUILTINS_DIR), $(BUILTINS_SRC))
+#SRC += $(addprefix $(BUILTINS_DIR), $(BUILTINS_SRC))
 
 OBJ_DIR:= .obj/
 OBJ:= $(SRC:$(SRC_DIR)%.c=$(OBJ_DIR)%.o)

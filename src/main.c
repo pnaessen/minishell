@@ -6,26 +6,27 @@
 /*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:38:59 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/18 16:49:18 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/02/19 14:32:55 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	handle_signals(void)
+int execute_command(t_ast *cmd, t_env *env)
 {
-	signal(SIGINT, SIG_IGN);
-	signal(SIGQUIT, SIG_IGN);
+	int ret;
+	
+	ret = check_builtin()
 }
 
-int	main(int argc, char **argv, char **env)
+int	main(int argc, char **env)
 {
 	char	*input;
 	t_env	*head;
+	t_ast	*cmd;
 
-	(void)argv;
-	(void)env;
 	head = NULL;
+	cmd = NULL;
 	if (argc != 1)
 	{
 		printf("Usage : minishell doesn't take argument\n");
@@ -33,7 +34,6 @@ int	main(int argc, char **argv, char **env)
 	}
 	handle_signals();
 	handle_env(env, &head);
-	print_stack(&head);
 	while (1)
 	{
 		input = readline("minishell$ ");
@@ -44,9 +44,13 @@ int	main(int argc, char **argv, char **env)
 		}
 		if (*input)
 			add_history(input);
-		check_build_in(input);
-		// send to parser
-		// send to exec
+		// cmd = parsing(input);
+		if(cmd)
+		{
+			execute_command(cmd, head);
+		}
+		// if (ft_strncmp(input, "env", ft_strlen(input)) == 0)
+		// 	print_stack(&head);
 		free(input);
 	}
 	return (0);
@@ -64,5 +68,3 @@ int	main(int argc, char **argv, char **env)
 // unset (tout ce qui reste dans l'env)
 // + unset une fois que l'environnement est vide
 // export
-
-[echo -n test] | [echo yes]
