@@ -1,48 +1,41 @@
 NAME := minishell
 
-SRC:= $(addprefix $(SRC_DIR),main.c utils.c utils_lst.c)
-BUILTINS_SRC:=$(addprefix $(BUILTINS_DIR), echo.c handle.c pwd.c)
-#SRC += $(addprefix $(BUILTINS_DIR), $(BUILTINS_SRC))
-
-OBJ_DIR:= .obj/
-OBJ:= $(SRC:$(SRC_DIR)%.c=$(OBJ_DIR)%.o)
-DEPS:= $(OBJ:%.o=%.d)
-
-CC:= cc
-CCFLAGS:= -Wextra -Wall -Werror
-LDFLAGS := -lreadline
-CPPFLAGS = -MMD -MP
-SRC_DIR:= src/
-BUILTINS_DIR:=$(SRC_DIR)builtins/
-INCLUDES:= include/
-
+# Directories
+SRC_DIR := src/
+BUILTINS_DIR := $(SRC_DIR)builtins/
+OBJ_DIR := .obj/
+INCLUDES := include/
 LIBFT_DIR := libft/
-LIBFT := $(LIBFT_DIR)libft.a 
-LIBFT_FLAG := -L $(LIBFT_DIR) $(LIBFT)
 
-HEADERS:= -I $(INCLUDES) -I $(LIBFT_DIR)
+# Source files
+SRC := $(addprefix $(SRC_DIR), \
+    main.c \
+    utils.c \
+    utils_lst.c \
+    signal.c \
+    handle.c \
+)
 
-all: welcome $(NAME)
+BUILTINS_SRC := $(addprefix $(BUILTINS_DIR), \
+    echo.c \
+    handle.c \
+    pwd.c \
+)
 
-$(NAME): $(LIBFT) $(OBJ) 
-	$(CC) $(CCFLAGS) $(OBJ) $(LIBFT_FLAG) $(LDFLAGS) -o $(NAME)
-	@echo "🌊 Surfing the compilation wave: $(BLUE)$(CC) $(CCFLAGS) $(OBJ) $(LIBFT_FLAG) -o $(NAME)$(DEF_COLOR)"
-	@echo "$(GREEN)🏄 Cowabunga! $(NAME) is ready to ride the shell waves! 🏄$(DEF_COLOR)"
+SRC += $(BUILTINS_SRC)
 
-$(OBJ_DIR)%.o: $(SRC_DIR)%.c
-	@mkdir -p $(OBJ_DIR)
-	@echo "🐚 $(MAGENTA)Collecting seashell: $< $(DEF_COLOR)"
-	$(CC) $(CCFLAGS) $(CPPFLAGS) $(HEADERS) -o $@ -c $<
+OBJ := $(SRC:%.c=$(OBJ_DIR)%.o)
+DEPS := $(OBJ:%.o=%.d)
 
-$(OBJ_DIR)builtins/%.o: $(BUILTINS_DIR)%.c
-	@mkdir -p $(@D)
-	@echo "🐚 $(MAGENTA)Collecting builtin seashell: $< $(DEF_COLOR)"
-	$(CC) $(CCFLAGS) $(CPPFLAGS) $(HEADERS) -o $@ -c $<
+CC := cc
+CFLAGS := -Wextra -Wall -Werror
+LDFLAGS := -lreadline
+CPPFLAGS := -MMD -MP
+HEADERS := -I $(INCLUDES) -I $(LIBFT_DIR)
 
-$(LIBFT): libft
 
-$(LIBFT):
-	$(MAKE) -C $(LIBFT_DIR)
+LIBFT := $(LIBFT_DIR)libft.a
+LIBFT_FLAGS := -L $(LIBFT_DIR) -lft
 
 DEF_COLOR = \033[0;39m
 GRAY = \033[0;90m
@@ -54,34 +47,41 @@ MAGENTA = \033[0;95m
 CYAN = \033[0;96m
 WHITE = \033[0;97m
 
-	
+all: welcome $(NAME)
+
+$(NAME): $(LIBFT) $(OBJ)
+	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT_FLAGS) $(LDFLAGS) -o $(NAME)
+	@echo "🌊 Surfing the compilation wave: $(BLUE)$@$(DEF_COLOR)"
+	@echo "$(GREEN)🏄 Cowabunga! $(NAME) is ready to ride the shell waves!$(DEF_COLOR)"
+
+$(OBJ_DIR)%.o: %.c
+	@mkdir -p $(dir $@)
+	@echo "🐚 $(MAGENTA)Collecting seashell: $<$(DEF_COLOR)"
+	@$(CC) $(CFLAGS) $(CPPFLAGS) $(HEADERS) -c $< -o $@
+
+$(LIBFT):
+	@$(MAKE) -C $(LIBFT_DIR)
+
 welcome:
-	@echo "🏖️ $(CYAN)Setting up the beach for $(NAME)... Compilation is about to make waves! $(DEF_COLOR)"
+	@echo "🏖️ $(CYAN)Setting up the beach for $(NAME)...$(DEF_COLOR)"
 
 clean:
 	@echo "🧼 $(YELLOW)Cleaning up the beach...$(DEF_COLOR)"
-	rm -rf $(OBJ_DIR)
+	@rm -rf $(OBJ_DIR)
+	@$(MAKE) clean -C $(LIBFT_DIR)
 
 fclean: clean
-	@echo "$(RED)"
-	@echo "        . . . . . . . . . ."
-	@echo "      .     *     *     *"
-	@echo "   .       *       *       ."
-	@echo "         *   SPLASH!   *"
-	@echo "      .       *       *       ."
-	@echo "    *     *     *     *     *"
-	@echo "      ' . . . . . . . . '"
-	@echo "$(DEF_COLOR)"
-	@echo "$(BLUE)🌊🌊🌊🌊🌊💦 $(NAME) washed away 💦🌊🌊🌊🌊🌊 $(DEF_COLOR)"
-	$(MAKE) fclean -C $(LIBFT_DIR)
-	rm -f $(NAME)
+	@echo "$(RED)🌊 Washing away $(NAME)...$(DEF_COLOR)"
+	@$(MAKE) fclean -C $(LIBFT_DIR)
+	@rm -f $(NAME)
+
 re: fclean all
 
 info:
-	@echo "OBJ": $(OBJ)
-	@echo "DEPS": $(DEPS)
-	@echo "BUILTINS_SRC = $(BUILTINS_SRC)"
-
+	@echo "Sources:" $(SRC)
+	@echo "Objects:" $(OBJ)
+	@echo "Dependencies:" $(DEPS)
 
 -include $(DEPS)
-.PHONY: all clean fclean re libft 
+
+.PHONY: all clean fclean re welcome info
