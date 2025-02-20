@@ -6,7 +6,7 @@
 /*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/19 14:33:07 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/02/20 10:12:52 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ typedef struct s_ast
 	struct s_ast	*right;
 	t_node_type		token;
 	struct s_ast	*head;
-	//	int				error_code;
+	int				error_code;
+	//char			**envp;
 }					t_ast;
 
 typedef struct s_env
@@ -66,7 +67,11 @@ int					ft_strcmp(char *src, char *cmp);
 int					execute_command(t_ast *cmd, t_env *env);
 
 ////////////builtins////////////////////////
-int					check_builtin(t_ast *input, t_env **env);
-int					pwd(void);
+int					check_builtin(t_ast *input, t_env *env);
+int					ft_pwd(void);
+
+//////////////////signal.c////////////////////////
+void				handle_signals(void);
+void				handle_sig(int sig);
 
 #endif

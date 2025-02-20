@@ -1,23 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   echo.c                                             :+:      :+:    :+:   */
+/*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/15 15:38:57 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/18 15:00:48 by pnaessen         ###   ########lyon.fr   */
+/*   Created: 2025/02/20 12:25:47 by pnaessen          #+#    #+#             */
+/*   Updated: 2025/02/20 12:27:01 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// int	echo(t_ast *ast)
-// {
-// 	int i;
+int	print_env(t_env **head, t_ast *cmd)
+{
+	t_env *current;
 
-// 	i = 1;
-// 	if (ast->args[i] && !ft_strcmp(ast->args[i], "-n"))
-// 	{
-// 	}
-// }
+	if (*head == NULL)
+	{
+		printf("env: environment not set\n");
+		cmd->error_code = 1;
+		return (1);
+	}
+	current = *head;
+	while (current != NULL)
+	{
+		printf("%s\n", current->str);
+		current = current->next;
+		cmd->error_code = 0;
+	}
+	return (0);
+}

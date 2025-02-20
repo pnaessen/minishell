@@ -1,25 +1,22 @@
 NAME := minishell
 
-# Directories
 SRC_DIR := src/
 BUILTINS_DIR := $(SRC_DIR)builtins/
 OBJ_DIR := .obj/
 INCLUDES := include/
 LIBFT_DIR := libft/
 
-# Source files
 SRC := $(addprefix $(SRC_DIR), \
-    main.c \
-    utils.c \
-    utils_lst.c \
-    signal.c \
-    handle.c \
+	main.c \
+	utils.c \
+	utils_lst.c \
+	signal.c \
 )
 
 BUILTINS_SRC := $(addprefix $(BUILTINS_DIR), \
-    echo.c \
-    handle.c \
-    pwd.c \
+	echo.c \
+	handle.c \
+	pwd.c \
 )
 
 SRC += $(BUILTINS_SRC)

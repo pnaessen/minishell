@@ -6,7 +6,7 @@
 /*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 14:44:37 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/19 13:00:12 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/02/20 12:25:46 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,19 +45,4 @@ void	lstadd_back(t_env **head, t_env *new_node)
 			tmp = tmp->next;
 		tmp->next = new_node;
 	}
-}
-
-int	print_stack(t_env **head)
-{
-	t_env	*current;
-
-	if (*head == NULL)
-		return (1);
-	current = *head;
-	while (current != NULL)
-	{
-		printf("%s\n", current->str);
-		current = current->next;
-	}
-	return (0);
 }

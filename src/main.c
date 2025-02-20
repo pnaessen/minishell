@@ -6,17 +6,23 @@
 /*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:38:59 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/19 14:32:55 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/02/20 11:26:44 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int execute_command(t_ast *cmd, t_env *env)
+int	execute_command(t_ast *cmd, t_env *env)
 {
-	int ret;
-	
-	ret = check_builtin()
+	int	ret;
+
+	ret = check_builtin(cmd, env);
+	if (ret == -1)
+	{
+		ret = execute_ast(cmd, env);
+		return (ret);
+	}
+	return (ret);
 }
 
 int	main(int argc, char **env)
@@ -45,12 +51,10 @@ int	main(int argc, char **env)
 		if (*input)
 			add_history(input);
 		// cmd = parsing(input);
-		if(cmd)
+		if (cmd)
 		{
 			execute_command(cmd, head);
 		}
-		// if (ft_strncmp(input, "env", ft_strlen(input)) == 0)
-		// 	print_stack(&head);
 		free(input);
 	}
 	return (0);
