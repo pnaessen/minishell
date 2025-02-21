@@ -6,7 +6,7 @@
 /*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 12:23:40 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/20 14:03:59 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/02/21 13:15:08 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ int	ft_exit(t_ast *cmd, t_env *env)
 		{
 			perror("bash exit");
 			cmd->error_code = 2;
+			return (2);
 		}
 		exit_code = ft_atoi(cmd->cmd->args[1]);
 		if (exit_code < 0)

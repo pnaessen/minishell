@@ -6,7 +6,7 @@
 /*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/20 10:12:52 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/02/21 11:52:46 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 # include <stdlib.h>
 # include <sys/wait.h>
 # include <unistd.h>
+
+# define PATH_MAX 4096
 
 typedef enum e_node_type
 {
@@ -42,7 +44,6 @@ typedef struct s_ast
 	t_node_type		token;
 	struct s_ast	*head;
 	int				error_code;
-	//char			**envp;
 }					t_ast;
 
 typedef struct s_env

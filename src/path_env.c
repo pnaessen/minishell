@@ -6,7 +6,7 @@
 /*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:31:37 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/20 11:25:32 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/02/21 13:19:30 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,20 +84,35 @@ char	*find_command_path(char **paths, char *cmd)
 
 void	env_to_tab(t_env **env)
 {
-	t_env *tmp;
-	char **envp;
+	t_env *current;
+	char **env_array;
 	int i;
 
-	tmp = *env;
 	i = 0;
-	while (tmp)
+	current = env;
+	while (current)
 	{
 		i++;
-		tmp = tmp->next;
+		current = current->next;
 	}
-	if (*env)
-		free(env);
-	envp = malloc(sizeof(char *) * (i + 1));
-	if (!envp)
-		return ;
+	env_array = malloc(sizeof(char *) * (i + 1));
+	if (!env_array)
+		return (NULL);
+	i = 0;
+	current = env;
+	while (current)
+	{
+		env_array[i] = ft_strdup(current->str);
+		if (!env_array[i])
+		{
+			while (i > 0)
+				free(env_array[--i]);
+			free(env_array);
+			return (NULL);
+		}
+		i++;
+		current = current->next;
+	}
+	env_array[i] = NULL;
+	return (env_array);
 }
