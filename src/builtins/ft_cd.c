@@ -6,7 +6,7 @@
 /*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 11:37:35 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/20 12:22:03 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/02/22 13:25:49 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	*get_home_var(t_env *env)
 	return (NULL);
 }
 
-int	ft_cd(t_ast *cmd, t_env *env)
+void	ft_cd(t_ast *cmd, t_env *env)
 {
 	char	*path;
 	int		i;
@@ -38,7 +38,7 @@ int	ft_cd(t_ast *cmd, t_env *env)
 		{
 			printf("cd: HOME not set\n");
 			cmd->error_code = 1;
-			return (1);
+			return ;
 		}
 	}
 	else
@@ -47,8 +47,7 @@ int	ft_cd(t_ast *cmd, t_env *env)
 	{
 		perror("cd");
 		cmd->error_code = 1;
-		return (1);
+		return ;
 	}
 	cmd->error_code = 0;
-	return (0);
 }

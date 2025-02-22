@@ -6,7 +6,7 @@
 /*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/21 11:52:46 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/02/22 13:26:06 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,10 @@ int					execute_command(t_ast *cmd, t_env *env);
 
 ////////////builtins////////////////////////
 int					check_builtin(t_ast *input, t_env *env);
-int					ft_pwd(void);
+void				ft_pwd(t_ast *cmd);
+void				ft_exit(t_ast *cmd, t_env *env);
+void				print_env(t_env **head, t_ast *cmd);
+void				ft_cd(t_ast *cmd, t_env *env);
 
 //////////////////signal.c////////////////////////
 void				handle_signals(void);

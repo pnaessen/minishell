@@ -6,7 +6,7 @@
 /*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:31:37 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/21 13:19:30 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/02/22 12:50:25 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,9 @@ char	*find_command_path(char **paths, char *cmd)
 
 void	env_to_tab(t_env **env)
 {
-	t_env *current;
-	char **env_array;
-	int i;
+	t_env	*current;
+	char	**env_array;
+	int		i;
 
 	i = 0;
 	current = env;
