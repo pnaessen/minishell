@@ -12,23 +12,27 @@
 
 #include "minishell.h"
 
-int execute_cmd(t_ast *cmd, t_env *env)
+void execute_cmd(t_ast *cmd, t_env *env)
 {
 	pid_t pid;
 	char **env_array;
 
 	env_array = env_to_tab(&env);
 	if (!env_array)
-		return (1);
+	{
+		cmd->error_code = 1;
+		return;
+	}
 	pid = fork();
 	if (pid == -1)
 	{
 		ft_free(env_array);
-		return (1);
+		cmd->error_code = 1;
+		return;
 	}
 	if (pid == 0)
 		child_process(cmd, env_array);
-	return (parent_process(pid, cmd, env_array));
+	parent_process(pid, cmd, env_array);
 }
 
 void child_process(t_ast *cmd, char **env_array)
@@ -61,25 +65,21 @@ int parent_process(pid_t pid, t_ast *cmd, char **env_array)
 	return (cmd->error_code);
 }
 
-int execute_ast(t_ast *cmd, t_env *env)
+void execute_ast(t_ast *cmd, t_env *env)
 {
-	int ret;
-	
-	ret = 0;
 	if (!cmd)
-		return (0);
+		return;
+	
 	if (cmd->token == CMD)
 	{
 		check_builtin(cmd, env);
-		if (ret != -1)
-			return (ret);
-		return (execute_cmd(cmd, env));
+		if (cmd->error_code == -1)
+			execute_cmd(cmd, env);
 	}
 	else if (cmd->token == PIPE)
-		return (execute_pipe(cmd, env));
+		execute_pipe(cmd, env);
 	else if (cmd->token == REDIR_IN)
-		return (handle_redir_in(cmd, env));
+		handle_redir_in(cmd, env);
 	else if (cmd->token == REDIR_OUT)
-		return (handle_redir_out(cmd, env));
-	return (0);
+		handle_redir_out(cmd, env);
 }

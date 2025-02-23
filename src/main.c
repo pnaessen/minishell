@@ -12,12 +12,11 @@
 
 #include "minishell.h"
 
-int	execute_command(t_ast *cmd, t_env *env)
+void execute_command(t_ast *cmd, t_env *env)
 {
-
 	check_builtin(cmd, env);
-	execute_ast(cmd, env);
-	return (1);
+	if (cmd->error_code == -1)
+		execute_ast(cmd, env);
 }
 
 int	main(int argc, char **env)

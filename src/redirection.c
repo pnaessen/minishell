@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int handle_redir_in(t_ast *cmd, t_env *env)
+void handle_redir_in(t_ast *cmd, t_env *env)
 {
 	int fd;
 	int saved_fd;
@@ -22,17 +22,17 @@ int handle_redir_in(t_ast *cmd, t_env *env)
 	if (fd == -1)
 	{
 		perror("open");
-		return (1);
+		cmd->error_code = 1;
+		return;
 	}
 	dup2(fd, STDIN_FILENO);
 	close(fd);
-	cmd->error_code = execute_ast(cmd->left, env);
+	execute_ast(cmd->left, env);
 	dup2(saved_fd, STDIN_FILENO);
 	close(saved_fd);
-	return (cmd->error_code);
 }
 
-int handle_redir_out(t_ast *cmd, t_env *env)
+void handle_redir_out(t_ast *cmd, t_env *env)
 {
 	int fd;
 	int saved_fd;
@@ -42,12 +42,12 @@ int handle_redir_out(t_ast *cmd, t_env *env)
 	if (fd == -1)
 	{
 		perror("open");
-		return (1);
+		cmd->error_code = 1;
+		return;
 	}
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
-	cmd->error_code = execute_ast(cmd->left, env);
+	execute_ast(cmd->left, env);
 	dup2(saved_fd, STDOUT_FILENO);
 	close(saved_fd);
-	return (cmd->error_code);
 }
