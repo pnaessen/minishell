@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:31:37 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/22 12:50:25 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/02/23 13:23:37 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,14 +82,14 @@ char	*find_command_path(char **paths, char *cmd)
 	return (NULL);
 }
 
-void	env_to_tab(t_env **env)
+char	**env_to_tab(t_env **env)
 {
 	t_env	*current;
 	char	**env_array;
 	int		i;
 
 	i = 0;
-	current = env;
+	current = *env;
 	while (current)
 	{
 		i++;
@@ -99,7 +99,7 @@ void	env_to_tab(t_env **env)
 	if (!env_array)
 		return (NULL);
 	i = 0;
-	current = env;
+	current = *env;
 	while (current)
 	{
 		env_array[i] = ft_strdup(current->str);

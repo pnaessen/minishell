@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 13:31:29 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/22 16:28:00 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/02/23 17:55:44 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	valid_var(char *str)
 	int	i;
 
 	i = 0;
-	if (!str || !*str || ft_isdigit(*str))
+	if (!str || !*str || ft_isdigiter(*str))
 		return (0);
 	while (str[i] && str[i] != '=')
 	{

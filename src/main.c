@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:38:59 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/20 11:26:44 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/02/23 17:55:47 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,10 @@
 
 int	execute_command(t_ast *cmd, t_env *env)
 {
-	int	ret;
 
-	ret = check_builtin(cmd, env);
-	if (ret == -1)
-	{
-		ret = execute_ast(cmd, env);
-		return (ret);
-	}
-	return (ret);
+	check_builtin(cmd, env);
+	execute_ast(cmd, env);
+	return (1);
 }
 
 int	main(int argc, char **env)

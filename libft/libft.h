@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 11:40:58 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/01/27 09:04:51 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/02/23 13:33:48 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
-//# include <stdarg.h>
+# include <stdarg.h>
 
 typedef struct s_list
 {
@@ -35,7 +35,7 @@ size_t				ft_strlen(const char *str);
 size_t				ft_strlcpy(char *dst, const char *src, size_t size);
 size_t				ft_strlcat(char *dst, const char *src, size_t size);
 int					ft_isprint(int c);
-int					ft_isdigit(int c);
+int					ft_isdigiter(int c);
 int					ft_isalpha(int c);
 int					ft_isalnum(int c);
 int					ft_toupper(int c);

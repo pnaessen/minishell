@@ -3,22 +3,83 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 11:25:46 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/20 12:28:43 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/02/23 13:31:18 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-// #include "minishell.h"
+#include "minishell.h"
 
-// int execute_ast(t_ast *cmd, t_env *env)
-// {
-// 	if (cmd->token == CMD)
-// 	if (cmd->token == PIPE)
-// 	if (cmd->token == AND)
-// 	if (cmd->token == OR)
-// 	if (cmd->token == REDIR_IN)
-// 	if (cmd->token == REDIR_OUT)
+int execute_cmd(t_ast *cmd, t_env *env)
+{
+	pid_t pid;
+	char **env_array;
+
+	env_array = env_to_tab(&env);
+	if (!env_array)
+		return (1);
+	pid = fork();
+	if (pid == -1)
+	{
+		ft_free(env_array);
+		return (1);
+	}
+	if (pid == 0)
+		child_process(cmd, env_array);
+	return (parent_process(pid, cmd, env_array));
+}
+
+void child_process(t_ast *cmd, char **env_array)
+{
+	cmd->cmd->path = get_path(cmd->cmd->args[0], env_array);
+	if (!cmd->cmd->path)
+	{
+		ft_putstr_fd("minishell: command not found: ", 2);
+		ft_putstr_fd(cmd->cmd->args[0], 2);
+		ft_putstr_fd("\n", 2);
+		ft_free(env_array);
+		exit(127);
+	}
+	if (execve(cmd->cmd->path, cmd->cmd->args, env_array) == -1)
+	{
+		perror("execve");
+		ft_free(env_array);
+		exit(126);
+	}
+}
+
+int parent_process(pid_t pid, t_ast *cmd, char **env_array)
+{
+	int status;
+
+	waitpid(pid, &status, 0);
+	if (WIFEXITED(status))
+		cmd->error_code = WEXITSTATUS(status);
+	ft_free(env_array);
+	return (cmd->error_code);
+}
+
+int execute_ast(t_ast *cmd, t_env *env)
+{
+	int ret;
 	
-// }
+	ret = 0;
+	if (!cmd)
+		return (0);
+	if (cmd->token == CMD)
+	{
+		check_builtin(cmd, env);
+		if (ret != -1)
+			return (ret);
+		return (execute_cmd(cmd, env));
+	}
+	else if (cmd->token == PIPE)
+		return (execute_pipe(cmd, env));
+	else if (cmd->token == REDIR_IN)
+		return (handle_redir_in(cmd, env));
+	else if (cmd->token == REDIR_OUT)
+		return (handle_redir_out(cmd, env));
+	return (0);
+}

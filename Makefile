@@ -1,5 +1,4 @@
 NAME := minishell
-
 SRC_DIR := src/
 BUILTINS_DIR := $(SRC_DIR)builtins/
 OBJ_DIR := .obj/
@@ -11,16 +10,22 @@ SRC := $(addprefix $(SRC_DIR), \
 	utils.c \
 	utils_lst.c \
 	signal.c \
+	exec.c \
+	path_env.c \
+	pipe.c \
+	redirection.c \
 )
 
 BUILTINS_SRC := $(addprefix $(BUILTINS_DIR), \
-	echo.c \
+	ft_cd.c \
 	handle.c \
-	pwd.c \
+	ft_pwd.c \
+	ft_env.c \
+	ft_exit.c \
+	ft_unset.c \
 )
 
 SRC += $(BUILTINS_SRC)
-
 OBJ := $(SRC:%.c=$(OBJ_DIR)%.o)
 DEPS := $(OBJ:%.o=%.d)
 
@@ -28,12 +33,11 @@ CC := cc
 CFLAGS := -Wextra -Wall -Werror
 LDFLAGS := -lreadline
 CPPFLAGS := -MMD -MP
-HEADERS := -I $(INCLUDES) -I $(LIBFT_DIR)
-
-
+HEADERS := -I./include -I$(LIBFT_DIR)
 LIBFT := $(LIBFT_DIR)libft.a
-LIBFT_FLAGS := -L $(LIBFT_DIR) -lft
+LIBFT_FLAGS := -L$(LIBFT_DIR) -lft
 
+# Colors
 DEF_COLOR = \033[0;39m
 GRAY = \033[0;90m
 RED = \033[0;91m
@@ -47,14 +51,14 @@ WHITE = \033[0;97m
 all: welcome $(NAME)
 
 $(NAME): $(LIBFT) $(OBJ)
-	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT_FLAGS) $(LDFLAGS) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT_FLAGS) -o $(NAME) $(LDFLAGS)
 	@echo "🌊 Surfing the compilation wave: $(BLUE)$@$(DEF_COLOR)"
 	@echo "$(GREEN)🏄 Cowabunga! $(NAME) is ready to ride the shell waves!$(DEF_COLOR)"
 
 $(OBJ_DIR)%.o: %.c
 	@mkdir -p $(dir $@)
 	@echo "🐚 $(MAGENTA)Collecting seashell: $<$(DEF_COLOR)"
-	@$(CC) $(CFLAGS) $(CPPFLAGS) $(HEADERS) -c $< -o $@
+	@$(CC) $(CFLAGS) $(HEADERS) $(CPPFLAGS) -c $< -o $@
 
 $(LIBFT):
 	@$(MAKE) -C $(LIBFT_DIR)

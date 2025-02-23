@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 11:37:35 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/22 13:25:49 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/02/23 13:28:10 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ char	*get_home_var(t_env *env)
 void	ft_cd(t_ast *cmd, t_env *env)
 {
 	char	*path;
-	int		i;
 
 	if (!cmd->cmd->args[1])
 	{
