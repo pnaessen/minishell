@@ -6,7 +6,7 @@
 /*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 14:45:10 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/18 14:58:37 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/02/24 09:46:21 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 int	ft_strcmp(char *src, char *cmp)
 {
-	size_t i;
-	unsigned char *t1;
-	unsigned char *t2;
+	size_t			i;
+	unsigned char	*t1;
+	unsigned char	*t2;
 
 	t1 = (unsigned char *)src;
 	t2 = (unsigned char *)cmp;

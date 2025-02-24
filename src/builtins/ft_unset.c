@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
+/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 13:31:29 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/23 17:55:44 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/02/24 09:47:03 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ int	valid_var(char *str)
 
 void	ft_unset(t_ast *input, t_env **env)
 {
-	int i;
-	t_env *current;
-	t_env *prev;
+	int		i;
+	t_env	*current;
+	t_env	*prev;
 
 	i = 1;
 	while (input->cmd->args[i])

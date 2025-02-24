@@ -3,39 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
+/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 11:25:46 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/23 13:31:18 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/02/24 09:46:41 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void execute_cmd(t_ast *cmd, t_env *env)
+void	execute_cmd(t_ast *cmd, t_env *env)
 {
-	pid_t pid;
-	char **env_array;
+	pid_t	pid;
+	char	**env_array;
 
 	env_array = env_to_tab(&env);
 	if (!env_array)
 	{
 		cmd->error_code = 1;
-		return;
+		return ;
 	}
 	pid = fork();
 	if (pid == -1)
 	{
 		ft_free(env_array);
 		cmd->error_code = 1;
-		return;
+		return ;
 	}
 	if (pid == 0)
 		child_process(cmd, env_array);
 	parent_process(pid, cmd, env_array);
 }
 
-void child_process(t_ast *cmd, char **env_array)
+void	child_process(t_ast *cmd, char **env_array)
 {
 	cmd->cmd->path = get_path(cmd->cmd->args[0], env_array);
 	if (!cmd->cmd->path)
@@ -54,9 +54,9 @@ void child_process(t_ast *cmd, char **env_array)
 	}
 }
 
-int parent_process(pid_t pid, t_ast *cmd, char **env_array)
+int	parent_process(pid_t pid, t_ast *cmd, char **env_array)
 {
-	int status;
+	int	status;
 
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
@@ -65,11 +65,10 @@ int parent_process(pid_t pid, t_ast *cmd, char **env_array)
 	return (cmd->error_code);
 }
 
-void execute_ast(t_ast *cmd, t_env *env)
+void	execute_ast(t_ast *cmd, t_env *env)
 {
 	if (!cmd)
-		return;
-	
+		return ;
 	if (cmd->token == CMD)
 	{
 		check_builtin(cmd, env);

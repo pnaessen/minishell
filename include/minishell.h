@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
+/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/23 13:33:20 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/02/24 09:45:40 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,9 @@ void				lstadd_back(t_env **head, t_env *new_node);
 
 /////////utils/////
 int					ft_strcmp(char *src, char *cmp);
-int					execute_command(t_ast *cmd, t_env *env);
 
 ////////////builtins////////////////////////
-void	check_builtin(t_ast *input, t_env *env);
+void				check_builtin(t_ast *input, t_env *env);
 void				ft_pwd(t_ast *cmd);
 void				ft_exit(t_ast *cmd, t_env *env);
 void				print_env(t_env **head, t_ast *cmd);
@@ -77,20 +76,21 @@ void				ft_cd(t_ast *cmd, t_env *env);
 void				handle_signals(void);
 void				handle_sig(int sig);
 
-void				 execute_ast(t_ast *cmd, t_env *env);
-void 				execute_pipe(t_ast *cmd, t_env *env);
-void 				handle_redir_in(t_ast *cmd, t_env *env);
-void 				handle_redir_out(t_ast *cmd, t_env *env);
-void				 execute_command(t_ast *cmd, t_env *env);
+void				execute_ast(t_ast *cmd, t_env *env);
+void				execute_pipe(t_ast *cmd, t_env *env);
+void				handle_redir_in(t_ast *cmd, t_env *env);
+void				handle_redir_out(t_ast *cmd, t_env *env);
+void				execute_command(t_ast *cmd, t_env *env);
 void				child_process(t_ast *cmd, char **env_array);
 int					parent_process(pid_t pid, t_ast *cmd, char **env_array);
 char				**env_to_tab(t_env **env);
 char				*get_path(char *cmd, char **env);
 char				*get_path_var(char **env);
 char				*find_command_path(char **paths, char *cmd);
-void 				handle_pipe_parent(t_ast *cmd, pid_t pid1, pid_t pid2, int *pipefd);
-void 				pipe_child_right(t_ast *cmd, t_env *env, int *pipefd);
-void 				pipe_child_left(t_ast *cmd, t_env *env, int *pipefd);
+void				handle_pipe_parent(t_ast *cmd, pid_t pid1, pid_t pid2,
+						int *pipefd);
+void				pipe_child_right(t_ast *cmd, t_env *env, int *pipefd);
+void				pipe_child_left(t_ast *cmd, t_env *env, int *pipefd);
 void				ft_unset(t_ast *input, t_env **env);
 int					ft_isdigit(char *str);
 

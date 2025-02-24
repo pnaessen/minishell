@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
+/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 11:37:35 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/23 13:28:10 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/02/24 16:07:09 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,46 @@ void	ft_cd(t_ast *cmd, t_env *env)
 		return ;
 	}
 	cmd->error_code = 0;
+}
+
+void	update_env_cd(t_ast *cmd, t_env *env)
+{
+	t_env	*tmp;
+	char	*pwd;
+	char	*old_pwd;
+
+	tmp = env;
+	old_pwd = getcwd(NULL, PATH_MAX);
+	if (!old_pwd)
+	{
+		perror("minishell: pwd");
+		cmd->error_code = 1;
+		return ;
+	}
+	while (tmp)
+	{
+		if (ft_strncmp(tmp->str, "PWD=", 4) == 0)
+		{
+			pwd = getcwd(NULL, PATH_MAX);
+			if (!pwd)
+			{
+				perror("minishell: pwd");
+				cmd->error_code = 1;
+				free(old_pwd);
+				return ;
+			}
+			if (tmp->str)
+				free(tmp->str);
+			tmp->str = ft_strdup(pwd);
+			free(pwd);
+		}
+		if (ft_strncmp(tmp->str, "OLDPWD=", 7) == 0)
+		{
+			if (tmp->str)
+				free(tmp->str);
+			tmp->str = ft_strdup(old_pwd);
+		}
+		tmp = tmp->next;
+	}
+	free(old_pwd);
 }
