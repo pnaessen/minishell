@@ -6,7 +6,7 @@
 /*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 11:37:35 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/25 19:07:32 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/02/25 19:42:15 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,17 @@ int	env_var_exists(t_env *env, char *name)
 	}
 	return (0);
 }
+void	add_to_env(t_env **env, char *new_str)
+{
+	t_env	*new_node;
+
+	new_node = malloc(sizeof(t_env));
+	if (!new_node)
+		return ;
+	new_node->str = new_str;
+	new_node->next = NULL;
+	lstadd_back(env, new_node);
+}
 
 void	set_env_var(t_env **env, char *name, char *value)
 {
@@ -48,6 +59,8 @@ void	set_env_var(t_env **env, char *name, char *value)
 	char	*new_str;
 	char	*name_equal;
 
+	if (!name || !value || !env)
+		return ;
 	name_equal = ft_strjoin(name, "=");
 	if (!name_equal)
 		return ;
@@ -60,16 +73,18 @@ void	set_env_var(t_env **env, char *name, char *value)
 			new_str = ft_strjoin(name_equal, value);
 			temp->str = new_str;
 			free(name_equal);
-			return ;
+			if (!new_str)
+				return ;
+			temp->str = new_str;
+				return ;
 		}
 		temp = temp->next;
 	}
 	new_str = ft_strjoin(name_equal, value);
 	free(name_equal);
-	
-	// Création et ajout du nouvel élément
-	// fonction pour ajouter un élément à t_env 
-	// add_to_env(env, new_str);
+	if (!new_str)
+		return ;
+	add_to_env(env, new_str);
 }
 
 void	update_env_cd(t_ast *cmd, t_env **env, char *old_dir)
@@ -107,7 +122,7 @@ void	ft_cd(t_ast *cmd, t_env **env)
 		path = get_home_var(*env);
 		if (!path)
 		{
-			printf("cd: HOME not set\n");
+			ft_putstr_fd("minishell: cd: HOME not set\n", 2);
 			cmd->error_code = 1;
 			free(old_dir);
 			return ;
@@ -117,7 +132,10 @@ void	ft_cd(t_ast *cmd, t_env **env)
 		path = cmd->cmd->args[1];
 	if (chdir(path) != 0)
 	{
-		perror("cd");
+		ft_putstr_fd("minishell: cd: ", 2);
+		ft_putstr_fd(path, 2);
+		ft_putstr_fd(": ", 2);
+		perror("");
 		cmd->error_code = 1;
 		free(old_dir);
 		return ;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:31:37 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/24 09:45:54 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/02/25 19:36:15 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,28 +31,23 @@ char	*get_path(char *cmd, char **env)
 	char	**paths;
 	char	*path_var;
 	char	*full_path;
-	int		i;
 
+	if (!cmd || !env)
+		return (NULL);
+	if (access(cmd, F_OK | X_OK) == 0 && ft_strchr(cmd, '/'))
+		return (ft_strdup(cmd));
 	path_var = get_path_var(env);
 	if (!path_var)
 		return (NULL);
 	paths = ft_split(path_var, ':');
-	if (!path_var || !paths)
-		return (NULL);
-	i = 0;
-	while (paths[i])
+	if (!paths)
 	{
-		full_path = find_command_path(paths, cmd);
-		if (full_path && access(full_path, F_OK) == 0)
-		{
-			ft_free(paths);
-			return (full_path);
-		}
-		free(full_path);
-		i++;
+		free(path_var);
+		return (NULL);
 	}
+	full_path = find_command_path(paths, cmd);
 	ft_free(paths);
-	return (NULL);
+	return (full_path);
 }
 
 char	*find_command_path(char **paths, char *cmd)
@@ -65,16 +60,19 @@ char	*find_command_path(char **paths, char *cmd)
 		return (NULL);
 	if (ft_strchr(cmd, '/'))
 	{
-		if (access(cmd, F_OK) == 0)
-			return (cmd);
+		if (access(cmd, F_OK | X_OK) == 0)
+			return (ft_strdup(cmd));
+		return (NULL);
 	}
 	i = 0;
 	while (paths[i])
 	{
 		path = ft_strjoin(paths[i], "/");
+		if (!path)
+			return (NULL);
 		full_path = ft_strjoin(path, cmd);
 		free(path);
-		if (access(full_path, X_OK) == 0)
+		if (access(full_path, F_OK | X_OK) == 0)
 			return (full_path);
 		free(full_path);
 		i++;

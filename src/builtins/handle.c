@@ -6,7 +6,7 @@
 /*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 14:43:00 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/25 19:08:05 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/02/25 20:50:04 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	check_builtin(t_ast *input, t_env *env)
 	else if (strcmp(input->cmd->args[0], "env") == 0)
 		print_env(&env, input);
 	else if (strcmp(input->cmd->args[0], "exit") == 0)
-		ft_exit(input, env);
+		ft_exit(input);
 	// else if (strcmp(input->cmd->args[0], "export") == 0)
 	// 	ft_export();
 	else if (strcmp(input->cmd->args[0], "unset") == 0)

@@ -6,7 +6,7 @@
 /*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/25 19:07:46 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/02/25 20:50:15 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int					ft_strcmp(char *src, char *cmp);
 ////////////builtins////////////////////////
 void				check_builtin(t_ast *input, t_env *env);
 void				ft_pwd(t_ast *cmd);
-void				ft_exit(t_ast *cmd, t_env *env);
+void				ft_exit(t_ast *cmd);
 void				print_env(t_env **head, t_ast *cmd);
 void				ft_cd(t_ast *cmd, t_env **env);
 
@@ -93,5 +93,6 @@ void				pipe_child_right(t_ast *cmd, t_env *env, int *pipefd);
 void				pipe_child_left(t_ast *cmd, t_env *env, int *pipefd);
 void				ft_unset(t_ast *input, t_env **env);
 int					ft_isdigit(char *str);
+int					ft_is_valid_number(char *str);
 
 #endif
