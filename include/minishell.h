@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/24 09:45:40 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/02/25 19:07:46 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void				check_builtin(t_ast *input, t_env *env);
 void				ft_pwd(t_ast *cmd);
 void				ft_exit(t_ast *cmd, t_env *env);
 void				print_env(t_env **head, t_ast *cmd);
-void				ft_cd(t_ast *cmd, t_env *env);
+void				ft_cd(t_ast *cmd, t_env **env);
 
 //////////////////signal.c////////////////////////
 void				handle_signals(void);

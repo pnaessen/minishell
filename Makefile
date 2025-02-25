@@ -1,6 +1,7 @@
 NAME := minishell
 SRC_DIR := src/
 BUILTINS_DIR := $(SRC_DIR)builtins/
+PARS_DIR := $(SRC_DIR)pars/
 OBJ_DIR := .obj/
 INCLUDES := include/
 LIBFT_DIR := libft/
@@ -25,7 +26,15 @@ BUILTINS_SRC := $(addprefix $(BUILTINS_DIR), \
 	ft_unset.c \
 )
 
-SRC += $(BUILTINS_SRC)
+PARS_SRC := $(addprefix $(PARS_DIR), \
+	parsing.c \
+	list_utils.c \
+	parsing_utils.c \
+	parsing_char_utils.c \
+	minishell_split.c \
+)
+
+SRC += $(BUILTINS_SRC) $(PARS_SRC)
 OBJ := $(SRC:%.c=$(OBJ_DIR)%.o)
 DEPS := $(OBJ:%.o=%.d)
 

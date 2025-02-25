@@ -6,10 +6,11 @@
 /*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 11:37:35 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/24 20:17:24 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/02/25 19:07:32 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "minishell.h"
 
 char	*get_home_var(t_env *env)
 {
