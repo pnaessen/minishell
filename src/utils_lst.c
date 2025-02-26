@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_lst.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 14:44:37 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/26 14:03:23 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/02/26 22:08:07 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,5 +49,19 @@ void	lstadd_back(t_env **head, t_env *new_node)
 		while (tmp->next != NULL)
 			tmp = tmp->next;
 		tmp->next = new_node;
+	}
+}
+
+void	free_env_list(t_env *env)
+{
+	t_env	*temp;
+
+	while (env)
+	{
+		temp = env;
+		env = env->next;
+		if (temp->str)
+			free(temp->str);
+		free(temp);
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:38:59 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/26 14:37:33 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/02/26 22:07:54 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 void	execute_command(t_ast *cmd, t_env *env)
 {
-	check_builtin(cmd, env);
-	if (cmd->error_code == -1)
 		execute_ast(cmd, env);
 }
 
@@ -24,7 +22,7 @@ int	main(int argc, char **argv, char **env)
 	char	*input;
 	t_env	*head;
 	//t_ast	*cmd;
-	t_ast	*pipe_cmd;
+	//t_ast	*pipe_cmd;
 
 	head = NULL;
 	(void)argv;
@@ -50,10 +48,10 @@ int	main(int argc, char **argv, char **env)
 		// {
 		// 	execute_command(cmd, head);
 		// }
-		pipe_cmd = create_test_pipe("ls", "wc");
+		t_ast *pipe_cmd = create_test_pipe("ls", "rev");
 		if (pipe_cmd)
 		{
-			execute_command(pipe_cmd, head);
+   			 execute_ast(pipe_cmd, head);
 		}
 		free(input);
 		break ;
@@ -73,6 +71,7 @@ t_ast	*create_test_command(char *cmd_str)
 	node->cmd = malloc(sizeof(t_cmd));
 	if (!node->cmd)
 	{
+		write(2, "malloc error\n", 13);
 		free(node);
 		ft_free(args);
 		return (NULL);
@@ -87,17 +86,23 @@ t_ast	*create_test_command(char *cmd_str)
 	return (node);
 }
 
-t_ast	*create_test_pipe(char *left_cmd, char *right_cmd)
+t_ast *create_test_pipe(char *left_cmd, char *right_cmd)
 {
-	t_ast	*pipe_node;
-	t_ast	*left;
-	t_ast	*right;
+	t_ast *pipe_node;
+	t_ast *left;
+	t_ast *right;
 
 	pipe_node = malloc(sizeof(t_ast));
 	left = create_test_command(left_cmd);
 	right = create_test_command(right_cmd);
 	if (!pipe_node || !left || !right)
 	{
+		if (pipe_node)
+			free(pipe_node);
+		if (left)
+			free_ast(left);
+		if (right)
+			free_ast(right);
 		return (NULL);
 	}
 	pipe_node->cmd = NULL;
@@ -105,8 +110,56 @@ t_ast	*create_test_pipe(char *left_cmd, char *right_cmd)
 	pipe_node->left = left;
 	pipe_node->right = right;
 	pipe_node->head = pipe_node;
+	left->head = pipe_node;
+	right->head = pipe_node;
+	
 	pipe_node->error_code = 0;
 	return (pipe_node);
+}
+
+void	free_ast_cmd(t_ast *node)
+{
+	int	i;
+
+	if (!node->cmd)
+		return ;
+	if (node->cmd->path)
+	{
+		free(node->cmd->path);
+		node->cmd->path = NULL;
+	}
+	if (node->cmd->args)
+	{
+		i = 0;
+		while (node->cmd->args[i])
+		{
+			free(node->cmd->args[i]);
+			i++;
+		}
+		free(node->cmd->args);
+		node->cmd->args = NULL;
+	}
+	free(node->cmd);
+	node->cmd = NULL;
+}
+
+void	free_ast(t_ast *node)
+{
+	if (!node)
+		return ;
+	if (node->left)
+	{
+		free_ast(node->left);
+		node->left = NULL;
+	}
+	if (node->right)
+	{
+		free_ast(node->right);
+		node->right = NULL;
+	}	
+	if (node->cmd)
+		free_ast_cmd(node);
+	free(node);
 }
 
 // < in > out < in1 < in2 < in3 > out1 < out2 cat

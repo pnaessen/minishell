@@ -3,80 +3,96 @@
 /*                                                        :::      ::::::::   */
 /*   path_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:31:37 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/26 11:19:31 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/02/26 22:08:02 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*get_path_var(char **env)
+char	*get_path(char *cmd, char **env_array)
 {
-	int	i;
-
-	i = 0;
-	while (env[i])
-	{
-		if (ft_strncmp(env[i], "PATH=", 5) == 0)
-			return (env[i] + 5);
-		i++;
-	}
-	return (NULL);
-}
-
-char	*get_path(char *cmd, char **env)
-{
-	char	**paths;
-	char	*path_var;
-	char	*full_path;
-
-	if (!cmd || !env)
-		return (NULL);
-	if (access(cmd, F_OK | X_OK) == 0 && ft_strchr(cmd, '/'))
-		return (ft_strdup(cmd));
-	path_var = get_path_var(env);
-	if (!path_var)
-		return (NULL);
-	paths = ft_split(path_var, ':');
-	free(path_var);
-	if (!paths)
-		return (NULL);
-	full_path = find_command_path(paths, cmd);
-	ft_free(paths);
-	return (full_path);
-}
-
-char	*find_command_path(char **paths, char *cmd)
-{
-	char	*path;
-	char	*full_path;
 	int		i;
 
-	if (!cmd || !paths)
+	if (!cmd || !*cmd)
+		return (NULL);
+	i = 0;
+	while (cmd[i] && cmd[i] == ' ')
+		i++;
+	if (!cmd[i])
 		return (NULL);
 	if (ft_strchr(cmd, '/'))
 	{
-		if (access(cmd, F_OK | X_OK) == 0)
-			return (ft_strdup(cmd));
-		return (NULL);
-	}
-	i = 0;
-	while (paths[i])
-	{
-		path = ft_strjoin(paths[i], "/");
-		if (!path)
+		if (access(cmd, F_OK) == -1)
 			return (NULL);
-		full_path = ft_strjoin(path, cmd);
-		free(path);
-		if (access(full_path, F_OK | X_OK) == 0)
+		if (access(cmd, X_OK) == -1)
+			return (NULL);
+		return (ft_strdup(cmd));
+	}
+	return (find_in_path(cmd, env_array));
+}
+
+char	*find_in_path(char *cmd, char **env_array)
+{
+	char	*path_var;
+	char	**path_dirs;
+	int		i;
+
+	i = 0;
+	path_var = NULL;
+	while (env_array && env_array[i])
+	{
+		if (ft_strncmp(env_array[i], "PATH=", 5) == 0)
+		{
+			path_var = env_array[i] + 5;
+			break ;
+		}
+		i++;
+	}
+	if (!path_var)
+		return (NULL);
+	path_dirs = ft_split(path_var, ':');
+	if (!path_dirs)
+		return (NULL);
+	return (search_command_in_path(cmd, path_dirs));
+}
+
+char	*search_command_in_path(char *cmd, char **path_dirs)
+{
+	int		i;
+	char	*temp;
+	char	*full_path;
+
+	i = 0;
+	while (path_dirs[i])
+	{
+		temp = ft_strjoin(path_dirs[i], "/");
+		if (!temp)
+		{
+			ft_free(path_dirs);
+			return (NULL);
+		}
+		full_path = ft_strjoin(temp, cmd);
+		free(temp);
+		if (!full_path)
+		{
+			ft_free(path_dirs);
+			return (NULL);
+		}
+		if (access(full_path, X_OK) == 0)
+		{
+			ft_free(path_dirs);
 			return (full_path);
+		}
 		free(full_path);
 		i++;
 	}
+	ft_free(path_dirs);
 	return (NULL);
 }
+
 
 char	**env_to_tab(t_env **env)
 {

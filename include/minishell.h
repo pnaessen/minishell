@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/26 14:35:02 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/02/26 22:08:44 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int					ft_strcmp(char *src, char *cmp);
 ////////////builtins////////////////////////
 void				check_builtin(t_ast *input, t_env *env);
 void				ft_pwd(t_ast *cmd);
-void				ft_exit(t_ast *cmd);
+void				ft_exit(t_ast *cmd, t_env **env);
 void				print_env(t_env **head, t_ast *cmd);
 void				ft_cd(t_ast *cmd, t_env **env);
 void				ft_echo(t_ast *cmd);
@@ -99,5 +99,9 @@ t_ast				*create_test_command(char *cmd_str);
 
 void				print_env_debug(t_env **head);
 t_ast				*create_test_pipe(char *left_cmd, char *right_cmd);
-
+void 				free_ast(t_ast *node);
+char				*search_command_in_path(char *cmd, char **path_dirs);
+void				free_ast_cmd(t_ast *node);
+void				free_env_list(t_env *env);
+char				*find_in_path(char *cmd, char **env_array);
 #endif
