@@ -24,6 +24,7 @@ BUILTINS_SRC := $(addprefix $(BUILTINS_DIR), \
 	ft_env.c \
 	ft_exit.c \
 	ft_unset.c \
+	ft_echo.c \
 )
 
 PARS_SRC := $(addprefix $(PARS_DIR), \

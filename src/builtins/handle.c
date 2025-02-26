@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
+/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 14:43:00 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/25 20:50:04 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/02/26 11:11:25 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ void	check_builtin(t_ast *input, t_env *env)
 {
 	if (strcmp(input->cmd->args[0], "pwd") == 0)
 		ft_pwd(input);
-	// else if (strcmp(input->cmd->args[0], "echo") == 0)
-	// 	ft_echo();
+	else if (strcmp(input->cmd->args[0], "echo") == 0)
+		ft_echo(input);
 	else if (strcmp(input->cmd->args[0], "cd") == 0)
 		ft_cd(input, &env);
 	else if (strcmp(input->cmd->args[0], "env") == 0)

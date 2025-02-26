@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
+/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:31:37 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/25 19:36:15 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/02/26 11:19:31 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,9 @@ char	*get_path(char *cmd, char **env)
 	if (!path_var)
 		return (NULL);
 	paths = ft_split(path_var, ':');
+	free(path_var);
 	if (!paths)
-	{
-		free(path_var);
 		return (NULL);
-	}
 	full_path = find_command_path(paths, cmd);
 	ft_free(paths);
 	return (full_path);

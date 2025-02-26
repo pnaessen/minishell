@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
+/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/25 20:50:15 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/02/26 14:35:02 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ void				ft_pwd(t_ast *cmd);
 void				ft_exit(t_ast *cmd);
 void				print_env(t_env **head, t_ast *cmd);
 void				ft_cd(t_ast *cmd, t_env **env);
+void				ft_echo(t_ast *cmd);
 
 //////////////////signal.c////////////////////////
 void				handle_signals(void);
@@ -94,5 +95,9 @@ void				pipe_child_left(t_ast *cmd, t_env *env, int *pipefd);
 void				ft_unset(t_ast *input, t_env **env);
 int					ft_isdigit(char *str);
 int					ft_is_valid_number(char *str);
+t_ast				*create_test_command(char *cmd_str);
+
+void				print_env_debug(t_env **head);
+t_ast				*create_test_pipe(char *left_cmd, char *right_cmd);
 
 #endif
