@@ -6,7 +6,7 @@
 /*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/26 22:08:44 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/02/27 21:28:28 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,4 +104,9 @@ char				*search_command_in_path(char *cmd, char **path_dirs);
 void				free_ast_cmd(t_ast *node);
 void				free_env_list(t_env *env);
 char				*find_in_path(char *cmd, char **env_array);
+
+
+void print_ast(t_ast *node, int level);
+t_ast *create_test_pipeline(char *cmds);
+t_ast *create_command_pipeline(char **cmds, int count);
 #endif

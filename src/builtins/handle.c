@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 14:43:00 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/27 14:04:59 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/02/27 21:40:58 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	check_builtin(t_ast *input, t_env *env)
 {
-	if(!input)
+	if (!input)
 		return ;
 	if (strcmp(input->cmd->args[0], "pwd") == 0)
 		ft_pwd(input);

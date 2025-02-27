@@ -6,7 +6,7 @@
 /*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 11:37:35 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/25 19:42:15 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/02/27 21:41:09 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ int	env_var_exists(t_env *env, char *name)
 	name_len = ft_strlen(name);
 	while (temp)
 	{
-		if (ft_strncmp(temp->str, name, name_len) == 0 && temp->str[name_len] == '=')
+		if (ft_strncmp(temp->str, name, name_len) == 0
+			&& temp->str[name_len] == '=')
 			return (1);
 		temp = temp->next;
 	}
@@ -76,7 +77,7 @@ void	set_env_var(t_env **env, char *name, char *value)
 			if (!new_str)
 				return ;
 			temp->str = new_str;
-				return ;
+			return ;
 		}
 		temp = temp->next;
 	}

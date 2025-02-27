@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 11:25:46 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/27 14:10:51 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/02/27 21:40:18 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ void	child_process(t_ast *cmd, char **env_array)
 		exit(126);
 	}
 }
-
 
 int	parent_process(pid_t pid, t_ast *cmd, char **env_array)
 {

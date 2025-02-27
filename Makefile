@@ -88,6 +88,15 @@ fclean: clean
 
 re: fclean all
 
+valgrind: $(NAME)
+	@echo "$(CYAN)🔍 Running Valgrind leak check...$(DEF_COLOR)"
+	@valgrind --leak-check=full --suppressions=readline.supp --show-leak-kinds=all --trace-children=yes --track-fds=yes ./$(NAME)
+
+readline.supp:
+	@echo "$(YELLOW)Creating readline suppression file...$(DEF_COLOR)"
+	@echo "{\n    Readline\n    Memcheck:Leak\n    match-leak-kinds: reachable\n    ...\n    fun:readline\n}" > readline.supp
+	@echo "$(GREEN)Created readline.supp file$(DEF_COLOR)"
+
 info:
 	@echo "Sources:" $(SRC)
 	@echo "Objects:" $(OBJ)

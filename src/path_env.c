@@ -6,7 +6,7 @@
 /*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:31:37 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/26 22:08:02 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/02/27 21:40:25 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 char	*get_path(char *cmd, char **env_array)
 {
-	int		i;
+	int	i;
 
 	if (!cmd || !*cmd)
 		return (NULL);
@@ -92,7 +92,6 @@ char	*search_command_in_path(char *cmd, char **path_dirs)
 	ft_free(path_dirs);
 	return (NULL);
 }
-
 
 char	**env_to_tab(t_env **env)
 {

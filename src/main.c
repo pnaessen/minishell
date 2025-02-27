@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:38:59 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/27 14:12:04 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/02/27 21:39:51 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	execute_command(t_ast *cmd, t_env *env)
 {
-		execute_ast(cmd, env);
+	execute_ast(cmd, env);
 }
 
 int	main(int argc, char **argv, char **env)
@@ -22,7 +22,6 @@ int	main(int argc, char **argv, char **env)
 	char	*input;
 	t_env	*head;
 	t_ast	*cmd;
-	//t_ast	*pipe_cmd;
 
 	head = NULL;
 	(void)argv;
@@ -39,21 +38,23 @@ int	main(int argc, char **argv, char **env)
 		if (!input)
 		{
 			printf("exit\n");
+			free_env_list(head);
 			exit(0);
 		}
 		if (*input)
+		{
 			add_history(input);
-		cmd = create_test_command("/");
-		if (cmd)
-			execute_command(cmd, head);
-		// t_ast *pipe_cmd = create_test_pipe("ls", "rev");
-		// if (pipe_cmd)
-		// 	execute_ast(pipe_cmd, head);
-		free_env_list(head);
+			cmd = create_test_pipeline(input);
+			if (cmd)
+			{
+				print_ast(cmd, 0);
+				execute_command(cmd, head);
+				free_ast(cmd);
+			}
+		}
 		free(input);
-		free_ast(cmd);
-		break ;
 	}
+	free_env_list(head);
 	return (0);
 }
 
@@ -61,20 +62,42 @@ t_ast	*create_test_command(char *cmd_str)
 {
 	t_ast	*node;
 	char	**args;
-	
-	if(cmd_str == NULL || cmd_str[0] == '\0')
+	int		i;
+	int		only_spaces_or_slash;
+
+	if (cmd_str == NULL)
+		return (NULL);
+	only_spaces_or_slash = 1;
+	i = 0;
+	while (cmd_str[i])
 	{
-		printf("test");
+		if (cmd_str[i] != ' ' && cmd_str[i] != '\\')
+		{
+			only_spaces_or_slash = 0;
+			break ;
+		}
+		i++;
+	}
+	if (cmd_str[0] == '\0' || only_spaces_or_slash)
+		return (NULL);
+	node = malloc(sizeof(t_ast));
+	if (!node)
+		return (NULL);
+	args = ft_split(cmd_str, ' ');
+	if (!args)
+	{
+		free(node);
 		return (NULL);
 	}
-	node = malloc(sizeof(t_ast));
-	args = ft_split(cmd_str, ' ');
-	if (!node || !args)
+	if (!args[0])
+	{
+		free(node);
+		ft_free(args);
 		return (NULL);
+	}
 	node->cmd = malloc(sizeof(t_cmd));
 	if (!node->cmd)
 	{
-		write(2, "malloc error\n", 13);
 		free(node);
 		ft_free(args);
 		return (NULL);
@@ -87,36 +110,6 @@ t_ast	*create_test_command(char *cmd_str)
 	node->head = node;
 	node->error_code = 0;
 	return (node);
-}
-
-t_ast *create_test_pipe(char *left_cmd, char *right_cmd)
-{
-	t_ast *pipe_node;
-	t_ast *left;
-	t_ast *right;
-
-	pipe_node = malloc(sizeof(t_ast));
-	left = create_test_command(left_cmd);
-	right = create_test_command(right_cmd);
-	if (!pipe_node || !left || !right)
-	{
-		if (pipe_node)
-			free(pipe_node);
-		if (left)
-			free_ast(left);
-		if (right)
-			free_ast(right);
-		return (NULL);
-	}
-	pipe_node->cmd = NULL;
-	pipe_node->token = PIPE;
-	pipe_node->left = left;
-	pipe_node->right = right;
-	pipe_node->head = pipe_node;
-	left->head = pipe_node;
-	right->head = pipe_node;
-	pipe_node->error_code = 0;
-	return (pipe_node);
 }
 
 void	free_ast_cmd(t_ast *node)
@@ -158,11 +151,133 @@ void	free_ast(t_ast *node)
 	{
 		free_ast(node->right);
 		node->right = NULL;
-	}	
+	}
 	if (node->cmd)
 		free_ast_cmd(node);
 	free(node);
 }
+
+t_ast	*create_command_pipeline(char **cmds, int count)
+{
+	t_ast	*pipe_node;
+	t_ast	*root;
+	t_ast	*current;
+	t_ast	*next_cmd;
+	t_ast	*cmd;
+	int		i;
+
+	if (!cmds || count <= 0)
+		return (NULL);
+	if (count == 1)
+		return (create_test_command(cmds[0]));
+	cmd = create_test_command(cmds[0]);
+	if (!cmd)
+		return (NULL);
+	root = cmd;
+	i = 1;
+	while (i < count)
+	{
+		next_cmd = create_test_command(cmds[i]);
+		if (!next_cmd)
+		{
+			free_ast(root);
+			return (NULL);
+		}
+		pipe_node = malloc(sizeof(t_ast));
+		if (!pipe_node)
+		{
+			free_ast(root);
+			free_ast(next_cmd);
+			return (NULL);
+		}
+		pipe_node->cmd = NULL;
+		pipe_node->token = PIPE;
+		pipe_node->left = root;
+		pipe_node->right = next_cmd;
+		pipe_node->head = pipe_node;
+		pipe_node->error_code = 0;
+		current = root;
+		current->head = pipe_node;
+		next_cmd->head = pipe_node;
+		root = pipe_node;
+		i++;
+	}
+	return (root);
+}
+
+t_ast	*create_test_pipeline(char *cmds)
+{
+	int		count;
+	char	*temp;
+	char	**split_commands;
+	int		valid_count;
+	t_ast	*result;
+
+	if (!cmds || !*cmds)
+		return (NULL);
+	count = 1;
+	temp = cmds;
+	while (*temp)
+	{
+		if (*temp == '|')
+			count++;
+		temp++;
+	}
+	split_commands = ft_split(cmds, '|');
+	if (!split_commands)
+		return (NULL);
+	valid_count = 0;
+	while (split_commands[valid_count])
+		valid_count++;
+	result = create_command_pipeline(split_commands, valid_count);
+	ft_free(split_commands);
+	return (result);
+}
+
+void	print_ast(t_ast *node, int level)
+{
+	int	i;
+
+	if (!node)
+		return ;
+	for (int i = 0; i < level; i++)
+		printf("  ");
+	if (node->token == CMD)
+	{
+		printf("CMD: ");
+		if (node->cmd && node->cmd->args)
+		{
+			i = 0;
+			while (node->cmd->args[i])
+			{
+				printf("%s ", node->cmd->args[i]);
+				i++;
+			}
+		}
+		printf("\n");
+	}
+	else if (node->token == PIPE)
+	{
+		printf("PIPE\n");
+		print_ast(node->left, level + 1);
+		print_ast(node->right, level + 1);
+	}
+	else if (node->token == REDIR_IN)
+	{
+		printf("REDIR_IN\n");
+		print_ast(node->left, level + 1);
+		print_ast(node->right, level + 1);
+	}
+	else if (node->token == REDIR_OUT)
+	{
+		printf("REDIR_OUT\n");
+		print_ast(node->left, level + 1);
+		print_ast(node->right, level + 1);
+	}
+}
+
+// You can call this function from main to test
+// test_pipelines(head);
 
 // < in > out < in1 < in2 < in3 > out1 < out2 cat
 // < in > out < (chmod 000) in1 < in2 < in3 > out1 < out2 cat
@@ -176,16 +291,3 @@ void	free_ast(t_ast *node)
 // unset (tout ce qui reste dans l'env)
 // + unset une fois que l'environnement est vide
 // export
-
-
-// ==112120== 
-// ==112120== 2 bytes in 1 blocks are still reachable in loss record 3 of 70
-// ==112120==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-// ==112120==    by 0x4049AA: ft_strdup (in /home/pnaessen/Mil03/minishell/minishell)
-// ==112120==    by 0x401E3D: get_path (in /home/pnaessen/Mil03/minishell/minishell)
-// ==112120==    by 0x401B35: child_process (in /home/pnaessen/Mil03/minishell/minishell)
-// ==112120==    by 0x401AF9: execute_cmd (in /home/pnaessen/Mil03/minishell/minishell)
-// ==112120==    by 0x401CB5: execute_ast (in /home/pnaessen/Mil03/minishell/minishell)
-// ==112120==    by 0x4012CC: execute_command (in /home/pnaessen/Mil03/minishell/minishell)
-// ==112120==    by 0x4013B1: main (in /home/pnaessen/Mil03/minishell/minishell)
-//  si only /
