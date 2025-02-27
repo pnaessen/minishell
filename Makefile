@@ -95,4 +95,6 @@ info:
 
 -include $(DEPS)
 
+#valgrind --leak-check=full --suppressions=readline.supp --show-leak-kinds=all --trace-children=yes --track-fds=yes ./minishell
+
 .PHONY: all clean fclean re welcome info

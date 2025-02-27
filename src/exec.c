@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
+/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 11:25:46 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/26 18:57:33 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/02/27 14:10:51 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	parent_process(pid_t pid, t_ast *cmd, char **env_array)
 
 void	execute_ast(t_ast *cmd, t_env *env)
 {
-	if (!cmd)
+	if (!cmd) // add un if only space
 		return ;
 	if (cmd->token == CMD)
 	{
