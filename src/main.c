@@ -3,19 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
+/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:38:59 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/27 21:39:51 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/02/28 10:43:48 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	execute_command(t_ast *cmd, t_env *env)
-{
-	execute_ast(cmd, env);
-}
 
 int	main(int argc, char **argv, char **env)
 {
@@ -47,8 +43,8 @@ int	main(int argc, char **argv, char **env)
 			cmd = create_test_pipeline(input);
 			if (cmd)
 			{
-				print_ast(cmd, 0);
-				execute_command(cmd, head);
+				//print_ast(cmd, 0);
+				execute_ast(cmd, head);
 				free_ast(cmd);
 			}
 		}
@@ -276,8 +272,6 @@ void	print_ast(t_ast *node, int level)
 	}
 }
 
-// You can call this function from main to test
-// test_pipelines(head);
 
 // < in > out < in1 < in2 < in3 > out1 < out2 cat
 // < in > out < (chmod 000) in1 < in2 < in3 > out1 < out2 cat

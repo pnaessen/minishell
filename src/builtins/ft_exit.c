@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
+/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 12:23:40 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/26 22:07:42 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/02/28 09:48:22 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_exit(t_ast *cmd, t_env **env)
+void	ft_exit(t_ast *cmd)
 {
 	int	exit_code;
 
@@ -31,7 +31,7 @@ void	ft_exit(t_ast *cmd, t_env **env)
 			ft_putstr_fd(cmd->cmd->args[1], 2);
 			ft_putstr_fd(": numeric argument required\n", 2);
 			cmd->error_code = 2;
-			return ;
+			exit(cmd->error_code);
 		}
 		exit_code = ft_atoi(cmd->cmd->args[1]);
 		if (exit_code < 0)
@@ -42,7 +42,6 @@ void	ft_exit(t_ast *cmd, t_env **env)
 	else
 		exit_code = 0;
 	cmd->error_code = exit_code;
-	free_env_list(*env);
 	free_ast(cmd->head);
 	exit(exit_code);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
+/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/27 21:28:28 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/02/28 11:37:25 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,55 +58,84 @@ typedef struct s_cmd
 	char			*path;
 }					t_cmd;
 
-////////utils_lst////
-void				handle_env(char **env, t_env **head);
-void				lstadd_back(t_env **head, t_env *new_node);
+////////////////////////SRC/////////////////////////////////////
 
-/////////utils/////
-int					ft_strcmp(char *src, char *cmp);
+///////////exec.c///////////////////////
+void				execute_cmd(t_ast *cmd, t_env *env);
+void				child_process(t_ast *cmd, char **env_array);
+int					parent_process(pid_t pid, t_ast *cmd, char **env_array);
+void				execute_ast(t_ast *cmd, t_env *env);
 
-////////////builtins////////////////////////
-void				check_builtin(t_ast *input, t_env *env);
-void				ft_pwd(t_ast *cmd);
-void				ft_exit(t_ast *cmd, t_env **env);
-void				print_env(t_env **head, t_ast *cmd);
-void				ft_cd(t_ast *cmd, t_env **env);
-void				ft_echo(t_ast *cmd);
+///////////path_env.c///////////////////
+char				*get_path(char *cmd, char **env_array);
+char				*find_in_path(char *cmd, char **env_array);
+char				*search_command_in_path(char *cmd, char **path_dirs);
+char				**env_to_tab(t_env **env);
+
+///////////pipe.c///////////////////////
+void				pipe_child_left(t_ast *cmd, t_env *env, int *pipefd);
+void				pipe_child_right(t_ast *cmd, t_env *env, int *pipefd);
+void				execute_pipe(t_ast *cmd, t_env *env);
+void				handle_pipe_parent(t_ast *cmd, pid_t pid1, pid_t pid2,
+						int *pipefd);
+
+////////////redirection.c///////////////////
+void				handle_redir_in(t_ast *cmd, t_env *env);
+void				handle_redir_out(t_ast *cmd, t_env *env);
 
 //////////////////signal.c////////////////////////
 void				handle_signals(void);
 void				handle_sig(int sig);
 
-void				execute_ast(t_ast *cmd, t_env *env);
-void				execute_pipe(t_ast *cmd, t_env *env);
-void				handle_redir_in(t_ast *cmd, t_env *env);
-void				handle_redir_out(t_ast *cmd, t_env *env);
-void				execute_command(t_ast *cmd, t_env *env);
-void				child_process(t_ast *cmd, char **env_array);
-int					parent_process(pid_t pid, t_ast *cmd, char **env_array);
-char				**env_to_tab(t_env **env);
-char				*get_path(char *cmd, char **env);
-char				*get_path_var(char **env);
-char				*find_command_path(char **paths, char *cmd);
-void				handle_pipe_parent(t_ast *cmd, pid_t pid1, pid_t pid2,
-						int *pipefd);
-void				pipe_child_right(t_ast *cmd, t_env *env, int *pipefd);
-void				pipe_child_left(t_ast *cmd, t_env *env, int *pipefd);
-void				ft_unset(t_ast *input, t_env **env);
-int					ft_isdigit(char *str);
-int					ft_is_valid_number(char *str);
-t_ast				*create_test_command(char *cmd_str);
-
-void				print_env_debug(t_env **head);
-t_ast				*create_test_pipe(char *left_cmd, char *right_cmd);
-void 				free_ast(t_ast *node);
-char				*search_command_in_path(char *cmd, char **path_dirs);
-void				free_ast_cmd(t_ast *node);
+////////utils_lst////
+void				handle_env(char **env, t_env **head);
+void				lstadd_back(t_env **head, t_env *new_node);
 void				free_env_list(t_env *env);
-char				*find_in_path(char *cmd, char **env_array);
 
+/////////utils/////
+int					ft_strcmp(char *src, char *cmp);
 
-void print_ast(t_ast *node, int level);
-t_ast *create_test_pipeline(char *cmds);
-t_ast *create_command_pipeline(char **cmds, int count);
+////////////BUILTINS////////////////////////
+
+///////////////ft_cd.c/////////////////////
+char				*get_home_var(t_env *env);
+int					env_var_exists(t_env *env, char *name);
+void				add_to_env(t_env **env, char *new_str);
+void				set_env_var(t_env **env, char *name, char *value);
+void				update_env_cd(t_ast *cmd, t_env **env, char *old_dir);
+void				ft_cd(t_ast *cmd, t_env **env);
+
+///////////////ft_echo.c/////////////////////
+int					is_valid_flag(char *flag);
+void				ft_echo(t_ast *cmd);
+
+////////////////ft_env.c///////////////////////
+void				print_env(t_env **head, t_ast *cmd);
+void				print_env_debug(t_env **head);
+
+/////////////////ft_exit.c////////////////////
+void				ft_exit(t_ast *cmd);
+int					ft_is_valid_number(char *str);
+
+////////////////ft_pwd.c/////////////////////
+void				ft_pwd(t_ast *cmd);
+
+////////////////ft_unset.c////////////////////
+int					valid_var(char *str);
+void				ft_unset(t_ast *input, t_env **env);
+
+//////////////////export.c/////////////////////
+void	ft_export(t_ast *cmd, t_env **env);
+
+///////////////handle.c//////////////////////
+void				check_builtin(t_ast *input, t_env *env);
+
+////////////////main.c/////////////////////////
+t_ast	*create_test_command(char *cmd_str);
+void	free_ast_cmd(t_ast *node);
+void	free_ast(t_ast *node);
+t_ast	*create_command_pipeline(char **cmds, int count);
+t_ast	*create_test_pipeline(char *cmds);
+void	print_ast(t_ast *node, int level);
+
 #endif

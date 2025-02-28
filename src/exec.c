@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
+/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 11:25:46 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/27 21:40:18 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/02/28 10:47:42 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	execute_cmd(t_ast *cmd, t_env *env)
 	char	**env_array;
 
 	env_array = env_to_tab(&env);
+	//free_env_list(env);
 	if (!env_array)
 	{
 		cmd->error_code = 1;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
+/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 14:43:00 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/27 21:40:58 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/02/28 11:36:06 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ void	check_builtin(t_ast *input, t_env *env)
 	else if (strcmp(input->cmd->args[0], "env") == 0)
 		print_env(&env, input);
 	else if (strcmp(input->cmd->args[0], "exit") == 0)
-		ft_exit(input, &env);
-	// else if (strcmp(input->cmd->args[0], "export") == 0)
-	// 	ft_export();
+		ft_exit(input);
+	else if (strcmp(input->cmd->args[0], "export") == 0)
+		ft_export(input, &env);
 	else if (strcmp(input->cmd->args[0], "unset") == 0)
 		ft_unset(input, &env);
 	else
