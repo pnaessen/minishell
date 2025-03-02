@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 14:45:10 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/24 09:46:21 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/01 15:14:16 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,4 +28,19 @@ int	ft_strcmp(char *src, char *cmp)
 		i++;
 	}
 	return (0);
+}
+
+void	free_env_array(char **env_array)
+{
+	int	i;
+
+	if (!env_array)
+		return ;
+	i = 0;
+	while (env_array[i])
+	{
+		free(env_array[i]);
+		i++;
+	}
+	free(env_array);
 }

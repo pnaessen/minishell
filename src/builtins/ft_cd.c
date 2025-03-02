@@ -6,7 +6,7 @@
 /*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 11:37:35 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/27 21:41:09 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/03/02 17:40:12 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ int	env_var_exists(t_env *env, char *name)
 	}
 	return (0);
 }
+
 void	add_to_env(t_env **env, char *new_str)
 {
 	t_env	*new_node;

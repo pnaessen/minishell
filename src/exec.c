@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 11:25:46 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/28 10:47:42 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/01 15:21:39 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ void	execute_cmd(t_ast *cmd, t_env *env)
 	char	**env_array;
 
 	env_array = env_to_tab(&env);
-	//free_env_list(env);
 	if (!env_array)
 	{
 		cmd->error_code = 1;
@@ -44,13 +43,16 @@ void	child_process(t_ast *cmd, char **env_array)
 		ft_putstr_fd("minishell: command not found: ", 2);
 		ft_putstr_fd(cmd->cmd->args[0], 2);
 		ft_putstr_fd("\n", 2);
-		ft_free(env_array);
+		free_env_array(env_array);
 		exit(127);
 	}
 	if (execve(cmd->cmd->path, cmd->cmd->args, env_array) == -1)
 	{
-		perror("execve");
-		ft_free(env_array);
+		ft_putstr_fd("minishell: ", 2);
+		perror(cmd->cmd->args[0]);
+		free(cmd->cmd->path);
+		cmd->cmd->path = NULL;
+		free_env_array(env_array);
 		exit(126);
 	}
 }
@@ -62,7 +64,9 @@ int	parent_process(pid_t pid, t_ast *cmd, char **env_array)
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
 		cmd->error_code = WEXITSTATUS(status);
-	ft_free(env_array);
+	else if (WIFSIGNALED(status))
+		cmd->error_code = 128 + WTERMSIG(status);
+	free_env_array(env_array);
 	return (cmd->error_code);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 10:12:14 by pn                #+#    #+#             */
-/*   Updated: 2025/02/24 09:45:56 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/02 17:41:29 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,35 @@
 
 void	pipe_child_left(t_ast *cmd, t_env *env, int *pipefd)
 {
+	t_env	*env_copy;
+
 	close(pipefd[0]);
-	dup2(pipefd[1], STDOUT_FILENO);
+	if (dup2(pipefd[1], STDOUT_FILENO) == -1)
+	{
+		perror("minishell: dup2");
+		close(pipefd[1]);
+		exit(1);
+	}
 	close(pipefd[1]);
-	execute_ast(cmd->left, env);
+	env_copy = env;
+	execute_ast(cmd->left, env_copy);
 	exit(cmd->error_code);
 }
 
 void	pipe_child_right(t_ast *cmd, t_env *env, int *pipefd)
 {
+	t_env	*env_copy;
+
 	close(pipefd[1]);
-	dup2(pipefd[0], STDIN_FILENO);
+	if (dup2(pipefd[0], STDIN_FILENO) == -1)
+	{
+		perror("minishell: dup2");
+		close(pipefd[0]);
+		exit(1);
+	}
 	close(pipefd[0]);
-	execute_ast(cmd->right, env);
+	env_copy = env;
+	execute_ast(cmd->right, env_copy);
 	exit(cmd->error_code);
 }
 
@@ -38,12 +54,14 @@ void	execute_pipe(t_ast *cmd, t_env *env)
 
 	if (pipe(pipefd) == -1)
 	{
+		perror("minishell: pipe");
 		cmd->error_code = 1;
 		return ;
 	}
 	pid1 = fork();
 	if (pid1 == -1)
 	{
+		perror("minishell: fork");
 		close(pipefd[0]);
 		close(pipefd[1]);
 		cmd->error_code = 1;
@@ -54,6 +72,7 @@ void	execute_pipe(t_ast *cmd, t_env *env)
 	pid2 = fork();
 	if (pid2 == -1)
 	{
+		perror("minishell: fork");
 		kill(pid1, SIGTERM);
 		close(pipefd[0]);
 		close(pipefd[1]);

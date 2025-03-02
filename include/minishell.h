@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/28 11:37:25 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/02 17:18:13 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ void				free_env_list(t_env *env);
 
 /////////utils/////
 int					ft_strcmp(char *src, char *cmp);
+void				free_env_array(char **env_array);
 
 ////////////BUILTINS////////////////////////
 
@@ -125,7 +126,14 @@ int					valid_var(char *str);
 void				ft_unset(t_ast *input, t_env **env);
 
 //////////////////export.c/////////////////////
-void	ft_export(t_ast *cmd, t_env **env);
+void				ft_export(t_ast *cmd, t_env **env);
+int					is_valid_identifier(char *str);
+void				update_env_var(t_env **env, char *var_str);
+
+/////////////////////print_export.c/////////////////////
+void				print_env_var(t_env *var);
+void				print_sorted_env(t_env **env);
+void				sort_env_array(t_env **sorted, int env_size);
 
 ///////////////handle.c//////////////////////
 void				check_builtin(t_ast *input, t_env *env);
