@@ -169,9 +169,12 @@ faire $?
 env full leaks
 unset full leaks
 qund command not next cmd = segfault cause free env dans exec cmd mais si pas free env leak
-minishell$ env | grep CHROME CHROME_DESKTOP=code.desktop  ?????
 secu for 1024 PROCESUS
 need expand var 
 here doc 
 signal 
 test auto
+handle exit more than 9223372036854775807
+export +=
+
+add PWD=/home/pnaessen/Mil03/ when no env  at start

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
+/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 12:23:40 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/01 15:28:36 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/03/04 14:22:35 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,15 @@ void	ft_exit(t_ast *cmd)
 			exit(cmd->error_code);
 		}
 		exit_code = ft_atoi(cmd->cmd->args[1]);
+		if ((exit_code == -1 && cmd->cmd->args[1][0] != '-') || (exit_code == 0
+				&& cmd->cmd->args[1][0] == '-' && cmd->cmd->args[1][1] != '0'))
+		{
+			ft_putstr_fd("minishell: exit: ", 2);
+			ft_putstr_fd(cmd->cmd->args[1], 2);
+			ft_putstr_fd(": numeric argument required\n", 2);
+			cmd->error_code = 2;
+			exit(cmd->error_code);
+		}
 		if (exit_code < 0)
 			exit_code = 256 + (exit_code % 256);
 		else

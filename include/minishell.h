@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
+/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/02 17:18:13 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/03/04 16:02:16 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ typedef enum e_node_type
 	OR,
 	REDIR_IN,
 	REDIR_OUT,
-	REDIR_HEREDOC
+	REDIR_HEREDOC,
+	APPEND// >> 
 }					t_node_type;
 
 typedef struct s_ast
@@ -91,6 +92,7 @@ void				handle_sig(int sig);
 void				handle_env(char **env, t_env **head);
 void				lstadd_back(t_env **head, t_env *new_node);
 void				free_env_list(t_env *env);
+void				creat_mini_env(t_env **head);
 
 /////////utils/////
 int					ft_strcmp(char *src, char *cmp);
@@ -139,11 +141,11 @@ void				sort_env_array(t_env **sorted, int env_size);
 void				check_builtin(t_ast *input, t_env *env);
 
 ////////////////main.c/////////////////////////
-t_ast	*create_test_command(char *cmd_str);
-void	free_ast_cmd(t_ast *node);
-void	free_ast(t_ast *node);
-t_ast	*create_command_pipeline(char **cmds, int count);
-t_ast	*create_test_pipeline(char *cmds);
-void	print_ast(t_ast *node, int level);
+t_ast				*create_test_command(char *cmd_str);
+void				free_ast_cmd(t_ast *node);
+void				free_ast(t_ast *node);
+t_ast				*create_command_pipeline(char **cmds, int count);
+t_ast				*create_test_pipeline(char *cmds);
+void				print_ast(t_ast *node, int level);
 
 #endif
