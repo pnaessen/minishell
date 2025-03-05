@@ -6,7 +6,7 @@
 /*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 15:10:00 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/04 16:40:12 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/05 12:51:03 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	*create_temp_filename(void)
 		free(filename);
 		return (NULL);
 	}
-	//filename = ft_strjoin_free(filename, pid_str); need to join and free filename
+	filename = ft_strjoin_free(filename, pid_str);
 	free(pid_str);
 	return (filename);
 }
@@ -96,4 +96,30 @@ void	handle_heredoc(t_ast *cmd, t_env *env)
 	execute_with_heredoc(cmd->left, env, temp_filename);
 	unlink(temp_filename);
 	free(temp_filename);
+}
+
+char	*ft_strjoin_free(char *s1, char *s2)
+{
+	int		i;
+	int		j;
+	char	*str;
+
+	j = 0;
+	i = 0;
+	str = (char *)malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
+	if (!str)
+		return (NULL);
+	while (s1[i] != '\0')
+	{
+		str[i] = s1[i];
+		i++;
+	}
+	while (s2[j] != '\0')
+	{
+		str[i + j] = s2[j];
+		j++;
+	}
+	free(s1);
+	str[i + j] = '\0';
+	return (str);
 }

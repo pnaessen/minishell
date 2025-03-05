@@ -6,7 +6,7 @@
 /*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/04 16:02:16 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/05 14:20:26 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ typedef enum e_node_type
 	REDIR_IN,
 	REDIR_OUT,
 	REDIR_HEREDOC,
-	APPEND// >> 
+	APPEND // >>
 }					t_node_type;
 
 typedef struct s_ast
@@ -67,6 +67,13 @@ void				child_process(t_ast *cmd, char **env_array);
 int					parent_process(pid_t pid, t_ast *cmd, char **env_array);
 void				execute_ast(t_ast *cmd, t_env *env);
 
+////////////here_doc////////////////////////////////
+char				*create_temp_filename(void);
+int					write_to_temp_file(char *delimiter, char *filename);
+void				execute_with_heredoc(t_ast *cmd, t_env *env,
+						char *filename);
+void				handle_heredoc(t_ast *cmd, t_env *env);
+char				*ft_strjoin_free(char *s1, char *s2);
 ///////////path_env.c///////////////////
 char				*get_path(char *cmd, char **env_array);
 char				*find_in_path(char *cmd, char **env_array);
@@ -83,6 +90,7 @@ void				handle_pipe_parent(t_ast *cmd, pid_t pid1, pid_t pid2,
 ////////////redirection.c///////////////////
 void				handle_redir_in(t_ast *cmd, t_env *env);
 void				handle_redir_out(t_ast *cmd, t_env *env);
+void				handle_redir_append(t_ast *cmd, t_env *env);
 
 //////////////////signal.c////////////////////////
 void				handle_signals(void);
@@ -117,7 +125,7 @@ void				print_env(t_env **head, t_ast *cmd);
 void				print_env_debug(t_env **head);
 
 /////////////////ft_exit.c////////////////////
-void				ft_exit(t_ast *cmd);
+void				ft_exit(t_ast *cmd, t_env *env);
 int					ft_is_valid_number(char *str);
 
 ////////////////ft_pwd.c/////////////////////

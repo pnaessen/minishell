@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
+/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 11:25:46 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/01 15:21:39 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/03/05 12:46:03 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,4 +86,8 @@ void	execute_ast(t_ast *cmd, t_env *env)
 		handle_redir_in(cmd, env);
 	else if (cmd->token == REDIR_OUT)
 		handle_redir_out(cmd, env);
+	else if (cmd->token == APPEND)
+		handle_redir_append(cmd, env);
+	else if (cmd->token == REDIR_HEREDOC)
+		handle_heredoc(cmd, env);
 }

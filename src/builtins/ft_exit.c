@@ -6,13 +6,13 @@
 /*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 12:23:40 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/04 14:22:35 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/05 14:19:58 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_exit(t_ast *cmd)
+void	ft_exit(t_ast *cmd, t_env *env)
 {
 	int	exit_code;
 
@@ -52,6 +52,7 @@ void	ft_exit(t_ast *cmd)
 		exit_code = 0;
 	cmd->error_code = exit_code;
 	free_ast(cmd->head);
+	free_env_list(env);
 	exit(exit_code);
 }
 

@@ -6,7 +6,7 @@
 /*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 11:40:58 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/03 13:32:10 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/05 10:36:32 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,13 @@
 #  define BUFFER_SIZE 10
 # endif
 
-#define LONG_LONG_INT 9223372036854775807
+# define LONG_LONG_INT 9223372036854775807
 # include <limits.h>
+# include <stdarg.h>
 # include <stdint.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
-# include <stdarg.h>
 
 typedef struct s_list
 {

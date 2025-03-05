@@ -6,12 +6,11 @@
 /*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:38:59 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/28 10:43:48 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/05 15:35:01 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 int	main(int argc, char **argv, char **env)
 {
@@ -43,7 +42,7 @@ int	main(int argc, char **argv, char **env)
 			cmd = create_test_pipeline(input);
 			if (cmd)
 			{
-				//print_ast(cmd, 0);
+				// print_ast(cmd, 0);
 				execute_ast(cmd, head);
 				free_ast(cmd);
 			}
@@ -85,17 +84,11 @@ t_ast	*create_test_command(char *cmd_str)
 		free(node);
 		return (NULL);
 	}
-	if (!args[0])
-	{
-		free(node);
-		ft_free(args);
-		return (NULL);
-	}
 	node->cmd = malloc(sizeof(t_cmd));
 	if (!node->cmd)
 	{
-		free(node);
 		ft_free(args);
+		free(node);
 		return (NULL);
 	}
 	node->cmd->args = args;
@@ -157,7 +150,6 @@ t_ast	*create_command_pipeline(char **cmds, int count)
 {
 	t_ast	*pipe_node;
 	t_ast	*root;
-	t_ast	*current;
 	t_ast	*next_cmd;
 	t_ast	*cmd;
 	int		i;
@@ -192,8 +184,6 @@ t_ast	*create_command_pipeline(char **cmds, int count)
 		pipe_node->right = next_cmd;
 		pipe_node->head = pipe_node;
 		pipe_node->error_code = 0;
-		current = root;
-		current->head = pipe_node;
 		next_cmd->head = pipe_node;
 		root = pipe_node;
 		i++;
@@ -203,22 +193,12 @@ t_ast	*create_command_pipeline(char **cmds, int count)
 
 t_ast	*create_test_pipeline(char *cmds)
 {
-	int		count;
-	char	*temp;
 	char	**split_commands;
 	int		valid_count;
 	t_ast	*result;
 
 	if (!cmds || !*cmds)
 		return (NULL);
-	count = 1;
-	temp = cmds;
-	while (*temp)
-	{
-		if (*temp == '|')
-			count++;
-		temp++;
-	}
 	split_commands = ft_split(cmds, '|');
 	if (!split_commands)
 		return (NULL);
@@ -271,7 +251,6 @@ void	print_ast(t_ast *node, int level)
 		print_ast(node->right, level + 1);
 	}
 }
-
 
 // < in > out < in1 < in2 < in3 > out1 < out2 cat
 // < in > out < (chmod 000) in1 < in2 < in3 > out1 < out2 cat
