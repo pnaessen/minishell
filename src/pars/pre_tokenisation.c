@@ -87,7 +87,7 @@ char	**pre_tokenisation(char const *s)
 	if (!(s))
 		return (0);
 	res = malloc((num_of_lines(s) + 1) * sizeof(char *));
-	printf("lines : %d\n", num_of_lines(s) + 1);
+	//printf("lines : %d\n", num_of_lines(s) + 1);
 	if (!(res))
 		return (0);
 	res[num_of_lines(s)] = NULL;

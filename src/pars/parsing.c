@@ -1,49 +1,54 @@
 #include "pars.h"
 
-int	tokenise_args(char *args_cleaned)
+t_stack *tokenise_args(char *args_cleaned)
 {
-	char	**token;
-	int		i;
-	t_stack	*stack;
+	char **token;
+	int i;
+	t_stack *stack;
 
-	token = pre_tokenisation(args_cleaned);
 	stack = NULL;
+	token = pre_tokenisation(args_cleaned);
+	if (!token)
+		return (NULL);
 	i = 0;
 	while (token[i])
 	{
 		if (fill_the_list(tokenisation(token[i]), &stack) == ERROR)
 		{
-			printf("DEBUG : in fill the lst");
 			ft_free_all(token);
-			return (ERROR);
+			return (NULL);
 		}
 		i++;
 	}
 	identify_token_type(&stack);
 	print_stack(&stack);
-	return (SUCCESS);
+	ft_free_all(token);
+	return (stack);
 }
 
-int	parsing_input(char *input)
+t_stack *parsing_input(char *input)
 {
-	char	*args;
-	char	*args_cleaned;
+	char *args;
+	char *args_cleaned;
+	t_stack *stack;
 
 	if (!input)
-		return (ERROR);
+		return (NULL);
 	args = handle_whitespaces(input);
 	if (!args)
-		return (ERROR);
+		return (NULL);
 	args_cleaned = handle_commands(args);
 	free(args);
 	if (!args_cleaned)
-		return (ERROR);
-	if (tokenise_args(args_cleaned) == ERROR)
+		return (NULL);
+	
+	stack = tokenise_args(args_cleaned);
+	if (!stack)
 	{
-		printf("DEBUG : tokenisation");
-		return (ERROR);
+		printf("DEBUG : tokenisation error\n");
+		return (NULL);
 	}
-	return (SUCCESS);
+	return (stack);
 }
 
 // int	main(int argc, char **env)

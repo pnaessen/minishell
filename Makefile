@@ -16,6 +16,7 @@ SRC := $(addprefix $(SRC_DIR), \
 	pipe.c \
 	redirection.c \
 	here_doc.c \
+
 )
 
 BUILTINS_SRC := $(addprefix $(BUILTINS_DIR), \

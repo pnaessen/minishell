@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/05 14:20:26 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/05 21:41:07 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINISHELL_H
 
 # include "libft.h"
+# include "pars.h"
 # include <fcntl.h>
 # include <readline/history.h>
 # include <readline/readline.h>
@@ -24,18 +25,6 @@
 # include <unistd.h>
 
 # define PATH_MAX 4096
-
-typedef enum e_node_type
-{
-	CMD,
-	PIPE,
-	AND,
-	OR,
-	REDIR_IN,
-	REDIR_OUT,
-	REDIR_HEREDOC,
-	APPEND // >>
-}					t_node_type;
 
 typedef struct s_ast
 {
@@ -60,6 +49,7 @@ typedef struct s_cmd
 }					t_cmd;
 
 ////////////////////////SRC/////////////////////////////////////
+
 
 ///////////exec.c///////////////////////
 void				execute_cmd(t_ast *cmd, t_env *env);
