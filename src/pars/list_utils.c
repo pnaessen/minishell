@@ -54,18 +54,49 @@ int	fill_the_list(char **cmd, t_stack **stack)
 	return (SUCCESS);
 }
 
+const char	*get_token_name(t_node_type token)
+{
+	switch (token)
+	{
+	case CMD:
+		return ("CMD");
+	case PIPE:
+		return ("PIPE");
+	case AND:
+		return ("AND");
+	case OR:
+		return ("OR");
+	case REDIR_IN:
+		return ("REDIR_IN");
+	case REDIR_OUT:
+		return ("REDIR_OUT");
+	case REDIR_HEREDOC:
+		return ("REDIR_HEREDOC");
+	case APPEND:
+		return ("APPEND");
+	default:
+		return ("UNKNOWN");
+	}
+}
+
 void	print_stack(t_stack **stack)
 {
 	t_stack	*temp;
 	int		i;
 
-	i = 0;
 	temp = *stack;
 	printf("\n");
 	while (1)
 	{
-		//printf("cmd[%d] : [%s]\n", i, temp->cmd);
-		i++;
+		i = 0;
+		printf("-----------------------------\n");
+		while (temp->cmd[i])
+		{
+			printf("cmd[%d] : [%s] || type : %s\n", i, temp->cmd[i],
+				get_token_name(temp->token));
+			i++;
+		}
+		printf("-----------------------------\n");
 		temp = temp->next;
 		if (temp == *stack)
 			break ;

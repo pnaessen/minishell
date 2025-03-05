@@ -31,11 +31,14 @@ BUILTINS_SRC := $(addprefix $(BUILTINS_DIR), \
 )
 
 PARS_SRC := $(addprefix $(PARS_DIR), \
-	parsing.c \
+	handle_commands.c \
+	handle_whitespace.c \
+	identify_tokens.c \
 	list_utils.c \
 	parsing_utils.c \
-	parsing_char_utils.c \
-	minishell_split.c \
+	parsing.c \
+	pre_tokenisation.c \
+	tokenisation.c \
 )
 
 SRC += $(BUILTINS_SRC) $(PARS_SRC)
