@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
+/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/05 21:41:07 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/03/06 15:04:30 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,16 @@ typedef struct s_cmd
 
 ////////////////////////SRC/////////////////////////////////////
 
+/////////////tree_ast//////////////////////////////
+t_ast				*parse_and_build_ast(char *input);
+t_ast				*convert_stack_to_ast(t_stack *stack);
+t_ast				*process_cmd_node(t_stack *node, t_ast **tree,
+						t_ast **prev_cmd);
+t_ast				*process_pipe_node(t_stack *node, t_stack *stack,
+						t_ast *tree, t_ast *prev_cmd);
+t_ast				*create_ast_command(char **args);
+t_ast				*create_ast_operator(t_node_type token, t_ast *left,
+						t_ast *right);
 
 ///////////exec.c///////////////////////
 void				execute_cmd(t_ast *cmd, t_env *env);

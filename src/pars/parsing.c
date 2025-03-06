@@ -21,8 +21,8 @@ t_stack *tokenise_args(char *args_cleaned)
 		i++;
 	}
 	identify_token_type(&stack);
-	print_stack(&stack);
-	ft_free_all(token);
+	//print_stack(&stack);
+	//ft_free_all(token);
 	return (stack);
 }
 
@@ -41,11 +41,10 @@ t_stack *parsing_input(char *input)
 	free(args);
 	if (!args_cleaned)
 		return (NULL);
-	
 	stack = tokenise_args(args_cleaned);
 	if (!stack)
 	{
-		printf("DEBUG : tokenisation error\n");
+		//printf("DEBUG : tokenisation error\n");
 		return (NULL);
 	}
 	return (stack);

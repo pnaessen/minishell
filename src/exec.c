@@ -6,7 +6,7 @@
 /*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 11:25:46 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/05 12:46:03 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/06 11:43:11 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	parent_process(pid_t pid, t_ast *cmd, char **env_array)
 void	execute_ast(t_ast *cmd, t_env *env)
 {
 	if (!cmd) // add un if only space
-		return ;
+	return ;
 	if (cmd->token == CMD)
 	{
 		check_builtin(cmd, env);
