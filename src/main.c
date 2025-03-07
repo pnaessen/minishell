@@ -6,7 +6,7 @@
 /*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:38:59 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/06 14:52:59 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/07 13:45:02 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ int	main(int argc, char **argv, char **env)
 		if (*input)
 		{
 			add_history(input);
-			//cmd = create_test_pipeline(input);
 			cmd = parse_and_build_ast(input);
 			if (cmd)
 			{
@@ -53,163 +52,6 @@ int	main(int argc, char **argv, char **env)
 	}
 	free_env_list(head);
 	return (0);
-}
-
-t_ast	*create_test_command(char *cmd_str)
-{
-	t_ast	*node;
-	char	**args;
-	int		i;
-	int		only_spaces_or_slash;
-
-	if (cmd_str == NULL)
-		return (NULL);
-	only_spaces_or_slash = 1;
-	i = 0;
-	while (cmd_str[i])
-	{
-		if (cmd_str[i] != ' ' && cmd_str[i] != '\\')
-		{
-			only_spaces_or_slash = 0;
-			break ;
-		}
-		i++;
-	}
-	if (cmd_str[0] == '\0' || only_spaces_or_slash)
-		return (NULL);
-	node = malloc(sizeof(t_ast));
-	if (!node)
-		return (NULL);
-	args = ft_split(cmd_str, ' ');
-	if (!args)
-	{
-		free(node);
-		return (NULL);
-	}
-	node->cmd = malloc(sizeof(t_cmd));
-	if (!node->cmd)
-	{
-		ft_free(args);
-		free(node);
-		return (NULL);
-	}
-	node->cmd->args = args;
-	node->cmd->path = NULL;
-	node->token = CMD;
-	node->left = NULL;
-	node->right = NULL;
-	node->head = node;
-	node->error_code = 0;
-	return (node);
-}
-
-void	free_ast_cmd(t_ast *node)
-{
-	int	i;
-
-	if (!node->cmd)
-		return ;
-	if (node->cmd->path)
-	{
-		free(node->cmd->path);
-		node->cmd->path = NULL;
-	}
-	if (node->cmd->args)
-	{
-		i = 0;
-		while (node->cmd->args[i])
-		{
-			free(node->cmd->args[i]);
-			i++;
-		}
-		free(node->cmd->args);
-		node->cmd->args = NULL;
-	}
-	free(node->cmd);
-	node->cmd = NULL;
-}
-
-void	free_ast(t_ast *node)
-{
-	if (!node)
-		return ;
-	if (node->left)
-	{
-		free_ast(node->left);
-		node->left = NULL;
-	}
-	if (node->right)
-	{
-		free_ast(node->right);
-		node->right = NULL;
-	}
-	if (node->cmd)
-		free_ast_cmd(node);
-	free(node);
-}
-
-t_ast	*create_command_pipeline(char **cmds, int count)
-{
-	t_ast	*pipe_node;
-	t_ast	*root;
-	t_ast	*next_cmd;
-	t_ast	*cmd;
-	int		i;
-
-	if (!cmds || count <= 0)
-		return (NULL);
-	if (count == 1)
-		return (create_test_command(cmds[0]));
-	cmd = create_test_command(cmds[0]);
-	if (!cmd)
-		return (NULL);
-	root = cmd;
-	i = 1;
-	while (i < count)
-	{
-		next_cmd = create_test_command(cmds[i]);
-		if (!next_cmd)
-		{
-			free_ast(root);
-			return (NULL);
-		}
-		pipe_node = malloc(sizeof(t_ast));
-		if (!pipe_node)
-		{
-			free_ast(root);
-			free_ast(next_cmd);
-			return (NULL);
-		}
-		pipe_node->cmd = NULL;
-		pipe_node->token = PIPE;
-		pipe_node->left = root;
-		pipe_node->right = next_cmd;
-		pipe_node->head = pipe_node;
-		pipe_node->error_code = 0;
-		next_cmd->head = pipe_node;
-		root = pipe_node;
-		i++;
-	}
-	return (root);
-}
-
-t_ast	*create_test_pipeline(char *cmds)
-{
-	char	**split_commands;
-	int		valid_count;
-	t_ast	*result;
-
-	if (!cmds || !*cmds)
-		return (NULL);
-	split_commands = ft_split(cmds, '|');
-	if (!split_commands)
-		return (NULL);
-	valid_count = 0;
-	while (split_commands[valid_count])
-		valid_count++;
-	result = create_command_pipeline(split_commands, valid_count);
-	ft_free(split_commands);
-	return (result);
 }
 
 void	print_ast(t_ast *node, int level)

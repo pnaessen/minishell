@@ -6,7 +6,7 @@
 /*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/06 15:04:30 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/07 12:18:52 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,15 +51,19 @@ typedef struct s_cmd
 ////////////////////////SRC/////////////////////////////////////
 
 /////////////tree_ast//////////////////////////////
-t_ast				*parse_and_build_ast(char *input);
-t_ast				*convert_stack_to_ast(t_stack *stack);
-t_ast				*process_cmd_node(t_stack *node, t_ast **tree,
-						t_ast **prev_cmd);
-t_ast				*process_pipe_node(t_stack *node, t_stack *stack,
-						t_ast *tree, t_ast *prev_cmd);
 t_ast				*create_ast_command(char **args);
+t_ast				*init_cmd_node(t_ast *node, char **args, int args_count);
+t_ast				*free_cmd_node(t_ast *node, int i);
 t_ast				*create_ast_operator(t_node_type token, t_ast *left,
 						t_ast *right);
+t_stack				*find_next_cmd(t_stack *current);
+t_ast				*parse_and_build_ast(char *input);
+t_ast				*create_command_and_continue(t_stack *cmd_token,
+						t_ast *left);
+t_ast				*process_pipe_node(t_stack *current, t_ast *left_ast);
+t_ast				*build_pipe_tree(t_stack *stack);
+void				free_ast_cmd(t_ast *node);
+void				free_ast(t_ast *node);
 
 ///////////exec.c///////////////////////
 void				execute_cmd(t_ast *cmd, t_env *env);
@@ -150,7 +154,6 @@ void				check_builtin(t_ast *input, t_env *env);
 
 ////////////////main.c/////////////////////////
 t_ast				*create_test_command(char *cmd_str);
-void				free_ast_cmd(t_ast *node);
 void				free_ast(t_ast *node);
 t_ast				*create_command_pipeline(char **cmds, int count);
 t_ast				*create_test_pipeline(char *cmds);
