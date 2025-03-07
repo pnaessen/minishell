@@ -26,7 +26,7 @@ void	execute_cmd(t_ast *cmd, t_env *env)
 	pid = fork();
 	if (pid == -1)
 	{
-		ft_free(env_array);
+		ft_free_ta(env_array);
 		cmd->error_code = 1;
 		return ;
 	}

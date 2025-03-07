@@ -109,6 +109,8 @@ void				creat_mini_env(t_env **head);
 /////////utils/////
 int					ft_strcmp(char *src, char *cmp);
 void				free_env_array(char **env_array);
+int					ft_isdigiter(int c);
+char				**ft_free_ta(char **tab);
 
 ////////////BUILTINS////////////////////////
 

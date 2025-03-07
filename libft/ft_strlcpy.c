@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlcpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vicperri <vicperri@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/06 08:53:12 by pnaessen          #+#    #+#             */
-/*   Updated: 2024/11/15 14:08:36 by pnaessen         ###   ########lyon.fr   */
+/*   Created: 2024/11/04 12:58:59 by vicperri          #+#    #+#             */
+/*   Updated: 2024/11/15 14:17:34 by vicperri         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 

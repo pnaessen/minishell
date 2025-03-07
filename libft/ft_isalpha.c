@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isalpha.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vicperri <vicperri@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/06 07:39:56 by pnaessen          #+#    #+#             */
-/*   Updated: 2024/12/07 12:57:38 by pnaessen         ###   ########lyon.fr   */
+/*   Created: 2024/11/05 12:42:22 by vicperri          #+#    #+#             */
+/*   Updated: 2024/11/15 12:54:03 by vicperri         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int	ft_isalpha(int c)
 {
-	if ((c > 64 && c < 91) || (c > 96 && c < 123))
-		return (1);
-	else
+	if (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')))
 		return (0);
+	else
+		return (1);
 }

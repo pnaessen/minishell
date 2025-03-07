@@ -5,93 +5,73 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/14 12:04:20 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/01/24 08:48:00 by pnaessen         ###   ########lyon.fr   */
+/*   Created: 2024/11/07 14:10:59 by vicperri          #+#    #+#             */
+/*   Updated: 2025/03/07 14:20:56 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	ft_count_word(char const *s, char c);
-static int	ft_len(char const *s, int i, char c);
-static char	*ft_strndup(char const *s, int i, int size, char c);
-
-char	**ft_split(char const *s, char c)
+char	**ft_free(char **res)
 {
-	char	**result;
-	int		i;
-	int		j;
-
-	if (*s == '\0')
-		return (NULL);
-	result = (char **)malloc(sizeof(char *) * (ft_count_word(s, c) + 1));
-	if (!result)
-		return (NULL);
-	i = 0;
-	j = 0;
-	while (j < ft_count_word(s, c))
-	{
-		while (s[i] == c)
-			i++;
-		result[j] = ft_strndup(s, i, ft_len(s, i, c), c);
-		if (!result[j])
-			return (ft_free(result));
-		while (s[i] && s[i] != c)
-			i++;
-		j++;
-	}
-	result[j] = NULL;
-	return (result);
-}
-
-static int	ft_count_word(char const *s, char c)
-{
-	int		count;
-	int		in_word;
 	size_t	i;
 
-	count = 0;
-	in_word = 0;
 	i = 0;
-	while (s[i])
+	while (res[i])
 	{
-		if (s[i] != c && in_word == 0)
-		{
-			in_word = 1;
+		free(res[i]);
+		res[i] = NULL;
+		i++;
+	}
+	free(res);
+	return (0);
+}
+
+size_t	ft_reslen(const char *s1, char c)
+{
+	size_t	i;
+	size_t	count;
+
+	i = 0;
+	count = 0;
+	while (s1[i])
+	{
+		if (s1[i] != c && (s1[i + 1] == c || s1[i + 1] == '\0'))
 			count++;
-		}
-		else if (s[i] == c)
-			in_word = 0;
 		i++;
 	}
 	return (count);
 }
 
-static int	ft_len(char const *s, int i, char c)
+size_t	ft_countword(const char *s1, size_t i, char c)
 {
-	int	len;
+	size_t	count;
 
-	len = 0;
-	while (s[i] && s[i] != c)
-	{
-		len++;
+	count = 0;
+	while (s1[i] == c)
 		i++;
+	while (s1[i])
+	{
+		if (s1[i] == c)
+			return (count);
+		i++;
+		count++;
 	}
-	return (len);
+	return (count);
 }
 
-static char	*ft_strndup(char const *s, int i, int size, char c)
+char	*ft_newtabb(const char *s1, size_t size, char c, size_t i)
 {
 	char	*dup;
-	int		j;
+	size_t	j;
 
-	dup = (char *)malloc(sizeof(char) * (size + 1));
-	if (!dup)
-		return (NULL);
+	dup = malloc((size + 1) * sizeof(char));
 	j = 0;
-	while (j < size && s[i] && s[i] != c)
+	if (!(dup))
+		return (0);
+	while (s1[i] != c && s1[i])
 	{
-		dup[j] = s[i];
+		dup[j] = s1[i];
 		i++;
 		j++;
 	}
@@ -99,16 +79,31 @@ static char	*ft_strndup(char const *s, int i, int size, char c)
 	return (dup);
 }
 
-char	**ft_free(char **tab)
+char	**ft_split(char const *s, char c)
 {
+	char	**res;
 	size_t	i;
+	size_t	j;
 
 	i = 0;
-	while (tab[i])
+	j = 0;
+	if (!(s))
+		return (0);
+	res = malloc((ft_reslen(s, c) + 1) * sizeof(char *));
+	if (!(res))
+		return (0);
+	res[ft_reslen(s, c)] = NULL;
+	while (s[i] && j < ft_reslen(s, c))
 	{
-		free(tab[i]);
+		if (s[i] != c)
+		{
+			res[j] = ft_newtabb(s, ft_countword(s, i, c), c, i);
+			if (!(res[j]))
+				return (ft_free(res));
+			i += ft_countword(s, i, c);
+			j++;
+		}
 		i++;
 	}
-	free(tab);
-	return (NULL);
+	return (res);
 }

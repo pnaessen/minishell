@@ -3,64 +3,64 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vicperri <vicperri@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/15 20:19:38 by aviscogl          #+#    #+#             */
-/*   Updated: 2024/12/07 11:03:44 by pnaessen         ###   ########lyon.fr   */
+/*   Created: 2024/11/18 09:22:21 by vicperri          #+#    #+#             */
+/*   Updated: 2024/12/11 14:49:09 by vicperri         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_printf(const char *format, ...)
-{
-	va_list	args;
-	int		count;
-
-	count = 0;
-	if (format == NULL)
-		return (-1);
-	va_start(args, format);
-	while (*format)
-	{
-		if (*format == '%')
-		{
-			format++;
-			count += parse_format(&format, args);
-		}
-		else
-		{
-			parse_char(*format);
-			count++;
-		}
-		format++;
-	}
-	va_end(args);
-	return (count);
-}
-
-int	parse_format(const char **format, va_list args)
+int	conversion_format(const char *format, int i, va_list args)
 {
 	int	count;
 
 	count = 0;
-	if (**format == 'c')
-		count = parse_char(va_arg(args, int));
-	else if (**format == 's')
-		count = parse_string(va_arg(args, char *));
-	else if (**format == 'd' || **format == 'i')
-		count = parse_int(va_arg(args, int));
-	else if (**format == 'u')
-		count = parse_unsigned(va_arg(args, unsigned int));
-	else if (**format == 'x')
-		count = parse_hex(va_arg(args, unsigned int));
-	else if (**format == 'X')
-		count = parse_hex_upper(va_arg(args, unsigned int));
-	else if (**format == 'p')
-		count = parse_pointer(va_arg(args, void *));
-	else if (**format == '%')
-		count = parse_char('%');
-	else
-		return (0);
+	if (format[i] == 'c')
+		count = ft_putchar_printf(va_arg(args, int));
+	if (format[i] == 's')
+		count = ft_putstr_printf(va_arg(args, char *));
+	if (format[i] == 'd' || format[i] == 'i')
+		count = ft_putnbr_printf(va_arg(args, int));
+	if (format[i] == 'u')
+		count = ft_unsign_nbr(va_arg(args, unsigned int));
+	if (format[i] == 'p')
+		count = ft_hexa_void(va_arg(args, unsigned long int));
+	if (format[i] == 'x')
+		count = ft_hexa_nbr(va_arg(args, unsigned int), format[i]);
+	if (format[i] == 'X')
+		count = ft_hexa_nbr(va_arg(args, unsigned int), format[i]);
+	if (format[i] == '%')
+		count = ft_putchar_printf('%');
 	return (count);
+}
+
+int	ft_printf(const char *format, ...)
+{
+	int		i;
+	int		len;
+	va_list	args;
+
+	i = 0;
+	len = 0;
+	va_start(args, format);
+	if (format == NULL)
+		return (-1);
+	while (format[i])
+	{
+		if (format[i] == '%')
+		{
+			i++;
+			len += conversion_format(format, i, args);
+		}
+		else
+		{
+			write(1, &format[i], 1);
+			len++;
+		}
+		i++;
+	}
+	va_end(args);
+	return (len);
 }

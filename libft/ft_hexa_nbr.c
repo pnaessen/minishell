@@ -1,22 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isalnum.c                                       :+:      :+:    :+:   */
+/*   ft_hexa_nbr.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vicperri <vicperri@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/05 12:55:55 by vicperri          #+#    #+#             */
-/*   Updated: 2025/02/19 14:10:37 by vicperri         ###   ########lyon.fr   */
+/*   Created: 2024/11/18 11:45:40 by vicperri          #+#    #+#             */
+/*   Updated: 2025/02/03 11:11:09 by vicperri         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_isalnum(int c)
+int	ft_hexa_nbr(unsigned int n, char x)
 {
-	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0'
-				&& c <= '9'))
-		return (0);
-	else
-		return (1);
+	char	*base_maj;
+	char	*base_min;
+	int		count;
+
+	count = 0;
+	base_maj = "0123456789ABCDEF";
+	base_min = "0123456789abcdef";
+	if (n >= 16)
+		count += ft_hexa_nbr((n / 16), x);
+	if (x == 'X')
+		count += ft_putchar_printf(base_maj[n % 16]);
+	if (x == 'x')
+		count += ft_putchar_printf(base_min[n % 16]);
+	return (count);
 }

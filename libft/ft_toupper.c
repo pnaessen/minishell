@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_toupper.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vicperri <vicperri@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/06 11:56:45 by pnaessen          #+#    #+#             */
-/*   Updated: 2024/11/15 14:09:32 by pnaessen         ###   ########lyon.fr   */
+/*   Created: 2024/11/05 13:56:05 by vicperri          #+#    #+#             */
+/*   Updated: 2024/11/15 14:16:05 by vicperri         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_toupper(int c)
 {
-	if (c > 96 && c < 123)
+	if (c >= 'a' && c <= 'z')
 		c -= 32;
 	return (c);
 }

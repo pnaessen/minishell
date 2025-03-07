@@ -1,22 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isalnum.c                                       :+:      :+:    :+:   */
+/*   ft_putchar_printf.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vicperri <vicperri@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/05 12:55:55 by vicperri          #+#    #+#             */
-/*   Updated: 2025/02/19 14:10:37 by vicperri         ###   ########lyon.fr   */
+/*   Created: 2024/11/18 11:45:40 by vicperri          #+#    #+#             */
+/*   Updated: 2025/02/03 11:14:51 by vicperri         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_isalnum(int c)
+int	ft_putchar_printf(int c)
 {
-	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0'
-				&& c <= '9'))
-		return (0);
-	else
-		return (1);
+	write(1, &c, 1);
+	return (1);
 }

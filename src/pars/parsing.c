@@ -21,7 +21,7 @@ t_stack *tokenise_args(char *args_cleaned)
 		i++;
 	}
 	identify_token_type(&stack);
-	//print_stack(&stack);
+	print_stack(&stack);
 	//ft_free_all(token);
 	return (stack);
 }

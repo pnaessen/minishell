@@ -3,106 +3,131 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vicperri <vicperri@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/21 19:47:55 by aviscogl          #+#    #+#             */
-/*   Updated: 2025/02/05 17:11:44 by pnaessen         ###   ########lyon.fr   */
+/*   Created: 2024/11/21 16:00:27 by vicperri          #+#    #+#             */
+/*   Updated: 2024/12/11 14:58:23 by vicperri         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static char	*strdup(const char *s)
+char	*join(char *line, char *readbuffer)
 {
-	size_t	len;
 	char	*str;
+	size_t	size;
 	size_t	i;
+	size_t	j;
 
 	i = 0;
-	len = 0;
-	while (s[len] && s[len] != '\n')
-		len++;
-	if (s[len] == '\n')
-		len++;
-	str = malloc(sizeof(char) * (len + 1));
+	if (!line || !readbuffer)
+		return (NULL);
+	j = ft_strlen(line);
+	while (readbuffer[i] && readbuffer[i] != '\n')
+		i++;
+	if (readbuffer[i] == '\n')
+		i++;
+	size = i + j;
+	str = malloc((size + 1) * sizeof(char));
 	if (!str)
+		return (free(line), NULL);
+	ft_memcpy(str, line, j);
+	i = 0;
+	while (readbuffer[i] && readbuffer[i] != '\n')
+		str[j++] = readbuffer[i++];
+	if (readbuffer[i] == '\n')
+		str[j++] = readbuffer[i++];
+	str[j] = '\0';
+	return (free(line), str);
+}
+
+void	ft_update(char *readbuffer)
+{
+	size_t	i;
+	size_t	j;
+
+	i = 0;
+	j = 0;
+	while (readbuffer[i] && readbuffer[i] != '\n')
+		i++;
+	if (readbuffer[i] == '\n')
+		i++;
+	while (readbuffer[i])
+	{
+		readbuffer[j] = readbuffer[i];
+		i++;
+		j++;
+	}
+	readbuffer[j] = '\0';
+}
+
+char	*dup_gnl(char *s1)
+{
+	size_t	len;
+	char	*dup;
+	size_t	i;
+
+	len = 0;
+	i = 0;
+	while (s1[len] && s1[len] != '\n')
+		len++;
+	if (s1[len] == '\n')
+		len++;
+	dup = malloc((len + 1) * sizeof(char));
+	if (!dup)
 		return (NULL);
 	while (i < len)
 	{
-		str[i] = s[i];
+		dup[i] = s1[i];
 		i++;
 	}
-	str[i] = '\0';
-	return (str);
-}
-
-static char	*strjoin(char *s1, char *s2)
-{
-	size_t	len1;
-	size_t	len2;
-	char	*str;
-
-	len2 = 0;
-	if (!s1 || !s2)
-		return (NULL);
-	len1 = ft_strlen(s1);
-	while (s2[len2] != '\n' && s2[len2] != '\0')
-		len2++;
-	if (s2[len2] == '\n')
-		len2++;
-	str = malloc(len1 + len2 + 1);
-	if (!str)
-	{
-		free(s1);
-		return (NULL);
-	}
-	ft_memcpy(str, s1, len1);
-	ft_memcpy(str + len1, s2, len2);
-	str[len1 + len2] = '\0';
-	free(s1);
-	return (str);
-}
-
-static void	ft_update(char *str)
-{
-	int	i;
-	int	j;
-
-	j = 0;
-	i = 0;
-	while (str[i] && str[i] != '\n')
-		i++;
-	if (str[i] == '\n')
-		i++;
-	while (str[i])
-		str[j++] = str[i++];
-	str[j] = '\0';
+	dup[i] = '\0';
+	return (dup);
 }
 
 char	*get_next_line(int fd)
 {
+	static char	readbuffer[BUFFER_SIZE + 1] = {0};
 	char		*line;
-	static char	str[BUFFER_SIZE + 1] = {0};
-	int			index;
+	int			bytes;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	index = 1;
-	line = strdup(str);
+	bytes = 1;
+	line = dup_gnl(readbuffer);
 	if (!line)
 		return (NULL);
-	while (index > 0 && !ft_strchr(line, '\n'))
+	while (bytes > 0 && !ft_strchr(line, '\n'))
 	{
-		index = read(fd, str, BUFFER_SIZE);
-		if (index == -1)
-			return (ft_bzero(str, BUFFER_SIZE), free(line), NULL);
-		str[index] = '\0';
-		line = strjoin(line, str);
+		bytes = read(fd, readbuffer, BUFFER_SIZE);
+		if (bytes == -1)
+			return (ft_bzero(readbuffer, BUFFER_SIZE), free(line), NULL);
+		readbuffer[bytes] = '\0';
+		line = join(line, readbuffer);
 		if (!line)
 			return (NULL);
 	}
-	if (index == 0 && !line[0])
+	if (!line[0] && bytes == 0)
 		return (free(line), NULL);
-	ft_update(str);
+	ft_update(readbuffer);
 	return (line);
 }
+
+// #include <fcntl.h>
+
+// int	main(void)
+// {
+// 	int fd = open("hello.txt", O_RDONLY);
+// 	char *line;
+
+// 	if (fd < 0)
+// 		return (1);
+
+// 	while ((line = get_next_line(fd)) != NULL)
+// 	{
+// 		printf("%s", line);
+// 		free(line);
+// 	}
+// 	close(fd);
+// 	return (0);
+// }

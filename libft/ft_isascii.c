@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isascii.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vicperri <vicperri@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/05 12:48:36 by pnaessen          #+#    #+#             */
-/*   Updated: 2024/11/15 14:10:37 by pnaessen         ###   ########lyon.fr   */
+/*   Created: 2024/11/05 13:08:34 by vicperri          #+#    #+#             */
+/*   Updated: 2024/11/15 12:53:36 by vicperri         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,7 @@
 
 int	ft_isascii(int c)
 {
-	if (c >= 0 && c <= 127)
-		return (1);
-	else
+	if (!(c >= 0 && c <= 127))
 		return (0);
+	return (1);
 }

@@ -71,25 +71,25 @@ char	*search_command_in_path(char *cmd, char **path_dirs)
 		temp = ft_strjoin(path_dirs[i], "/");
 		if (!temp)
 		{
-			ft_free(path_dirs);
+			ft_free_ta(path_dirs);
 			return (NULL);
 		}
 		full_path = ft_strjoin(temp, cmd);
 		free(temp);
 		if (!full_path)
 		{
-			ft_free(path_dirs);
+			ft_free_ta(path_dirs);
 			return (NULL);
 		}
 		if (access(full_path, X_OK) == 0)
 		{
-			ft_free(path_dirs);
+			ft_free_ta(path_dirs);
 			return (full_path);
 		}
 		free(full_path);
 		i++;
 	}
-	ft_free(path_dirs);
+	ft_free_ta(path_dirs);
 	return (NULL);
 }
 

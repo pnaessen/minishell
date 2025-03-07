@@ -44,3 +44,25 @@ void	free_env_array(char **env_array)
 	}
 	free(env_array);
 }
+
+int	ft_isdigiter(int c)
+{
+	if (c > 47 && c < 58)
+		return (1);
+	else
+		return (0);
+}
+
+char	**ft_free_ta(char **tab)
+{
+	size_t	i;
+
+	i = 0;
+	while (tab[i])
+	{
+		free(tab[i]);
+		i++;
+	}
+	free(tab);
+	return (NULL);
+}

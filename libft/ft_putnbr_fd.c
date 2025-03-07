@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vicperri <vicperri@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/10 23:12:14 by aviscogl          #+#    #+#             */
-/*   Updated: 2024/11/14 08:31:40 by pnaessen         ###   ########lyon.fr   */
+/*   Created: 2024/11/08 14:52:38 by vicperri          #+#    #+#             */
+/*   Updated: 2024/11/15 14:17:51 by vicperri         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,17 @@ void	ft_putnbr_fd(int n, int fd)
 	if (n == -2147483648)
 	{
 		write(fd, "-2147483648", 11);
-		return ;
 	}
-	if (n < 0)
+	if (n < 0 && n != -2147483648)
 	{
-		write(fd, "-", 1);
-		n = -n;
+		n *= -1;
+		ft_putchar_fd('-', fd);
 	}
-	if (n >= 10)
-		ft_putnbr_fd(n / 10, fd);
-	write(fd, &"0123456789"[n % 10], 1);
+	if (n > 9)
+	{
+		ft_putnbr_fd((n / 10), fd);
+		ft_putnbr_fd((n % 10), fd);
+	}
+	else if (n != -2147483648)
+		ft_putchar_fd(n + 48, fd);
 }

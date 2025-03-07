@@ -1,22 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isalnum.c                                       :+:      :+:    :+:   */
+/*   ft_putnbr_printf.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vicperri <vicperri@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/05 12:55:55 by vicperri          #+#    #+#             */
-/*   Updated: 2025/02/19 14:10:37 by vicperri         ###   ########lyon.fr   */
+/*   Created: 2024/11/18 11:45:40 by vicperri          #+#    #+#             */
+/*   Updated: 2025/02/03 11:14:47 by vicperri         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_isalnum(int c)
+int	ft_putnbr_printf(int n)
 {
-	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0'
-				&& c <= '9'))
-		return (0);
+	int	count;
+
+	count = 0;
+	if (n == -2147483648)
+	{
+		write(1, "-2147483648", 11);
+		return (11);
+	}
+	if (n < 0)
+	{
+		n *= -1;
+		count += ft_putchar_printf('-');
+	}
+	if (n > 9)
+	{
+		count += ft_putnbr_printf((n / 10));
+		count += ft_putnbr_printf((n % 10));
+	}
 	else
-		return (1);
+		count += ft_putchar_printf(n + 48);
+	return (count);
 }
