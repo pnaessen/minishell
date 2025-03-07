@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vicperri <vicperri@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 14:33:06 by vicperri          #+#    #+#             */
-/*   Updated: 2025/01/31 10:38:51 by vicperri         ###   ########lyon.fr   */
+/*   Updated: 2025/03/07 19:56:28 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,26 @@
 
 long	ft_atoi(const char *nptr)
 {
-	long	res;
-	int		neg;
-	int		i;
+	size_t			i;
+	int				sign;
+	unsigned long	nb;
 
 	i = 0;
-	neg = 1;
-	res = 0;
-	while ((nptr[i] == ' ') || (nptr[i] >= 9 && nptr[i] <= 13))
+	sign = 1;
+	nb = 0;
+	while ((nptr[i] >= 9 && nptr[i] <= 13) || nptr[i] == 32)
 		i++;
 	if (nptr[i] == '-' || nptr[i] == '+')
-	{
-		if (nptr[i] == '-')
-			neg *= -1;
-		i++;
-	}
+		if (nptr[i++] == '-')
+			sign *= -1;
 	while (nptr[i] >= '0' && nptr[i] <= '9')
 	{
-		res = res * 10 + (nptr[i++] - 48);
+		if (((nb * 10) + (nptr[i] - '0')) > LONG_LONG_INT && sign == 1)
+			return (-1);
+		else if (((nb * 10) + (nptr[i] - '0')) > LONG_LONG_INT
+			&& sign == -1)
+			return (0);
+		nb = nb * 10 + (nptr[i++] - '0');
 	}
-	return (res * neg);
+	return (nb * sign);
 }
