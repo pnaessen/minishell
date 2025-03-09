@@ -49,8 +49,8 @@ void	free_ast_cmd(t_ast *node)
 	}
 	if (node->cmd->args)
 		free_ast_cmd_args(node);
-	free(node->cmd);
 	node->cmd = NULL;
+	free(node->cmd);
 }
 
 void	free_ast_cmd_args(t_ast *node)
@@ -63,6 +63,28 @@ void	free_ast_cmd_args(t_ast *node)
 		free(node->cmd->args[i]);
 		i++;
 	}
-	free(node->cmd->args);
 	node->cmd->args = NULL;
+	free(node->cmd->args);
+}
+
+void free_stack(t_stack *node)
+{
+    if (node->cmd)
+		free_stack_cmd_args(node);
+	node->cmd = NULL;
+	free(node->cmd);
+}
+
+void	free_stack_cmd_args(t_stack *node)
+{
+	int	i;
+
+	i = 0;
+	while (node->cmd[i])
+	{
+		free(node->cmd[i]);
+		i++;
+	}
+	node->cmd = NULL;
+	free(node->cmd);
 }

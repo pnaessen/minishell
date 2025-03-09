@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
+/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:31:37 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/27 21:40:25 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/03/09 17:16:35 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ char	*find_in_path(char *cmd, char **env_array)
 	}
 	if (!path_var)
 		return (NULL);
-	path_dirs = ft_split(path_var, ':');
+	path_dirs = ft_split_pn(path_var, ':');
 	if (!path_dirs)
 		return (NULL);
 	return (search_command_in_path(cmd, path_dirs));

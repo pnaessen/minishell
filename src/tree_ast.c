@@ -6,7 +6,7 @@
 /*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 09:52:29 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/09 16:45:04 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/09 17:58:37 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,24 @@ t_ast	*parse_and_build_ast(char *input)
 {
 	t_stack	*parsed_stack;
 	t_ast	*ast_result;
+	// t_stack *end;
+	// t_stack *tmp;
 
 	if (!input || !*input)
 		return (NULL);
 	parsed_stack = parsing_input(input);
 	if (!parsed_stack)
 		return (NULL);
-	//parsed_stack = link_redi(parsed_stack);
+	// parsed_stack = link_redi(parsed_stack);
 	ast_result = build_tree(parsed_stack);
+	end = parsed_stack->prev;
+	// while(parsed_stack != end)
+	// {
+	// 	tmp = parsed_stack;
+	// 	free_stack(tmp);
+	// 	parsed_stack = parsed_stack->next;
+	// 	free(tmp);
+	// }
 	return (ast_result);
 }
 
@@ -95,3 +105,13 @@ t_ast	*init_first_cmd(t_stack *stack, t_stack *end, t_ast **current_node)
 	*current_node = root;
 	return (root);
 }
+
+////////////////////////////////////////////////////////////////
+
+// int	is_redirection(t_stack *token)
+// {
+// 	if (token == REDIR_HEREDOC || token == APPEND || token == REDIR_IN
+// 		|| token == REDIR_OUT)
+// 		return (1);
+// 	return (0);
+// }

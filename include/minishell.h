@@ -6,7 +6,7 @@
 /*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/09 16:29:08 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/09 17:56:48 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,6 @@ t_ast	*handle_pipe(t_ast **current_node, t_stack **current, t_stack *stack,
 
 
 
-
-
 ////////////ast_tools//////////////
 t_ast	*create_pipe_node(t_ast *left_cmd, t_ast *right_cmd);
 t_ast	*create_ast_operator(t_node_type token, t_ast *left, t_ast *right);
@@ -74,6 +72,12 @@ void	free_ast(t_ast *node);
 void	free_ast_children(t_ast *node);
 void	free_ast_cmd(t_ast *node);
 void	free_ast_cmd_args(t_ast *node);
+
+
+
+
+void free_stack(t_stack *node);
+void	free_stack_cmd_args(t_stack *node);
 
 //////////////////ast_utils////////////////
 t_stack	*find_next_cmd(t_stack *current, t_stack *end);
