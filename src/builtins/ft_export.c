@@ -6,7 +6,7 @@
 /*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 10:32:39 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/03 10:40:25 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/09 15:48:26 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,9 @@ void	update_env_var(t_env **env, char *var_str)
 	current = *env;
 	while (current)
 	{
-		if (ft_strncmp(current->str, name, name_len) == 0 && 
-			(current->str[name_len] == '=' || current->str[name_len] == '\0'))
+		if (ft_strncmp(current->str, name, name_len) == 0
+			&& (current->str[name_len] == '='
+				|| current->str[name_len] == '\0'))
 		{
 			free(current->str);
 			current->str = ft_strdup(var_str);

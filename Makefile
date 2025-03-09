@@ -17,6 +17,9 @@ SRC := $(addprefix $(SRC_DIR), \
 	redirection.c \
 	here_doc.c \
 	tree_ast.c \
+	ast_utils.c \
+	ast_free.c \
+	ast_tools.c \
 )
 
 BUILTINS_SRC := $(addprefix $(BUILTINS_DIR), \
