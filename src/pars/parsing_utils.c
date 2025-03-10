@@ -25,16 +25,19 @@ int	ft_is_quotes(char c)
 		return (SUCCESS);
 	return (ERROR);
 }
-int	handle_quotes(char argv, int quotes)
+int	handle_quotes(char argv, t_data *data)
 {
 	if (ft_is_quotes(argv) == SUCCESS)
 	{
-		if (quotes == SUCCESS)
-			quotes = ERROR;
+		if (data->quotes == SUCCESS)
+			data->quotes = ERROR;
 		else
-			quotes = SUCCESS;
+		{
+			data->quotes = SUCCESS;
+			data->quote_type = argv;
+		}
 	}
-	return (quotes);
+	return (data->quotes);
 }
 
 char	**ft_free_all(char **args)

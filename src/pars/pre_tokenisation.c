@@ -1,24 +1,23 @@
 #include "pars.h"
 
-int	num_of_lines(const char *s1)
+int	num_of_lines(const char *s1, t_data *data)
 {
 	int	i;
 	int	count;
-	int	quotes;
 
 	i = 0;
 	count = 0;
-	quotes = ERROR;
+	data->quotes = ERROR;
 	while (s1[i])
 	{
-		quotes = handle_quotes(s1[i], quotes);
+		handle_quotes(s1[i], data);
 		if ((ft_is_operator(s1[i]) == ERROR && ft_is_operator(s1[i
 					+ 1]) == SUCCESS) || s1[i + 1] == '\0')
 		{
-			if (quotes == ERROR)
+			if (data->quotes == ERROR)
 				count++;
 		}
-		else if (ft_is_operator(s1[i]) == SUCCESS && quotes == ERROR)
+		else if (ft_is_operator(s1[i]) == SUCCESS && data->quotes == ERROR)
 		{
 			while (ft_is_operator(s1[i]) == SUCCESS)
 				i++;
@@ -29,13 +28,12 @@ int	num_of_lines(const char *s1)
 	return (count);
 }
 
-int	num_of_words(const char *s1, int i)
+int	num_of_words(const char *s1, t_data *data, int i)
 {
 	int	count;
-	int	quotes;
 
 	count = 0;
-	quotes = ERROR;
+	data->quotes = ERROR;
 	if (ft_is_operator(s1[i]) == SUCCESS)
 	{
 		while (ft_is_operator(s1[i]) == SUCCESS)
@@ -47,8 +45,8 @@ int	num_of_words(const char *s1, int i)
 	}
 	while (s1[i])
 	{
-		quotes = handle_quotes(s1[i], quotes);
-		if (ft_is_operator(s1[i + 1]) == ERROR || quotes == SUCCESS)
+		handle_quotes(s1[i], data);
+		if (ft_is_operator(s1[i + 1]) == ERROR || data->quotes == SUCCESS)
 			count++;
 		else
 			return (count);
@@ -79,24 +77,27 @@ static char	*ft_newtab(const char *s1, int size, int i)
 char	**pre_tokenisation(char const *s)
 {
 	char	**res;
+	t_data	*data;
 	int		i;
 	int		j;
 
 	i = 0;
 	j = 0;
+	data = malloc(sizeof(t_data));
+	if (!data)
+		return (NULL);
 	if (!(s))
 		return (0);
-	res = malloc((num_of_lines(s) + 1) * sizeof(char *));
-	//printf("lines : %d\n", num_of_lines(s) + 1);
+	res = malloc((num_of_lines(s, data) + 1) * sizeof(char *));
 	if (!(res))
 		return (0);
-	res[num_of_lines(s)] = NULL;
-	while (s[i] && j < num_of_lines(s))
+	res[num_of_lines(s, data)] = NULL;
+	while (s[i] && j < num_of_lines(s, data))
 	{
-		res[j] = ft_newtab(s, num_of_words(s, i), i);
+		res[j] = ft_newtab(s, num_of_words(s, data, i), i);
 		if (!(res[j]))
 			return (ft_free_all(res));
-		i += num_of_words(s, i);
+		i += num_of_words(s, data, i);
 		j++;
 		i++;
 	}

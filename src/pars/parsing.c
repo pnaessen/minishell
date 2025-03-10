@@ -20,6 +20,7 @@ t_stack	*tokenise_args(char *args_cleaned)
 		}
 		i++;
 	}
+	quoting(&stack);
 	identify_token_type(&stack);
 	print_stack(&stack);
 	// ft_free_all(token);
@@ -35,9 +36,11 @@ t_stack	*parsing_input(char *input)
 	if (!input)
 		return (NULL);
 	args = handle_whitespaces(input);
+	printf("[DEBUG] : args : %s\n", args);
 	if (!args)
 		return (NULL);
 	args_cleaned = handle_commands(args);
+	printf("[DEBUG] : args_cleaned : %s\n", args_cleaned);
 	free(args);
 	if (!args_cleaned)
 		return (NULL);
@@ -47,32 +50,34 @@ t_stack	*parsing_input(char *input)
 	return (stack);
 }
 
-// int	main(int argc, char **env)
-// {
-// 	char	*input;
+int	main(int argc, char **env)
+{
+	char	*input;
 
-// 	(void)env;
-// 	if (argc != 1)
-// 	{
-// 		printf("Usage : minishell doesn't take argument\n");
-// 		return (0);
-// 	}
-// 	while (1)
-// 	{
-// 		input = readline("minishell$ ");
-// 		if (!input)
-// 		{
-// 			printf("exit\n");
-// 			exit(0);
-// 		}
-// 		if (*input)
-// 			add_history(input);
-// 		if (parsing_input(input) == ERROR)
-// 		{
-// 			free(input);
-// 			return (ERROR);
-// 		}
-// 		free(input);
-// 	}
-// 	return (0);
-// }
+	(void)env;
+	if (argc != 1)
+	{
+		printf("Usage : minishell doesn't take argument\n");
+		return (0);
+	}
+	while (1)
+	{
+		input = readline("minishell$ ");
+		if (!input)
+		{
+			printf("exit\n");
+			exit(0);
+		}
+		if (*input)
+		{
+			add_history(input);
+			parsing_input(input);
+		}
+		// {
+		// 	free(input);
+		// 	return (ERROR);
+		// }
+		free(input);
+	}
+	return (0);
+}
