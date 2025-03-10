@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
+/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 14:45:10 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/01 15:14:16 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/03/10 10:10:32 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_strcmp(char *src, char *cmp)
+int	ft_strrcmp(char *src, char *cmp)
 {
 	size_t			i;
 	unsigned char	*t1;
