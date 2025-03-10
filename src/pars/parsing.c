@@ -1,10 +1,10 @@
 #include "pars.h"
 
-t_stack *tokenise_args(char *args_cleaned)
+t_stack	*tokenise_args(char *args_cleaned)
 {
-	char **token;
-	int i;
-	t_stack *stack;
+	char	**token;
+	int		i;
+	t_stack	*stack;
 
 	stack = NULL;
 	token = pre_tokenisation(args_cleaned);
@@ -22,15 +22,15 @@ t_stack *tokenise_args(char *args_cleaned)
 	}
 	identify_token_type(&stack);
 	print_stack(&stack);
-	//ft_free_all(token);
+	// ft_free_all(token);
 	return (stack);
 }
 
-t_stack *parsing_input(char *input)
+t_stack	*parsing_input(char *input)
 {
-	char *args;
-	char *args_cleaned;
-	t_stack *stack;
+	char	*args;
+	char	*args_cleaned;
+	t_stack	*stack;
 
 	if (!input)
 		return (NULL);
@@ -43,10 +43,7 @@ t_stack *parsing_input(char *input)
 		return (NULL);
 	stack = tokenise_args(args_cleaned);
 	if (!stack)
-	{
-		//printf("DEBUG : tokenisation error\n");
 		return (NULL);
-	}
 	return (stack);
 }
 
