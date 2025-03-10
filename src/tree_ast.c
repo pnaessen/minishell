@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tree_ast.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
+/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 09:52:29 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/09 21:14:28 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/03/10 10:11:43 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,11 @@ t_ast	*parse_and_build_ast(char *input)
 	if (!parsed_stack)
 		return (NULL);
 	// parsed_stack = link_redi(parsed_stack);
-	if (!parsed_stack)
-	{
-		free_stack(parsed_stack);
-		return (NULL);
-	}
+	// if (!parsed_stack)
+	// {
+	// 	free_stack(parsed_stack);
+	// 	return (NULL);
+	// }
 	ast_result = build_tree(parsed_stack);
 	free_stack(parsed_stack);
 	return (ast_result);

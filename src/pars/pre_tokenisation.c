@@ -57,7 +57,7 @@ int	num_of_words(const char *s1, int i)
 	return (count);
 }
 
-char	*ft_newtab(const char *s1, int size, int i)
+static char	*ft_newtab(const char *s1, int size, int i)
 {
 	char	*dup;
 	int		j;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
+/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/09 21:14:54 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/03/10 10:10:42 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ void				free_env_list(t_env *env);
 void				creat_mini_env(t_env **head);
 
 /////////utils/////
-int					ft_strcmp(char *src, char *cmp);
+int					ft_strrcmp(char *src, char *cmp);
 void				free_env_array(char **env_array);
 int					ft_isdigiter(int c);
 char				**ft_free_ta(char **tab);

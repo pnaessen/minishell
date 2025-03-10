@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_export.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/28 10:32:39 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/09 15:48:26 by pnaessen         ###   ########lyon.fr   */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "minishell.h"
 
@@ -30,7 +19,7 @@ int	is_valid_identifier(char *str)
 	i = 0;
 	while (name[i])
 	{
-		if (!ft_isalnum(name[i]) && name[i] != '_')
+		if (ft_isalnum(name[i]) && name[i] != '_')
 		{
 			free(name);
 			return (0);

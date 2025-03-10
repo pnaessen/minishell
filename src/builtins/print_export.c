@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_export.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
+/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 14:47:14 by pn                #+#    #+#             */
-/*   Updated: 2025/03/02 17:40:34 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/03/10 10:14:39 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	sort_env_array(t_env **sorted, int env_size)
 		j = 0;
 		while (j < env_size - i - 1)
 		{
-			if (ft_strcmp(sorted[j]->str, sorted[j + 1]->str) > 0)
+			if (ft_strrcmp(sorted[j]->str, sorted[j + 1]->str) > 0)
 			{
 				tmp = sorted[j];
 				sorted[j] = sorted[j + 1];

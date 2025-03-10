@@ -6,7 +6,7 @@
 /*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 15:10:00 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/05 12:51:03 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/10 10:13:21 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	write_to_temp_file(char *delimiter, char *filename)
 	while (1)
 	{
 		line = readline("> ");
-		if (!line || ft_strcmp(line, delimiter) == 0)
+		if (!line || ft_strrcmp(line, delimiter) == 0)
 		{
 			free(line);
 			break ;
