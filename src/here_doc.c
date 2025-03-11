@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: aviscogl <aviscogl@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 15:10:00 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/10 10:13:21 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/11 20:28:27 by aviscogl         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,29 +74,29 @@ void	execute_with_heredoc(t_ast *cmd, t_env *env, char *filename)
 	close(saved_fd);
 }
 
-void	handle_heredoc(t_ast *cmd, t_env *env)
-{
-	char	*temp_filename;
-	char	*delimiter;
+// void	handle_heredoc(t_ast *cmd, t_env *env)
+// {
+// 	char	*temp_filename;
+// 	char	*delimiter;
 
-	delimiter = cmd->right->cmd->args[0];
-	temp_filename = create_temp_filename();
-	if (!temp_filename)
-	{
-		cmd->error_code = 1;
-		return ;
-	}
-	if (write_to_temp_file(delimiter, temp_filename) == -1)
-	{
-		perror("minishell: heredoc");
-		cmd->error_code = 1;
-		free(temp_filename);
-		return ;
-	}
-	execute_with_heredoc(cmd->left, env, temp_filename);
-	unlink(temp_filename);
-	free(temp_filename);
-}
+// 	delimiter = cmd->right->cmd->args[0];
+// 	temp_filename = create_temp_filename();
+// 	if (!temp_filename)
+// 	{
+// 		cmd->error_code = 1;
+// 		return ;
+// 	}
+// 	if (write_to_temp_file(delimiter, temp_filename) == -1)
+// 	{
+// 		perror("minishell: heredoc");
+// 		cmd->error_code = 1;
+// 		free(temp_filename);
+// 		return ;
+// 	}
+// 	execute_with_heredoc(cmd->left, env, temp_filename);
+// 	unlink(temp_filename);
+// 	free(temp_filename);
+// }
 
 char	*ft_strjoin_free(char *s1, char *s2)
 {

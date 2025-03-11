@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tree_ast.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: aviscogl <aviscogl@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 09:52:29 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/11 14:22:55 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/11 20:27:53 by aviscogl         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,23 +19,29 @@ t_ast	*build_tree_compat(t_stack *parsed_stack)
 	t_stack	*end;
 	t_ast	*root;
 	t_ast	*current_node;
+	t_ast *last_cmd_node;
 
 	current = parsed_stack;
 	end = parsed_stack->prev;
 	root = init_first_cmd(parsed_stack, end, &current_node);
 	if (!root)
 		return (NULL);
+	last_cmd_node = current_node;
 	current = current->next;
 	while (current != parsed_stack)
 	{
 		if (current->token == PIPE)
+		{
 			handle_pipe(&current_node, &current, parsed_stack, &root);
+			if (current_node->token == PIPE && current_node->right)
+				last_cmd_node = current_node->right;
+		}
 		else if (current->token == REDIR_IN || current->token == REDIR_OUT
 			|| current->token == APPEND || current->token == REDIR_HEREDOC)
 		{
 			if (current->next != parsed_stack && current->next->token == CMD)
 			{
-				if (!add_redirection_to_cmd(current_node, current->token,
+				if (!add_redirection_to_cmd(last_cmd_node, current->token,
 					current->next->cmd[0]))
 					{
 						free_ast(root);
@@ -129,18 +135,20 @@ int add_redirection_to_cmd(t_ast *cmd_node, t_node_type type, char *file)
 		return (0);
 	if (!cmd_node->cmd)
 	{
-		printf("DEBUGggggggggggg: cmd_node->cmd is NULL\n");
-		return (0);
+		cmd_node->cmd = malloc(sizeof(t_cmd));
+		if(!cmd_node->cmd)
+			return (0);
+		cmd_node->cmd->args = NULL;
+		cmd_node->cmd->redirs = NULL;
+		cmd_node->cmd->path = NULL;
 	}
-	printf("DEBUG: Adding redirection of type %d with file %s\n", type, file);
-	new_redir = create_redirection(type, file);
-	if (!new_redir)
-		return (0);
 	new_redir = create_redirection(type, file);
 	if (!new_redir)
 		return (0);	
-	if (!cmd_node->cmd->redirs) //segfault car cmd_node->cmd est NULL
+	if (!cmd_node->cmd->redirs)
+	{
 		cmd_node->cmd->redirs = new_redir;
+	}
 	else
 	{
 		current = cmd_node->cmd->redirs;
@@ -149,4 +157,68 @@ int add_redirection_to_cmd(t_ast *cmd_node, t_node_type type, char *file)
 		current->next = new_redir;
 	}
 	return (1);
+}
+
+
+int process_all_heredocs(t_ast *node)
+{
+	char *temp_filename;
+	char *delimiter;
+	t_redir *redir;
+	
+	if (!node)
+		return (1);
+	if (node->token == CMD && node->cmd && node->cmd->redirs)
+	{
+		redir = node->cmd->redirs;
+		while (redir)
+		{
+			if (redir->type == REDIR_HEREDOC)
+			{
+				delimiter = ft_strdup(redir->file);
+				if (!delimiter)
+					return (0);
+				temp_filename = create_temp_filename();
+				if (!temp_filename)
+				{
+					free(delimiter);
+					return (0);
+				}
+				if (write_to_temp_file(delimiter, temp_filename) == -1)
+				{
+					free(delimiter);
+					free(temp_filename);
+					return (0);
+				}
+				free(delimiter);
+				free(redir->file);
+				redir->file = temp_filename;
+			}
+			redir = redir->next;
+		}
+	}
+	if (node->left && !process_all_heredocs(node->left))
+		return (0);
+	if (node->right && !process_all_heredocs(node->right))
+		return (0);
+	return (1);
+}
+
+void cleanup_heredoc_files(t_ast *node)
+{
+	if (!node)
+		return;
+		
+	if (node->token == CMD && node->cmd && node->cmd->redirs)
+	{
+		t_redir *redir = node->cmd->redirs;
+		while (redir)
+		{
+			if (redir->type == REDIR_HEREDOC)
+				unlink(redir->file);
+			redir = redir->next;
+		}
+	}
+	cleanup_heredoc_files(node->left);
+	cleanup_heredoc_files(node->right);
 }

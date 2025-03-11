@@ -77,11 +77,17 @@ void	execute_cmd(t_ast *cmd_node, t_env *env)
 
 void	execute_ast(t_ast *node, t_env *env)
 {
-	int	saved_stdin;
-	int	saved_stdout;
+	int saved_stdin;
+	int saved_stdout;
+	static int heredocs_processed = 0;
 
 	if (!node)
 		return ;
+	if (!heredocs_processed)
+	{
+		process_all_heredocs(node);
+		heredocs_processed = 1;
+	}
 	if (node->token == CMD)
 	{
 		if (node->cmd->redirs)
@@ -135,5 +141,10 @@ void	execute_ast(t_ast *node, t_env *env)
 	else if (node->token == APPEND)
 		handle_redir_append(node, env);
 	else if (node->token == REDIR_HEREDOC)
-		handle_heredoc(node, env);
+		handle_redir_in(node, env);
+	if (node->head == node)
+	{
+		heredocs_processed = 0;
+		cleanup_heredoc_files(node);
+	}
 }

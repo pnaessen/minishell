@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 12:13:47 by pn                #+#    #+#             */
-/*   Updated: 2025/03/11 14:17:10 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/11 19:32:31 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ int	apply_redirection(t_redir *redir)
 {
 	int	fd;
 
-	if (redir->type == REDIR_IN)
+	if (redir->type == REDIR_IN || redir->type == REDIR_HEREDOC)
 	{
 		fd = open(redir->file, O_RDONLY);
 		if (fd == -1)

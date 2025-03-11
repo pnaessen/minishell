@@ -34,7 +34,7 @@ t_ast	*init_cmd_node_alloc(t_ast *node, int args_count)
 		free(node);
 		return (NULL);
 	}
-	node->cmd->redirs = NULL; // bug ? ou pas
+	node->cmd->redirs = NULL;
 	return (node);
 }
 
@@ -65,5 +65,6 @@ t_ast	*init_cmd_node(t_ast *node, char **args, int args_count)
 	}
 	node->cmd->args[args_count] = NULL;
 	node->cmd->path = NULL;
+	node->cmd->has_heredoc = 0;
 	return (node);
 }

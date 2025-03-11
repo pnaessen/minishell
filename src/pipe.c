@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 10:12:14 by pn                #+#    #+#             */
-/*   Updated: 2025/03/06 11:44:26 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/11 19:57:53 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,11 @@ void	pipe_child_left(t_ast *cmd, t_env *env, int *pipefd)
 		exit(1);
 	}
 	close(pipefd[1]);
+	if (cmd->left->token == CMD && cmd->left->cmd && cmd->left->cmd->redirs)
+	{
+		if (apply_all_redirections(cmd->left->cmd))
+			exit(1);
+	}
 	env_copy = env;
 	execute_ast(cmd->left, env_copy);
 	exit(cmd->error_code);
@@ -34,11 +39,15 @@ void	pipe_child_right(t_ast *cmd, t_env *env, int *pipefd)
 	t_env	*env_copy;
 
 	close(pipefd[1]);
-	if (dup2(pipefd[0], STDIN_FILENO) == -1)
+	if (cmd->right->token == CMD && cmd->right->cmd
+		&& !cmd->right->cmd->has_heredoc)
 	{
-		perror("minishell: dup2");
-		close(pipefd[0]);
-		exit(1);
+		if (dup2(pipefd[0], STDIN_FILENO) == -1)
+		{
+			perror("minishell: dup2");
+			close(pipefd[0]);
+			exit(1);
+		}
 	}
 	close(pipefd[0]);
 	env_copy = env;

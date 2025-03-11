@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/11 14:07:12 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/11 19:58:10 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ typedef struct s_cmd
 	char			**args;
 	char			*path;
 	t_redir			*redirs;
+	int				has_heredoc;
 }					t_cmd;
 
 ////////////////////////SRC/////////////////////////////////////
@@ -57,6 +58,8 @@ int					add_redirection_to_cmd(t_ast *cmd_node, t_node_type type,
 int					is_redirection(t_node_type token);
 void				free_redirections(t_redir *redirs);
 void				print_redirections(t_redir *redirs, int level);
+int					process_all_heredocs(t_ast *node);
+void				cleanup_heredoc_files(t_ast *node);
 /////////////tree_ast//////////////////////////////
 t_ast				*parse_and_build_ast(char *input);
 t_ast				*build_tree_compat(t_stack *parsed_stack);
