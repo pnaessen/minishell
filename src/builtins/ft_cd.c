@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
+/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 11:37:35 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/02 17:40:12 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/03/10 11:47:17 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,12 +113,12 @@ void	ft_cd(t_ast *cmd, t_env **env)
 	char	*old_dir;
 
 	old_dir = getcwd(NULL, PATH_MAX);
-	if (!old_dir)
-	{
-		perror("minishell: getcwd");
-		cmd->error_code = 1;
-		return ;
-	}
+	// if (!old_dir)
+	// {
+	// 	perror("minishell: getcwd");
+	// 	cmd->error_code = 1;
+	// 	return ;
+	// }
 	if (!cmd->cmd->args[1])
 	{
 		path = get_home_var(*env);

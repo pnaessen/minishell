@@ -35,6 +35,14 @@ typedef struct s_stack
 	struct s_stack	*prev;
 }					t_stack;
 
+// Structure pour stocker une redirection
+typedef struct s_redir
+{
+    t_node_type     type;       // Type de redirection (REDIR_IN, REDIR_OUT, APPEND, REDIR_HEREDOC)
+    char            *file;      // Nom du fichier ou délimiteur (pour heredoc)
+    struct s_redir  *next;      // Pointeur vers la prochaine redirection pour cette commande
+} t_redir;
+
 // parsing
 t_stack				*parsing_input(char *input);
 t_stack 			*tokenise_args(char *args_cleaned);

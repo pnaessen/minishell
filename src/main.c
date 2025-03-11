@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/15 15:38:59 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/09 20:20:58 by pn               ###   ########lyon.fr   */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
 int	main(int argc, char **argv, char **env)
@@ -74,6 +62,8 @@ void	print_ast(t_ast *node, int level)
 			}
 		}
 		printf("\n");
+		if (node->cmd && node->cmd->redirs)
+			print_redirections(node->cmd->redirs, level + 1);
 	}
 	else if (node->token == PIPE)
 	{
@@ -81,16 +71,34 @@ void	print_ast(t_ast *node, int level)
 		print_ast(node->left, level + 1);
 		print_ast(node->right, level + 1);
 	}
-	else if (node->token == REDIR_IN)
+}
+
+void	print_redirections(t_redir *redirs, int level)
+{
+	t_redir	*current;
+
+	current = redirs;
+	while (current)
 	{
-		printf("REDIR_IN\n");
-		print_ast(node->left, level + 1);
-		print_ast(node->right, level + 1);
-	}
-	else if (node->token == REDIR_OUT)
-	{
-		printf("REDIR_OUT\n");
-		print_ast(node->left, level + 1);
-		print_ast(node->right, level + 1);
+		for (int i = 0; i < level; i++)
+			printf("  ");
+		switch (current->type)
+		{
+		case REDIR_IN:
+			printf("< %s\n", current->file);
+			break ;
+		case REDIR_OUT:
+			printf("> %s\n", current->file);
+			break ;
+		case APPEND:
+			printf(">> %s\n", current->file);
+			break ;
+		case REDIR_HEREDOC:
+			printf("<< %s\n", current->file);
+			break ;
+		default:
+			printf("Unknown redirection\n");
+		}
+		current = current->next;
 	}
 }

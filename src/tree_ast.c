@@ -6,35 +6,14 @@
 /*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 09:52:29 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/10 10:11:43 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/11 14:22:55 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "pars.h"
 
-t_ast	*parse_and_build_ast(char *input)
-{
-	t_stack	*parsed_stack;
-	t_ast	*ast_result;
-
-	if (!input || !*input)
-		return (NULL);
-	parsed_stack = parsing_input(input);
-	if (!parsed_stack)
-		return (NULL);
-	// parsed_stack = link_redi(parsed_stack);
-	// if (!parsed_stack)
-	// {
-	// 	free_stack(parsed_stack);
-	// 	return (NULL);
-	// }
-	ast_result = build_tree(parsed_stack);
-	free_stack(parsed_stack);
-	return (ast_result);
-}
-
-t_ast	*build_tree(t_stack *parsed_stack)
+t_ast	*build_tree_compat(t_stack *parsed_stack)
 {
 	t_stack	*current;
 	t_stack	*end;
@@ -47,21 +26,42 @@ t_ast	*build_tree(t_stack *parsed_stack)
 	if (!root)
 		return (NULL);
 	current = current->next;
-	return (process_cmd_tokens(current, parsed_stack, root, current_node));
-}
-
-t_ast	*process_cmd_tokens(t_stack *current, t_stack *parsed_stack,
-		t_ast *root, t_ast *current_node)
-{
 	while (current != parsed_stack)
 	{
 		if (current->token == PIPE)
 			handle_pipe(&current_node, &current, parsed_stack, &root);
-		// else if (is_redirection(current->token))
-		// 	handle_redi();
+		else if (current->token == REDIR_IN || current->token == REDIR_OUT
+			|| current->token == APPEND || current->token == REDIR_HEREDOC)
+		{
+			if (current->next != parsed_stack && current->next->token == CMD)
+			{
+				if (!add_redirection_to_cmd(current_node, current->token,
+					current->next->cmd[0]))
+					{
+						free_ast(root);
+						return (NULL);
+					}
+				current = current->next;
+			}
+		}
 		current = current->next;
 	}
 	return (root);
+}
+
+t_ast	*parse_and_build_ast(char *input)
+{
+	t_stack	*parsed_stack;
+	t_ast	*ast_result;
+
+	if (!input || !*input)
+		return (NULL);
+	parsed_stack = parsing_input(input);
+	if (!parsed_stack)
+		return (NULL);
+	ast_result = build_tree_compat(parsed_stack);
+	free_stack(parsed_stack);
+	return (ast_result);
 }
 
 t_ast	*handle_pipe(t_ast **current_node, t_stack **current, t_stack *stack,
@@ -102,12 +102,51 @@ t_ast	*init_first_cmd(t_stack *stack, t_stack *end, t_ast **current_node)
 	return (root);
 }
 
-////////////////////////////////////////////////////////////////
+t_redir	*create_redirection(t_node_type type, char *file)
+{
+	t_redir	*redir;
 
-// int	is_redirection(t_stack *token)
-// {
-// 	if (token == REDIR_HEREDOC || token == APPEND || token == REDIR_IN
-// 		|| token == REDIR_OUT)
-// 		return (1);
-// 	return (0);
-// }
+	redir = malloc(sizeof(t_redir));
+	if (!redir)
+		return (NULL);
+	redir->type = type;
+	redir->file = ft_strdup(file);
+	if (!redir->file)
+	{
+		free(redir);
+		return (NULL);
+	}
+	redir->next = NULL;
+	return (redir);
+}
+
+int add_redirection_to_cmd(t_ast *cmd_node, t_node_type type, char *file)
+{
+	t_redir *new_redir;
+	t_redir *current;
+
+	if (!cmd_node || !file)
+		return (0);
+	if (!cmd_node->cmd)
+	{
+		printf("DEBUGggggggggggg: cmd_node->cmd is NULL\n");
+		return (0);
+	}
+	printf("DEBUG: Adding redirection of type %d with file %s\n", type, file);
+	new_redir = create_redirection(type, file);
+	if (!new_redir)
+		return (0);
+	new_redir = create_redirection(type, file);
+	if (!new_redir)
+		return (0);	
+	if (!cmd_node->cmd->redirs) //segfault car cmd_node->cmd est NULL
+		cmd_node->cmd->redirs = new_redir;
+	else
+	{
+		current = cmd_node->cmd->redirs;
+		while (current->next)
+			current = current->next;
+		current->next = new_redir;
+	}
+	return (1);
+}

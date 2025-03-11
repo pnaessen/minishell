@@ -26,7 +26,7 @@ t_ast	*create_ast_operator(t_node_type token, t_ast *left, t_ast *right)
 	if (!node)
 		return (NULL);
 	node->token = token;
-	node->cmd = NULL;
+	node->cmd = NULL; // change si pipe avant est redi apres
 	node->left = left;
 	node->right = right;
 	node->head = node;
@@ -50,4 +50,10 @@ t_ast	*create_pipe_node(t_ast *left_cmd, t_ast *right_cmd)
 		return (NULL);
 	}
 	return (pipe_node);
+}
+
+int	is_redirection(t_node_type token)
+{
+	return (token == REDIR_IN || token == REDIR_OUT || token == APPEND
+		|| token == REDIR_HEREDOC);
 }

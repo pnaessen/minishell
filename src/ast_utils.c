@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ast_utils.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/07 12:18:17 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/09 15:09:25 by pnaessen         ###   ########lyon.fr   */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "minishell.h"
 #include "pars.h"
@@ -45,6 +34,7 @@ t_ast	*init_cmd_node_alloc(t_ast *node, int args_count)
 		free(node);
 		return (NULL);
 	}
+	node->cmd->redirs = NULL; // bug ? ou pas
 	return (node);
 }
 

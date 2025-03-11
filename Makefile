@@ -20,6 +20,7 @@ SRC := $(addprefix $(SRC_DIR), \
 	ast_utils.c \
 	ast_free.c \
 	ast_tools.c \
+	free_tools.c \
 )
 
 BUILTINS_SRC := $(addprefix $(BUILTINS_DIR), \
