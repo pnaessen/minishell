@@ -33,18 +33,18 @@ int	identify_token_type(t_stack **stack)
 		return (ERROR);
 	while (1)
 	{
-		//i = 0;
-		//data->quotes = ERROR;
-		// while (temp->cmd[i])
-		// {
-		// 	handle_quotes(temp->cmd[i][0], data);
-		// 	if (ft_is_operator(temp->cmd[i][0]) == ERROR
-		// 		|| data->quotes == SUCCESS)
-		// 		temp->token = CMD;
-		// 	else
-		// 		define_type(temp, temp->cmd[i], data->quotes);
-		// 	i++;
-		// }
+		i = 0;
+		data->quotes = ERROR;
+		while (temp->cmd[i])
+		{
+			handle_quotes(temp->cmd[i][0], data);
+			if (ft_is_operator(temp->cmd[i][0]) == ERROR
+				|| data->quotes == SUCCESS)
+				temp->token = CMD;
+			else
+				define_type(temp, temp->cmd[i], data->quotes);
+			i++;
+		}
 		temp = temp->next;
 		if (temp == *stack)
 			break ;

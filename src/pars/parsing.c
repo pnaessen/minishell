@@ -8,6 +8,12 @@ t_stack	*tokenise_args(char *args_cleaned)
 
 	stack = NULL;
 	token = pre_tokenisation(args_cleaned);
+	i = 0;
+	while (token[i])
+	{
+		printf("[DEBUG] : token[%d] : %s\n", i, token[i]);
+		i++;
+	}
 	if (!token)
 		return (NULL);
 	i = 0;
@@ -20,8 +26,9 @@ t_stack	*tokenise_args(char *args_cleaned)
 		}
 		i++;
 	}
-	quoting(&stack);
 	identify_token_type(&stack);
+	print_stack(&stack);
+	quoting(&stack);
 	print_stack(&stack);
 	// ft_free_all(token);
 	return (stack);

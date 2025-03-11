@@ -30,7 +30,10 @@ int	handle_quotes(char argv, t_data *data)
 	if (ft_is_quotes(argv) == SUCCESS)
 	{
 		if (data->quotes == SUCCESS)
+		{
 			data->quotes = ERROR;
+			data->quote_type = '\0';
+		}
 		else
 		{
 			data->quotes = SUCCESS;
