@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aviscogl <aviscogl@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 15:10:00 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/11 20:28:27 by aviscogl         ###   ########lyon.fr   */
+/*   Updated: 2025/03/11 20:46:51 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,49 +55,6 @@ int	write_to_temp_file(char *delimiter, char *filename)
 	return (0);
 }
 
-void	execute_with_heredoc(t_ast *cmd, t_env *env, char *filename)
-{
-	int	saved_fd;
-	int	temp_fd;
-
-	temp_fd = open(filename, O_RDONLY);
-	if (temp_fd == -1)
-	{
-		cmd->error_code = 1;
-		return ;
-	}
-	saved_fd = dup(STDIN_FILENO);
-	dup2(temp_fd, STDIN_FILENO);
-	close(temp_fd);
-	execute_ast(cmd->left, env);
-	dup2(saved_fd, STDIN_FILENO);
-	close(saved_fd);
-}
-
-// void	handle_heredoc(t_ast *cmd, t_env *env)
-// {
-// 	char	*temp_filename;
-// 	char	*delimiter;
-
-// 	delimiter = cmd->right->cmd->args[0];
-// 	temp_filename = create_temp_filename();
-// 	if (!temp_filename)
-// 	{
-// 		cmd->error_code = 1;
-// 		return ;
-// 	}
-// 	if (write_to_temp_file(delimiter, temp_filename) == -1)
-// 	{
-// 		perror("minishell: heredoc");
-// 		cmd->error_code = 1;
-// 		free(temp_filename);
-// 		return ;
-// 	}
-// 	execute_with_heredoc(cmd->left, env, temp_filename);
-// 	unlink(temp_filename);
-// 	free(temp_filename);
-// }
-
 char	*ft_strjoin_free(char *s1, char *s2)
 {
 	int		i;
@@ -122,4 +79,23 @@ char	*ft_strjoin_free(char *s1, char *s2)
 	free(s1);
 	str[i + j] = '\0';
 	return (str);
+}
+
+void cleanup_heredoc_files(t_ast *node)
+{
+	if (!node)
+		return;
+		
+	if (node->token == CMD && node->cmd && node->cmd->redirs)
+	{
+		t_redir *redir = node->cmd->redirs;
+		while (redir)
+		{
+			if (redir->type == REDIR_HEREDOC)
+				unlink(redir->file);
+			redir = redir->next;
+		}
+	}
+	cleanup_heredoc_files(node->left);
+	cleanup_heredoc_files(node->right);
 }

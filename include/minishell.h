@@ -6,7 +6,7 @@
 /*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/11 19:58:10 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/03/11 20:51:57 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ void				free_redirections(t_redir *redirs);
 void				print_redirections(t_redir *redirs, int level);
 int					process_all_heredocs(t_ast *node);
 void				cleanup_heredoc_files(t_ast *node);
+void				create_mini_env(t_env **head);
 /////////////tree_ast//////////////////////////////
 t_ast				*parse_and_build_ast(char *input);
 t_ast				*build_tree_compat(t_stack *parsed_stack);

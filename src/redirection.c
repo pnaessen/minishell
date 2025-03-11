@@ -6,7 +6,7 @@
 /*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 12:13:47 by pn                #+#    #+#             */
-/*   Updated: 2025/03/11 19:32:31 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/03/11 21:01:43 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,58 +117,74 @@ void	handle_redir_append(t_ast *cmd, t_env *env)
 	close(saved_fd);
 }
 
-int	apply_redirection(t_redir *redir)
+int	apply_input_redirection(t_redir *redir)
 {
 	int	fd;
 
+	fd = open(redir->file, O_RDONLY);
+	if (fd == -1)
+	{
+		perror("minishell: open");
+		return (1);
+	}
+	if (dup2(fd, STDIN_FILENO) == -1)
+	{
+		perror("minishell: dup2");
+		close(fd);
+		return (1);
+	}
+	close(fd);
+	return (0);
+}
+
+int	apply_output_redirection(t_redir *redir)
+{
+	int	fd;
+
+	fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd == -1)
+	{
+		perror("minishell: open");
+		return (1);
+	}
+	if (dup2(fd, STDOUT_FILENO) == -1)
+	{
+		perror("minishell: dup2");
+		close(fd);
+		return (1);
+	}
+	close(fd);
+	return (0);
+}
+
+int	apply_append_redirection(t_redir *redir)
+{
+	int	fd;
+
+	fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	if (fd == -1)
+	{
+		perror("minishell: open");
+		return (1);
+	}
+	if (dup2(fd, STDOUT_FILENO) == -1)
+	{
+		perror("minishell: dup2");
+		close(fd);
+		return (1);
+	}
+	close(fd);
+	return (0);
+}
+
+int	apply_redirection(t_redir *redir)
+{
 	if (redir->type == REDIR_IN || redir->type == REDIR_HEREDOC)
-	{
-		fd = open(redir->file, O_RDONLY);
-		if (fd == -1)
-		{
-			perror("minishell: open");
-			return (1);
-		}
-		if (dup2(fd, STDIN_FILENO) == -1)
-		{
-			perror("minishell: dup2");
-			close(fd);
-			return (1);
-		}
-		close(fd);
-	}
+		return (apply_input_redirection(redir));
 	else if (redir->type == REDIR_OUT)
-	{
-		fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (fd == -1)
-		{
-			perror("minishell: open");
-			return (1);
-		}
-		if (dup2(fd, STDOUT_FILENO) == -1)
-		{
-			perror("minishell: dup2");
-			close(fd);
-			return (1);
-		}
-		close(fd);
-	}
+		return (apply_output_redirection(redir));
 	else if (redir->type == APPEND)
-	{
-		fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-		if (fd == -1)
-		{
-			perror("minishell: open");
-			return (1);
-		}
-		if (dup2(fd, STDOUT_FILENO) == -1)
-		{
-			perror("minishell: dup2");
-			close(fd);
-			return (1);
-		}
-		close(fd);
-	}
+		return (apply_append_redirection(redir));
 	return (0);
 }
 

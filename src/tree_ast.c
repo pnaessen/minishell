@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tree_ast.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aviscogl <aviscogl@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 09:52:29 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/11 20:27:53 by aviscogl         ###   ########lyon.fr   */
+/*   Updated: 2025/03/11 20:47:06 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,9 +146,7 @@ int add_redirection_to_cmd(t_ast *cmd_node, t_node_type type, char *file)
 	if (!new_redir)
 		return (0);	
 	if (!cmd_node->cmd->redirs)
-	{
 		cmd_node->cmd->redirs = new_redir;
-	}
 	else
 	{
 		current = cmd_node->cmd->redirs;
@@ -204,21 +202,4 @@ int process_all_heredocs(t_ast *node)
 	return (1);
 }
 
-void cleanup_heredoc_files(t_ast *node)
-{
-	if (!node)
-		return;
-		
-	if (node->token == CMD && node->cmd && node->cmd->redirs)
-	{
-		t_redir *redir = node->cmd->redirs;
-		while (redir)
-		{
-			if (redir->type == REDIR_HEREDOC)
-				unlink(redir->file);
-			redir = redir->next;
-		}
-	}
-	cleanup_heredoc_files(node->left);
-	cleanup_heredoc_files(node->right);
-}
+

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_lst.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 14:44:37 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/03 14:17:16 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/11 20:52:19 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	handle_env(char **env, t_env **head)
 
 	i = 0;
 	if (!*env)
-		creat_mini_env(head);
+		create_mini_env(head);
 	while (env[i])
 	{
 		new_node = malloc(sizeof(t_env));
@@ -68,44 +68,66 @@ void	free_env_list(t_env *env)
 	}
 }
 
-void	creat_mini_env(t_env **head)
+t_env	*create_env_var(char *var_string)
+{
+	t_env	*new_node;
+
+	new_node = malloc(sizeof(t_env));
+	if (!new_node)
+		return (NULL);
+	new_node->str = ft_strdup(var_string);
+	if (!new_node->str)
+	{
+		free(new_node);
+		return (NULL);
+	}
+	new_node->next = NULL;
+	return (new_node);
+}
+
+void	add_pwd_to_env(t_env **head)
 {
 	t_env	*new_node;
 	char	*path;
+	char	*pwd_var;
 
 	path = getcwd(NULL, PATH_MAX);
-	path = ft_strjoin("PWD=", path);
-	new_node = malloc(sizeof(t_env));
+	if (!path)
+		return ;
+	pwd_var = ft_strjoin("PWD=", path);
+	free(path);
+	if (!pwd_var)
+		return ;
+	new_node = create_env_var(pwd_var);
+	free(pwd_var);
 	if (!new_node)
 		return ;
-	new_node->str = ft_strdup(path);
-	if (!new_node->str)
-	{
-		free(new_node);
-		return ;
-	}
-	new_node->next = NULL;
 	lstadd_back(head, new_node);
-	new_node = malloc(sizeof(t_env));
+}
+
+void	add_shlvl_to_env(t_env **head)
+{
+	t_env	*new_node;
+
+	new_node = create_env_var("SHLVL=1");
 	if (!new_node)
 		return ;
-	new_node->str = ft_strdup("SHLVL=1");
-	if (!new_node->str)
-	{
-		free(new_node);
-		return ;
-	}
-	new_node->next = NULL;
 	lstadd_back(head, new_node);
-	new_node = malloc(sizeof(t_env));
+}
+
+void	add_underscore_to_env(t_env **head)
+{
+	t_env	*new_node;
+
+	new_node = create_env_var("_=/usr/bin/env");
 	if (!new_node)
 		return ;
-	new_node->str = ft_strdup("_=/usr/bin/env");
-	if (!new_node->str)
-	{
-		free(new_node);
-		return ;
-	}
-	new_node->next = NULL;
 	lstadd_back(head, new_node);
+}
+
+void	create_mini_env(t_env **head)
+{
+	add_pwd_to_env(head);
+	add_shlvl_to_env(head);
+	add_underscore_to_env(head);
 }
