@@ -129,14 +129,14 @@ void	execute_ast(t_ast *node, t_env *env)
 	}
 	else if (node->token == PIPE)
 		execute_pipe(node, env);
-	else if (node->token == REDIR_IN)
-		handle_redir_in(node, env);
-	else if (node->token == REDIR_OUT)
-		handle_redir_out(node, env);
-	else if (node->token == APPEND)
-		handle_redir_append(node, env);
-	else if (node->token == REDIR_HEREDOC)
-		handle_redir_in(node, env);
+	// else if (node->token == REDIR_IN)
+	// 	handle_redir_in(node, env);
+	// else if (node->token == REDIR_OUT)
+	// 	handle_redir_out(node, env);
+	// else if (node->token == APPEND)
+	// 	handle_redir_append(node, env);
+	// else if (node->token == REDIR_HEREDOC)
+	// 	handle_redir_in(node, env);
 	if (node->head == node)
 	{
 		heredocs_processed = 0;

@@ -74,7 +74,7 @@ t_ast	*handle_pipe(t_ast **current_node, t_stack **current, t_stack *stack,
 	pipe_node = create_pipe_node(*current_node, new_cmd);
 	if (!pipe_node)
 		return (NULL);
-	if (*current_node == *root)
+	if (*current_node == *root) //si pas la full bug
 		*root = pipe_node;
 	*current_node = pipe_node;
 	*current = next_cmd;
