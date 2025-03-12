@@ -168,13 +168,10 @@ cd full leaks
 faire $?
 env full leaks
 unset full leaks
-qund command not next cmd = segfault cause free env dans exec cmd mais si pas free env leak
 secu for 1024 PROCESUS
 need expand var 
-here doc 
+here doc sans cat avant ou cmd
 signal 
 test auto
-handle exit more than 9223372036854775807
-export +=
 
 add PWD=/home/pnaessen/Mil03/ when no env  at start

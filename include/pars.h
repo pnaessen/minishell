@@ -18,13 +18,13 @@
 typedef enum e_node_type
 {
 	CMD,
-	PIPE,          // |
-	AND,           // &&
-	OR,            // ||
-	REDIR_IN,      // <
-	REDIR_OUT,     // >
-	REDIR_HEREDOC, // <<
-	APPEND         // >>
+	PIPE,
+	AND,
+	OR,
+	REDIR_IN,
+	REDIR_OUT,
+	REDIR_HEREDOC,
+	APPEND
 }					t_node_type;
 
 typedef struct s_stack
@@ -35,17 +35,16 @@ typedef struct s_stack
 	struct s_stack	*prev;
 }					t_stack;
 
-// Structure pour stocker une redirection
 typedef struct s_redir
 {
-    t_node_type     type;       // Type de redirection (REDIR_IN, REDIR_OUT, APPEND, REDIR_HEREDOC)
-    char            *file;      // Nom du fichier ou délimiteur (pour heredoc)
-    struct s_redir  *next;      // Pointeur vers la prochaine redirection pour cette commande
-} t_redir;
+	t_node_type		type;
+	char			*file;
+	struct s_redir	*next;
+}					t_redir;
 
 // parsing
 t_stack				*parsing_input(char *input);
-t_stack 			*tokenise_args(char *args_cleaned);
+t_stack				*tokenise_args(char *args_cleaned);
 
 /// handle commands
 char				*handle_commands(char *args);

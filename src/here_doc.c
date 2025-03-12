@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
+/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 15:10:00 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/11 20:46:51 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/03/12 11:02:54 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,14 +81,15 @@ char	*ft_strjoin_free(char *s1, char *s2)
 	return (str);
 }
 
-void cleanup_heredoc_files(t_ast *node)
+void	cleanup_heredoc_files(t_ast *node)
 {
+	t_redir	*redir;
+
 	if (!node)
-		return;
-		
+		return ;
 	if (node->token == CMD && node->cmd && node->cmd->redirs)
 	{
-		t_redir *redir = node->cmd->redirs;
+		redir = node->cmd->redirs;
 		while (redir)
 		{
 			if (redir->type == REDIR_HEREDOC)
@@ -98,4 +99,48 @@ void cleanup_heredoc_files(t_ast *node)
 	}
 	cleanup_heredoc_files(node->left);
 	cleanup_heredoc_files(node->right);
+}
+
+int	process_all_heredocs(t_ast *node)
+{
+	char	*temp_filename;
+	char	*delimiter;
+	t_redir	*redir;
+
+	if (!node)
+		return (1);
+	if (node->token == CMD && node->cmd && node->cmd->redirs)
+	{
+		redir = node->cmd->redirs;
+		while (redir)
+		{
+			if (redir->type == REDIR_HEREDOC)
+			{
+				delimiter = ft_strdup(redir->file);
+				if (!delimiter)
+					return (0);
+				temp_filename = create_temp_filename();
+				if (!temp_filename)
+				{
+					free(delimiter);
+					return (0);
+				}
+				if (write_to_temp_file(delimiter, temp_filename) == -1)
+				{
+					free(delimiter);
+					free(temp_filename);
+					return (0);
+				}
+				free(delimiter);
+				free(redir->file);
+				redir->file = temp_filename;
+			}
+			redir = redir->next;
+		}
+	}
+	if (node->left && !process_all_heredocs(node->left))
+		return (0);
+	if (node->right && !process_all_heredocs(node->right))
+		return (0);
+	return (1);
 }

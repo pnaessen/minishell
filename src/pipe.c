@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   pipe.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/23 10:12:14 by pn                #+#    #+#             */
-/*   Updated: 2025/03/11 19:57:53 by pn               ###   ########lyon.fr   */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
 void	pipe_child_left(t_ast *cmd, t_env *env, int *pipefd)
@@ -70,10 +58,7 @@ void	execute_pipe(t_ast *cmd, t_env *env)
 	pid1 = fork();
 	if (pid1 == -1)
 	{
-		perror("minishell: fork");
-		close(pipefd[0]);
-		close(pipefd[1]);
-		cmd->error_code = 1;
+		fork_fail(&cmd, pipefd);
 		return ;
 	}
 	if (pid1 == 0)
@@ -81,11 +66,8 @@ void	execute_pipe(t_ast *cmd, t_env *env)
 	pid2 = fork();
 	if (pid2 == -1)
 	{
-		perror("minishell: fork");
+		fork_fail(&cmd, pipefd);
 		kill(pid1, SIGTERM);
-		close(pipefd[0]);
-		close(pipefd[1]);
-		cmd->error_code = 1;
 		return ;
 	}
 	if (pid2 == 0)
@@ -103,4 +85,12 @@ void	handle_pipe_parent(t_ast *cmd, pid_t pid1, pid_t pid2, int *pipefd)
 	waitpid(pid2, &status, 0);
 	if (WIFEXITED(status))
 		cmd->error_code = WEXITSTATUS(status);
+}
+
+void	fork_fail(t_ast **cmd, int *pipefd)
+{
+	perror("minishell: fork");
+	close(pipefd[0]);
+	close(pipefd[1]);
+	(*cmd)->error_code = 1;
 }

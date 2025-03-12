@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
+/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/11 20:51:57 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/03/12 12:47:59 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ void				print_redirections(t_redir *redirs, int level);
 int					process_all_heredocs(t_ast *node);
 void				cleanup_heredoc_files(t_ast *node);
 void				create_mini_env(t_env **head);
+t_redir				*create_redirection(t_node_type type, char *file);
+
 /////////////tree_ast//////////////////////////////
 t_ast				*parse_and_build_ast(char *input);
 t_ast				*build_tree_compat(t_stack *parsed_stack);
@@ -70,7 +72,7 @@ t_ast				*process_cmd_tokens(t_stack *current, t_stack *parsed_stack,
 						t_ast *root, t_ast *current_node);
 t_ast				*handle_pipe(t_ast **current_node, t_stack **current,
 						t_stack *stack, t_ast **root);
-
+void				fork_fail(t_ast **cmd, int *pipefd);
 ////////////ast_tools//////////////
 t_ast				*create_pipe_node(t_ast *left_cmd, t_ast *right_cmd);
 t_ast				*create_ast_operator(t_node_type token, t_ast *left,

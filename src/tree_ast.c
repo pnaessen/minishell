@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   tree_ast.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/06 09:52:29 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/11 20:47:06 by pn               ###   ########lyon.fr   */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 #include "pars.h"
 
@@ -19,7 +7,7 @@ t_ast	*build_tree_compat(t_stack *parsed_stack)
 	t_stack	*end;
 	t_ast	*root;
 	t_ast	*current_node;
-	t_ast *last_cmd_node;
+	t_ast	*last_cmd_node;
 
 	current = parsed_stack;
 	end = parsed_stack->prev;
@@ -42,11 +30,11 @@ t_ast	*build_tree_compat(t_stack *parsed_stack)
 			if (current->next != parsed_stack && current->next->token == CMD)
 			{
 				if (!add_redirection_to_cmd(last_cmd_node, current->token,
-					current->next->cmd[0]))
-					{
-						free_ast(root);
-						return (NULL);
-					}
+						current->next->cmd[0]))
+				{
+					free_ast(root);
+					return (NULL);
+				}
 				current = current->next;
 			}
 		}
@@ -108,35 +96,18 @@ t_ast	*init_first_cmd(t_stack *stack, t_stack *end, t_ast **current_node)
 	return (root);
 }
 
-t_redir	*create_redirection(t_node_type type, char *file)
+int	add_redirection_to_cmd(t_ast *cmd_node, t_node_type type, char *file)
 {
-	t_redir	*redir;
+	t_redir	*new_redir;
+	t_redir	*current;
 
-	redir = malloc(sizeof(t_redir));
-	if (!redir)
-		return (NULL);
-	redir->type = type;
-	redir->file = ft_strdup(file);
-	if (!redir->file)
-	{
-		free(redir);
-		return (NULL);
-	}
-	redir->next = NULL;
-	return (redir);
-}
-
-int add_redirection_to_cmd(t_ast *cmd_node, t_node_type type, char *file)
-{
-	t_redir *new_redir;
-	t_redir *current;
-
+	// if cmd_node comme << eof | << eof cree la node cmd pour mettre une redi 
 	if (!cmd_node || !file)
 		return (0);
 	if (!cmd_node->cmd)
 	{
 		cmd_node->cmd = malloc(sizeof(t_cmd));
-		if(!cmd_node->cmd)
+		if (!cmd_node->cmd)
 			return (0);
 		cmd_node->cmd->args = NULL;
 		cmd_node->cmd->redirs = NULL;
@@ -144,7 +115,7 @@ int add_redirection_to_cmd(t_ast *cmd_node, t_node_type type, char *file)
 	}
 	new_redir = create_redirection(type, file);
 	if (!new_redir)
-		return (0);	
+		return (0);
 	if (!cmd_node->cmd->redirs)
 		cmd_node->cmd->redirs = new_redir;
 	else
@@ -156,50 +127,4 @@ int add_redirection_to_cmd(t_ast *cmd_node, t_node_type type, char *file)
 	}
 	return (1);
 }
-
-
-int process_all_heredocs(t_ast *node)
-{
-	char *temp_filename;
-	char *delimiter;
-	t_redir *redir;
-	
-	if (!node)
-		return (1);
-	if (node->token == CMD && node->cmd && node->cmd->redirs)
-	{
-		redir = node->cmd->redirs;
-		while (redir)
-		{
-			if (redir->type == REDIR_HEREDOC)
-			{
-				delimiter = ft_strdup(redir->file);
-				if (!delimiter)
-					return (0);
-				temp_filename = create_temp_filename();
-				if (!temp_filename)
-				{
-					free(delimiter);
-					return (0);
-				}
-				if (write_to_temp_file(delimiter, temp_filename) == -1)
-				{
-					free(delimiter);
-					free(temp_filename);
-					return (0);
-				}
-				free(delimiter);
-				free(redir->file);
-				redir->file = temp_filename;
-			}
-			redir = redir->next;
-		}
-	}
-	if (node->left && !process_all_heredocs(node->left))
-		return (0);
-	if (node->right && !process_all_heredocs(node->right))
-		return (0);
-	return (1);
-}
-
 

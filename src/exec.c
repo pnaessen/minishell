@@ -1,4 +1,3 @@
-
 #include "minishell.h"
 
 void	child_process(t_ast *cmd, char **env_array)
@@ -77,9 +76,9 @@ void	execute_cmd(t_ast *cmd_node, t_env *env)
 
 void	execute_ast(t_ast *node, t_env *env)
 {
-	int saved_stdin;
-	int saved_stdout;
-	static int heredocs_processed = 0;
+	int			saved_stdin;
+	int			saved_stdout;
+	static int	heredocs_processed = 0;
 
 	if (!node)
 		return ;
@@ -114,14 +113,10 @@ void	execute_ast(t_ast *node, t_env *env)
 				return ;
 			}
 			check_builtin(node, env);
-			if (node->error_code == -1)
-			{
-				dup2(saved_stdin, STDIN_FILENO);
-				dup2(saved_stdout, STDOUT_FILENO);
-				execute_cmd(node, env);
-			}
 			dup2(saved_stdin, STDIN_FILENO);
 			dup2(saved_stdout, STDOUT_FILENO);
+			if (node->error_code == -1)
+				execute_cmd(node, env);
 			close(saved_stdin);
 			close(saved_stdout);
 		}

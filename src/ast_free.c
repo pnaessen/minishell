@@ -17,8 +17,8 @@ void	free_ast_children(t_ast *node)
 
 void	free_redirections(t_redir *redirs)
 {
-	t_redir *current;
-	t_redir *next;
+	t_redir	*current;
+	t_redir	*next;
 
 	current = redirs;
 	while (current)
@@ -31,36 +31,36 @@ void	free_redirections(t_redir *redirs)
 	}
 }
 
-void free_ast_cmd(t_ast *node)
+void	free_ast_cmd(t_ast *node)
 {
-	if(node->cmd)
+	if (node->cmd)
 		return ;
-	if(node->cmd->args)
+	if (node->cmd->args)
 		free_ast_cmd_args(node);
-	if(node->cmd->redirs)
+	if (node->cmd->redirs)
 		free_redirections(node->cmd->redirs);
-	if(node->cmd->path)
+	if (node->cmd->path)
 		free(node->cmd->path);
 	free(node->cmd);
 	node->cmd = NULL;
 }
 
-void free_ast(t_ast *node)
+void	free_ast(t_ast *node)
 {
-	if(!node)
+	if (!node)
 		return ;
 	free_ast_children(node);
-	if(node->cmd)
+	if (node->cmd)
 		free_ast_cmd(node);
 	free(node);
 }
 
-void free_ast_cmd_args(t_ast *node)
+void	free_ast_cmd_args(t_ast *node)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	while(node->cmd->args[i])
+	while (node->cmd->args[i])
 	{
 		free(node->cmd->args[i]);
 		i++;
