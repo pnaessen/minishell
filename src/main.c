@@ -13,6 +13,11 @@ int	main(int argc, char **argv, char **env)
 		printf("Usage : minishell doesn't take argument\n");
 		return (0);
 	}
+	if (!isatty(STDIN_FILENO) || !isatty(STDOUT_FILENO))
+	{
+		printf("minishell: cannot be used in pipes or redirections\n");
+		return (1);
+	}
 	handle_signals();
 	handle_env(env, &head);
 	while (1)

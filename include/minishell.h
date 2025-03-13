@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/12 12:47:59 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/13 19:35:29 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ int					process_all_heredocs(t_ast *node);
 void				cleanup_heredoc_files(t_ast *node);
 void				create_mini_env(t_env **head);
 t_redir				*create_redirection(t_node_type type, char *file);
+t_ast	*find_target_cmd_for_heredoc(t_stack *heredoc_token, t_ast *last_cmd, t_ast *root);
 
 /////////////tree_ast//////////////////////////////
 t_ast				*parse_and_build_ast(char *input);

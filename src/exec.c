@@ -86,7 +86,6 @@ void	execute_cmd(t_ast *cmd_node, t_env *env)
 		parent_process(pid, cmd_node, env_array);
 }
 
-
 int	save_std_fds(int *saved_stdin, int *saved_stdout, t_ast *node)
 {
 	*saved_stdin = dup(STDIN_FILENO);
@@ -131,8 +130,7 @@ void	exec_with_redirects(t_ast *node, t_env *env)
 		execute_cmd(node, env);
 }
 
-
- void	execute_cmd_node(t_ast *node, t_env *env)
+void	execute_cmd_node(t_ast *node, t_env *env)
 {
 	if (node->cmd->redirs)
 		exec_with_redirects(node, env);
@@ -159,6 +157,8 @@ void	execute_ast(t_ast *node, t_env *env)
 		execute_cmd_node(node, env);
 	else if (node->token == PIPE)
 		execute_pipe(node, env);
+	if (node->head != node && node->head)
+		node->head->error_code = node->error_code;
 	if (node->head == node)
 	{
 		heredocs_processed = 0;

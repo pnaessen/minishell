@@ -25,6 +25,7 @@ void	pipe_child_left(t_ast *cmd, t_env *env, int *pipefd)
 void	pipe_child_right(t_ast *cmd, t_env *env, int *pipefd)
 {
 	t_env	*env_copy;
+	int exit_code;
 
 	close(pipefd[1]);
 	if (cmd->right->token == CMD && cmd->right->cmd
@@ -40,6 +41,9 @@ void	pipe_child_right(t_ast *cmd, t_env *env, int *pipefd)
 	close(pipefd[0]);
 	env_copy = env;
 	execute_ast(cmd->right, env_copy);
+	exit_code = cmd->right->error_code;
+	if(exit_code == -1)
+		exit_code = cmd->error_code;
 	exit(cmd->error_code);
 }
 
@@ -78,13 +82,16 @@ void	execute_pipe(t_ast *cmd, t_env *env)
 void	handle_pipe_parent(t_ast *cmd, pid_t pid1, pid_t pid2, int *pipefd)
 {
 	int	status;
+	int	status2;
 
 	close(pipefd[0]);
 	close(pipefd[1]);
 	waitpid(pid1, &status, 0);
-	waitpid(pid2, &status, 0);
-	if (WIFEXITED(status))
-		cmd->error_code = WEXITSTATUS(status);
+	waitpid(pid2, &status2, 0);
+	if (WIFEXITED(status2))
+		cmd->error_code = WEXITSTATUS(status2);
+	else if (WIFSIGNALED(status2))
+		cmd->error_code = 128 + WTERMSIG(status2);
 }
 
 void	fork_fail(t_ast **cmd, int *pipefd)
