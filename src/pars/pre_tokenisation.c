@@ -13,7 +13,9 @@ int	num_of_lines(const char *s1)
 	while (s1[i])
 	{
 		handle_quotes(s1[i], &data);
-		if ((ft_is_operator(s1[i]) == ERROR && ft_is_operator(s1[i
+		if ((s1[i - 2] == '<' || s1[i - 2] == '>') && data.quotes == ERROR)
+			count++;
+		else if ((ft_is_operator(s1[i]) == ERROR && ft_is_operator(s1[i
 					+ 1]) == SUCCESS) || s1[i + 1] == '\0')
 		{
 			if (data.quotes == ERROR)
@@ -50,6 +52,15 @@ int	num_of_words(const char *s1, int i)
 	while (s1[i])
 	{
 		handle_quotes(s1[i], &data);
+		if ((s1[i - 2] == '<' || s1[i - 2] == '>') && data.quotes == ERROR)
+		{
+			while (s1[i] && s1[i] != ' ')
+			{
+				i++;
+				count++;
+			}
+			return (count);
+		}
 		if (ft_is_operator(s1[i + 1]) == ERROR || data.quotes == SUCCESS)
 			count++;
 		else

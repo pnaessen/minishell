@@ -72,7 +72,7 @@ char				**ft_free_all(char **args);
 int					ft_iswhitespace(int c);
 int					ft_is_operator(int c);
 int					ft_is_quotes(char c);
-void	handle_quotes(char argv, t_data *data);
+void				handle_quotes(char argv, t_data *data);
 
 // list_utils
 t_stack				*node_init(char **cmd);
