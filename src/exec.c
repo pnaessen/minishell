@@ -34,17 +34,39 @@ int	parent_process(pid_t pid, t_ast *cmd, char **env_array)
 	free_env_array(env_array);
 	return (cmd->error_code);
 }
+
+int	is_cmd_invalid(t_ast *cmd_node)
+{
+	if (!cmd_node || !cmd_node->cmd || !cmd_node->cmd->args
+		|| !cmd_node->cmd->args[0])
+	{
+		cmd_node->error_code = 1;
+		return (1);
+	}
+	return (0);
+}
+
+int	handle_child_redirects(t_ast *cmd_node, char **env_array)
+{
+	if (cmd_node->cmd->redirs)
+	{
+		if (apply_all_redirections(cmd_node->cmd))
+		{
+			ft_free_ta(env_array);
+			exit(1);
+		}
+	}
+	child_process(cmd_node, env_array);
+	return (0);
+}
+
 void	execute_cmd(t_ast *cmd_node, t_env *env)
 {
 	pid_t	pid;
 	char	**env_array;
 
-	if (!cmd_node || !cmd_node->cmd || !cmd_node->cmd->args
-		|| !cmd_node->cmd->args[0])
-	{
-		cmd_node->error_code = 1;
+	if (is_cmd_invalid(cmd_node))
 		return ;
-	}
 	env_array = env_to_tab(&env);
 	if (!env_array)
 	{
@@ -59,25 +81,71 @@ void	execute_cmd(t_ast *cmd_node, t_env *env)
 		return ;
 	}
 	if (pid == 0)
-	{
-		if (cmd_node->cmd->redirs)
-		{
-			if (apply_all_redirections(cmd_node->cmd))
-			{
-				ft_free_ta(env_array);
-				exit(1);
-			}
-		}
-		child_process(cmd_node, env_array);
-	}
+		handle_child_redirects(cmd_node, env_array);
 	else
 		parent_process(pid, cmd_node, env_array);
 }
 
+
+int	save_std_fds(int *saved_stdin, int *saved_stdout, t_ast *node)
+{
+	*saved_stdin = dup(STDIN_FILENO);
+	*saved_stdout = dup(STDOUT_FILENO);
+	if (*saved_stdin == -1 || *saved_stdout == -1)
+	{
+		perror("minishell: dup");
+		node->error_code = 1;
+		if (*saved_stdin != -1)
+			close(*saved_stdin);
+		if (*saved_stdout != -1)
+			close(*saved_stdout);
+		return (1);
+	}
+	return (0);
+}
+
+void	restore_std_fds(int saved_stdin, int saved_stdout)
+{
+	dup2(saved_stdin, STDIN_FILENO);
+	dup2(saved_stdout, STDOUT_FILENO);
+	close(saved_stdin);
+	close(saved_stdout);
+}
+
+void	exec_with_redirects(t_ast *node, t_env *env)
+{
+	int	saved_stdin;
+	int	saved_stdout;
+
+	if (save_std_fds(&saved_stdin, &saved_stdout, node))
+		return ;
+	if (apply_all_redirections(node->cmd))
+	{
+		node->error_code = 1;
+		restore_std_fds(saved_stdin, saved_stdout);
+		return ;
+	}
+	check_builtin(node, env);
+	restore_std_fds(saved_stdin, saved_stdout);
+	if (node->error_code == -1)
+		execute_cmd(node, env);
+}
+
+
+ void	execute_cmd_node(t_ast *node, t_env *env)
+{
+	if (node->cmd->redirs)
+		exec_with_redirects(node, env);
+	else
+	{
+		check_builtin(node, env);
+		if (node->error_code == -1)
+			execute_cmd(node, env);
+	}
+}
+
 void	execute_ast(t_ast *node, t_env *env)
 {
-	int			saved_stdin;
-	int			saved_stdout;
 	static int	heredocs_processed = 0;
 
 	if (!node)
@@ -88,55 +156,9 @@ void	execute_ast(t_ast *node, t_env *env)
 		heredocs_processed = 1;
 	}
 	if (node->token == CMD)
-	{
-		if (node->cmd->redirs)
-		{
-			saved_stdin = dup(STDIN_FILENO);
-			saved_stdout = dup(STDOUT_FILENO);
-			if (saved_stdin == -1 || saved_stdout == -1)
-			{
-				perror("minishell: dup");
-				node->error_code = 1;
-				if (saved_stdin != -1)
-					close(saved_stdin);
-				if (saved_stdout != -1)
-					close(saved_stdout);
-				return ;
-			}
-			if (apply_all_redirections(node->cmd))
-			{
-				node->error_code = 1;
-				dup2(saved_stdin, STDIN_FILENO);
-				dup2(saved_stdout, STDOUT_FILENO);
-				close(saved_stdin);
-				close(saved_stdout);
-				return ;
-			}
-			check_builtin(node, env);
-			dup2(saved_stdin, STDIN_FILENO);
-			dup2(saved_stdout, STDOUT_FILENO);
-			if (node->error_code == -1)
-				execute_cmd(node, env);
-			close(saved_stdin);
-			close(saved_stdout);
-		}
-		else
-		{
-			check_builtin(node, env);
-			if (node->error_code == -1)
-				execute_cmd(node, env);
-		}
-	}
+		execute_cmd_node(node, env);
 	else if (node->token == PIPE)
 		execute_pipe(node, env);
-	// else if (node->token == REDIR_IN)
-	// 	handle_redir_in(node, env);
-	// else if (node->token == REDIR_OUT)
-	// 	handle_redir_out(node, env);
-	// else if (node->token == APPEND)
-	// 	handle_redir_append(node, env);
-	// else if (node->token == REDIR_HEREDOC)
-	// 	handle_redir_in(node, env);
 	if (node->head == node)
 	{
 		heredocs_processed = 0;
