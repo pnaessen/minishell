@@ -63,15 +63,16 @@ int					quoting(t_stack **stack);
 char				*handling_quotes(char *args, int size);
 int					final_len(char *args);
 int					check_num_of_quotes(char *args);
-int					is_closed(char *args, int i, char quote);
-void				is_in_quotes(char c, t_data *data);
+// int					check_num_of_quotes(char *args);
+// int					is_closed(char *args, int i, char quote);
+// void				is_in_quotes(char c, t_data *data);
 
 /// parsing_utils
 char				**ft_free_all(char **args);
 int					ft_iswhitespace(int c);
 int					ft_is_operator(int c);
 int					ft_is_quotes(char c);
-int					handle_quotes(char argv, t_data *data);
+void	handle_quotes(char argv, t_data *data);
 
 // list_utils
 t_stack				*node_init(char **cmd);

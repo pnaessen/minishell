@@ -25,22 +25,26 @@ int	ft_is_quotes(char c)
 		return (SUCCESS);
 	return (ERROR);
 }
-int	handle_quotes(char argv, t_data *data)
+void	handle_quotes(char argv, t_data *data)
 {
 	if (ft_is_quotes(argv) == SUCCESS)
 	{
-		if (data->quotes == SUCCESS)
+		if (data->quotes == SUCCESS && data->quote_type == argv)
 		{
 			data->quotes = ERROR;
 			data->quote_type = '\0';
+			data->quote_num++;
 		}
 		else
 		{
 			data->quotes = SUCCESS;
-			data->quote_type = argv;
+			if (data->quote_type == '\0')
+			{
+				data->quote_type = argv;
+				data->quote_num++;
+			}
 		}
 	}
-	return (data->quotes);
 }
 
 char	**ft_free_all(char **args)

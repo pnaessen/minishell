@@ -9,11 +9,6 @@ t_stack	*tokenise_args(char *args_cleaned)
 	stack = NULL;
 	token = pre_tokenisation(args_cleaned);
 	i = 0;
-	while (token[i])
-	{
-		printf("[DEBUG] : token[%d] : %s\n", i, token[i]);
-		i++;
-	}
 	if (!token)
 		return (NULL);
 	i = 0;
@@ -28,7 +23,8 @@ t_stack	*tokenise_args(char *args_cleaned)
 	}
 	identify_token_type(&stack);
 	print_stack(&stack);
-	quoting(&stack);
+	if (quoting(&stack) == ERROR)
+		return (NULL);
 	print_stack(&stack);
 	// ft_free_all(token);
 	return (stack);
@@ -43,12 +39,15 @@ t_stack	*parsing_input(char *input)
 	if (!input)
 		return (NULL);
 	args = handle_whitespaces(input);
-	printf("[DEBUG] : args : %s\n", args);
 	if (!args)
 		return (NULL);
 	args_cleaned = handle_commands(args);
-	printf("[DEBUG] : args_cleaned : %s\n", args_cleaned);
 	free(args);
+	if (check_num_of_quotes(args_cleaned) == ERROR)
+	{
+		free(args_cleaned);
+		return (NULL);
+	}
 	if (!args_cleaned)
 		return (NULL);
 	stack = tokenise_args(args_cleaned);
@@ -78,12 +77,12 @@ int	main(int argc, char **env)
 		if (*input)
 		{
 			add_history(input);
-			parsing_input(input);
+			if (!parsing_input(input))
+			{
+				free(input);
+				return (ERROR);
+			}
 		}
-		// {
-		// 	free(input);
-		// 	return (ERROR);
-		// }
 		free(input);
 	}
 	return (0);
