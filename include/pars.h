@@ -15,6 +15,13 @@
 # define ERROR 1
 # define SUCCESS 0
 
+typedef struct s_data
+{
+	int				quotes;
+	int				quote_num;
+	char			quote_type;
+}					t_data;
+
 typedef enum e_node_type
 {
 	CMD,
@@ -37,7 +44,7 @@ typedef struct s_stack
 
 // parsing
 t_stack				*parsing_input(char *input);
-t_stack 			*tokenise_args(char *args_cleaned);
+t_stack				*tokenise_args(char *args_cleaned);
 
 /// handle commands
 char				*handle_commands(char *args);
@@ -47,21 +54,29 @@ int					handle_operators(char *args, int i);
 
 /// handle whitespace
 char				*handle_whitespaces(char *args);
-char				*rm_whitespaces(char *args, int size);
-int					len_without_whitespaces(char *args);
-int					check_num_of_quotes(char *args);
+char				*rm_whitespaces(char *args, t_data *data, int size);
+int					len_without_whitespaces(char *args, t_data *data);
 int					add_whitespace(char b, char a, int quotes);
+
+// quoting
+int					quoting(t_stack **stack);
+char				*handling_quotes(char *args, int size);
+int					final_len(char *args);
+int					check_num_of_quotes(char *args);
+// int					check_num_of_quotes(char *args);
+// int					is_closed(char *args, int i, char quote);
+// void				is_in_quotes(char c, t_data *data);
 
 /// parsing_utils
 char				**ft_free_all(char **args);
 int					ft_iswhitespace(int c);
 int					ft_is_operator(int c);
 int					ft_is_quotes(char c);
-int					handle_quotes(char args, int quotes);
+void				handle_quotes(char argv, t_data *data);
 
 // list_utils
-int					fill_the_list(char **cmd, t_stack **stack);
 t_stack				*node_init(char **cmd);
+int					fill_the_list(char **cmd, t_stack **stack);
 void				rot_lstadd_back(t_stack **stack, t_stack *new_node);
 void				print_stack(t_stack **stack);
 
