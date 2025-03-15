@@ -56,21 +56,21 @@ void	execute_cmd(t_ast *cmd_node, t_env *env)
 		return ;
 	}
 	if (pid == 0)
-		handle_child_redirects(cmd_node, env_array);
+		child_process(cmd_node, env_array);
 	else
 		parent_process(pid, cmd_node, env_array);
 }
 
 void	execute_cmd_node(t_ast *node, t_env *env)
 {
-	if (node->cmd->redirs)
-		exec_with_redirects(node, env);
-	else
-	{
+	// if (node->cmd->redirs)
+	// 	exec_with_redirects(node, env);
+	// else
+	// {
 		check_builtin(node, env);
 		if (node->error_code == -1)
 			execute_cmd(node, env);
-	}
+//	}
 }
 
 void	execute_ast(t_ast *node, t_env *env)
@@ -89,7 +89,7 @@ void	execute_ast(t_ast *node, t_env *env)
 	else if (node->token == PIPE)
 		execute_pipe(node, env);
 	else if(node->token == REDIR_IN || node->token == REDIR_OUT || node->token == APPEND)
-		execute_redi_node(node, env);
+		exec_with_redirects(node, env);
 	if (node->head != node && node->head)
 		node->head->error_code = node->error_code;
 	if (node->head == node)

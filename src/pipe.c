@@ -14,8 +14,8 @@ void	pipe_child_left(t_ast *cmd, t_env *env, int *pipefd)
 	close(pipefd[1]);
 	if (cmd->left->token == CMD && cmd->left->cmd && cmd->left->cmd->redirs)
 	{
-		if (apply_all_redirections(cmd->left->cmd))
-			exit(1);
+		//if (apply_all_redirections(cmd->left->cmd)) // modif
+		//	exit(1);
 	}
 	env_copy = env;
 	execute_ast(cmd->left, env_copy);

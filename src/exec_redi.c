@@ -14,8 +14,9 @@ void	exec_with_redirects(t_ast *node, t_env *env)
 		restore_std_fds(saved_stdin, saved_stdout);
 		return ;
 	}
-	execute_ast(node->left, env);
-	// check_builtin(node, env);
+	check_builtin(node->left, env);
+	if (node->left->error_code == -1)
+		execute_ast(node->left, env);
 	restore_std_fds(saved_stdin, saved_stdout); // not sure
 }
 
@@ -96,5 +97,41 @@ int	apply_append_redirection(t_ast *redir)
 		return (1);
 	}
 	close(fd);
+	return (0);
+}
+
+int	save_std_fds(int *saved_stdin, int *saved_stdout, t_ast *node)
+{
+	*saved_stdin = dup(STDIN_FILENO);
+	*saved_stdout = dup(STDOUT_FILENO);
+	if (*saved_stdin == -1 || *saved_stdout == -1)
+	{
+		perror("minishell: dup");
+		node->error_code = 1;
+		if (*saved_stdin != -1)
+			close(*saved_stdin);
+		if (*saved_stdout != -1)
+			close(*saved_stdout);
+		return (1);
+	}
+	return (0);
+}
+
+void	restore_std_fds(int saved_stdin, int saved_stdout)
+{
+	dup2(saved_stdin, STDIN_FILENO);
+	dup2(saved_stdout, STDOUT_FILENO);
+	close(saved_stdin);
+	close(saved_stdout);
+}
+
+int	is_cmd_invalid(t_ast *cmd_node)
+{
+	if (!cmd_node || !cmd_node->cmd || !cmd_node->cmd->args
+		|| !cmd_node->cmd->args[0])
+	{
+		cmd_node->error_code = 1;
+		return (1);
+	}
 	return (0);
 }

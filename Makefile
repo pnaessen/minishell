@@ -23,6 +23,8 @@ SRC := $(addprefix $(SRC_DIR), \
 	free_tools.c \
 	mini_env.c \
 	apply_redi.c \
+	exec_redi.c \
+	ast.c \
 )
 
 BUILTINS_SRC := $(addprefix $(BUILTINS_DIR), \

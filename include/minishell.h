@@ -6,7 +6,7 @@
 /*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/15 16:07:07 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/15 17:30:47 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,16 @@ typedef struct s_cmd
 
 ////////////////////////SRC/////////////////////////////////////
 
+/////////////////////////main.c////////////////////////////
+void				print_ast(t_ast *node, int level);
+void				print_redirections(t_redir *redirs, int level);
+
 /////////////////////////apply_redi.c////////////////////////////
-int					apply_append_redirection(t_redir *redir);
-int					apply_input_redirection(t_redir *redir);
-int					apply_output_redirection(t_redir *redir);
-int					apply_redirection(t_redir *redir);
-int					apply_all_redirections(t_cmd *cmd);
+// int					apply_append_redirection(t_redir *redir);
+// int					apply_input_redirection(t_redir *redir);
+// int					apply_output_redirection(t_redir *redir);
+// int					apply_redirection(t_redir *redir);
+// int					apply_all_redirections(t_cmd *cmd);
 
 /////////////////////////ast_free.c////////////////////////////
 void				free_ast_children(t_ast *node);
@@ -84,7 +88,6 @@ t_ast				*init_cmd_node(t_ast *node, char **args, int args_count);
 /////////////////////////exec.c////////////////////////////
 void				child_process(t_ast *cmd, char **env_array);
 void				execute_ast(t_ast *cmd, t_env *env);
-void				execute_cmd(t_ast *cmd, t_env *env);
 int					parent_process(pid_t pid, t_ast *cmd, char **env_array);
 void				execute_cmd_node(t_ast *node, t_env *env);
 
@@ -125,7 +128,7 @@ void				fork_fail(t_ast **cmd, int *pipefd);
 int					save_std_fds(int *saved_stdin, int *saved_stdout,
 						t_ast *node);
 void				restore_std_fds(int saved_stdin, int saved_stdout);
-void				exec_with_redirects(t_ast *node, t_env *env);
+//void				exec_with_redirects(t_ast *node, t_env *env);
 int					is_cmd_invalid(t_ast *cmd_node);
 int					handle_child_redirects(t_ast *cmd_node, char **env_array);
 
@@ -135,7 +138,7 @@ void				handle_signals(void);
 
 /////////////////////////tree_ast.c////////////////////////////
 t_ast				*build_tree_compat(t_stack *parsed_stack);
-t_ast				*parse_and_build_ast(char *input);
+// t_ast				*parse_and_build_ast(char *input);
 t_ast				*handle_pipe(t_ast **current_node, t_stack **current,
 						t_stack *stack, t_ast **root);
 t_ast				*init_first_cmd(t_stack *stack, t_stack *end,
@@ -157,9 +160,18 @@ char				**ft_free_ta(char **tab);
 /////////////////////////ast.c////////////////////////////
 t_ast				*build_tree(t_stack *stack);
 void				handle_redirection(t_ast **current_node, t_stack **current,
-						t_stack *stack, t_ast **root);
+						t_ast **root);
 t_ast				*create_ast_redirection(char **args, t_node_type token);
 t_ast				*init_redi_struct(t_ast *node, t_node_type token);
+t_ast				*parse_and_build_ast(char *input);
+
+/////////////////////////exec_redi.c////////////////////////////
+void				exec_with_redirects(t_ast *node, t_env *env);
+int					apply_all_redirections(t_ast *node);
+int					apply_redirection(t_ast *redir);
+int					apply_input_redirection(t_ast *redir);
+int					apply_output_redirection(t_ast *redir);
+int					apply_append_redirection(t_ast *redir);
 
 ////////////BUILTINS////////////////////////
 

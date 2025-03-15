@@ -43,20 +43,20 @@ t_ast	*build_tree_compat(t_stack *parsed_stack)
 	return (root);
 }
 
-t_ast	*parse_and_build_ast(char *input)
-{
-	t_stack	*parsed_stack;
-	t_ast	*ast_result;
+// t_ast	*parse_and_build_ast(char *input)
+// {
+// 	t_stack	*parsed_stack;
+// 	t_ast	*ast_result;
 
-	if (!input || !*input)
-		return (NULL);
-	parsed_stack = parsing_input(input);
-	if (!parsed_stack)
-		return (NULL);
-	ast_result = build_tree_compat(parsed_stack);
-	free_stack(parsed_stack);
-	return (ast_result);
-}
+// 	if (!input || !*input)
+// 		return (NULL);
+// 	parsed_stack = parsing_input(input);
+// 	if (!parsed_stack)
+// 		return (NULL);
+// 	ast_result = build_tree_compat(parsed_stack);
+// 	free_stack(parsed_stack);
+// 	return (ast_result);
+// }
 
 t_ast	*handle_pipe(t_ast **current_node, t_stack **current, t_stack *stack,
 		t_ast **root)
