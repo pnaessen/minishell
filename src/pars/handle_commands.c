@@ -65,6 +65,5 @@ char	*handle_commands(char *args)
 
 	size = len_to_sep_commands(args) + 1;
 	token = separate_commands(args, size);
-	// printf("[DEBUG] args cleaned : [%s]\n", token);
 	return (token);
 }

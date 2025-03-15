@@ -74,7 +74,7 @@ t_ast	*handle_pipe(t_ast **current_node, t_stack **current, t_stack *stack,
 	pipe_node = create_pipe_node(*current_node, new_cmd);
 	if (!pipe_node)
 		return (NULL);
-	if (*current_node == *root) //si pas la full bug
+	if (*current_node == *root)
 		*root = pipe_node;
 	*current_node = pipe_node;
 	*current = next_cmd;
@@ -101,7 +101,7 @@ int	add_redirection_to_cmd(t_ast *cmd_node, t_node_type type, char *file)
 	t_redir	*new_redir;
 	t_redir	*current;
 
-	// if cmd_node comme << eof | << eof cree la node cmd pour mettre une redi 
+	// if cmd_node comme << eof | << eof cree la node cmd pour mettre une redi
 	if (!cmd_node || !file)
 		return (0);
 	if (!cmd_node->cmd)
@@ -127,4 +127,3 @@ int	add_redirection_to_cmd(t_ast *cmd_node, t_node_type type, char *file)
 	}
 	return (1);
 }
-

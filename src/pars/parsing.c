@@ -8,6 +8,7 @@ t_stack	*tokenise_args(char *args_cleaned)
 
 	stack = NULL;
 	token = pre_tokenisation(args_cleaned);
+	i = 0;
 	if (!token)
 		return (NULL);
 	i = 0;
@@ -21,6 +22,8 @@ t_stack	*tokenise_args(char *args_cleaned)
 		i++;
 	}
 	identify_token_type(&stack);
+	if (quoting(&stack) == ERROR)
+		return (NULL);
 	print_stack(&stack);
 	// ft_free_all(token);
 	return (stack);
@@ -39,14 +42,16 @@ t_stack	*parsing_input(char *input)
 		return (NULL);
 	args_cleaned = handle_commands(args);
 	free(args);
+	if (check_num_of_quotes(args_cleaned) == ERROR)
+	{
+		free(args_cleaned);
+		return (NULL);
+	}
 	if (!args_cleaned)
 		return (NULL);
 	stack = tokenise_args(args_cleaned);
 	if (!stack)
-	{
-		// printf("DEBUG : tokenisation error\n");
 		return (NULL);
-	}
 	return (stack);
 }
 
@@ -69,11 +74,13 @@ t_stack	*parsing_input(char *input)
 // 			exit(0);
 // 		}
 // 		if (*input)
-// 			add_history(input);
-// 		if (parsing_input(input) == ERROR)
 // 		{
-// 			free(input);
-// 			return (ERROR);
+// 			add_history(input);
+// 			if (!parsing_input(input))
+// 			{
+// 				free(input);
+// 				return (ERROR);
+// 			}
 // 		}
 // 		free(input);
 // 	}

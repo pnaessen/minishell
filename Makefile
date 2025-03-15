@@ -46,6 +46,7 @@ PARS_SRC := $(addprefix $(PARS_DIR), \
 	parsing.c \
 	pre_tokenisation.c \
 	tokenisation.c \
+	quoting.c \
 )
 
 SRC += $(BUILTINS_SRC) $(PARS_SRC)
