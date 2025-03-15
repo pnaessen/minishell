@@ -2,7 +2,7 @@
 
 void	pipe_child_left(t_ast *cmd, t_env *env, int *pipefd)
 {
-	t_env	*env_copy;
+	int	exit_code;
 
 	close(pipefd[0]);
 	if (dup2(pipefd[1], STDOUT_FILENO) == -1)
@@ -12,20 +12,25 @@ void	pipe_child_left(t_ast *cmd, t_env *env, int *pipefd)
 		exit(1);
 	}
 	close(pipefd[1]);
-	if (cmd->left->token == CMD && cmd->left->cmd && cmd->left->cmd->redirs)
+	if (cmd->left->token == CMD)
 	{
-		//if (apply_all_redirections(cmd->left->cmd)) // modif
-		//	exit(1);
+		check_builtin(cmd->left, env);
+		if (cmd->left->error_code == -1)
+			execute_ast(cmd->left, env);
 	}
-	env_copy = env;
-	execute_ast(cmd->left, env_copy);
-	exit(cmd->error_code);
+	else
+		execute_ast(cmd->left, env);
+	if (cmd->left->error_code != -1)
+		exit_code = cmd->left->error_code;
+	else
+		exit_code = cmd->error_code;
+	exit(exit_code);
 }
 
 void	pipe_child_right(t_ast *cmd, t_env *env, int *pipefd)
 {
 	t_env	*env_copy;
-	int exit_code;
+	int		exit_code;
 
 	close(pipefd[1]);
 	if (cmd->right->token == CMD && cmd->right->cmd
@@ -42,7 +47,7 @@ void	pipe_child_right(t_ast *cmd, t_env *env, int *pipefd)
 	env_copy = env;
 	execute_ast(cmd->right, env_copy);
 	exit_code = cmd->right->error_code;
-	if(exit_code == -1)
+	if (exit_code == -1)
 		exit_code = cmd->error_code;
 	exit(cmd->error_code);
 }

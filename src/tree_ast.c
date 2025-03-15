@@ -1,47 +1,47 @@
 #include "minishell.h"
 #include "pars.h"
 
-t_ast	*build_tree_compat(t_stack *parsed_stack)
-{
-	t_stack	*current;
-	t_stack	*end;
-	t_ast	*root;
-	t_ast	*current_node;
-	t_ast	*last_cmd_node;
+// t_ast	*build_tree_compat(t_stack *parsed_stack)
+// {
+// 	t_stack	*current;
+// 	t_stack	*end;
+// 	t_ast	*root;
+// 	t_ast	*current_node;
+// 	t_ast	*last_cmd_node;
 
-	current = parsed_stack;
-	end = parsed_stack->prev;
-	root = init_first_cmd(parsed_stack, end, &current_node);
-	if (!root)
-		return (NULL);
-	last_cmd_node = current_node;
-	current = current->next;
-	while (current != parsed_stack)
-	{
-		if (current->token == PIPE)
-		{
-			handle_pipe(&current_node, &current, parsed_stack, &root);
-			if (current_node->token == PIPE && current_node->right)
-				last_cmd_node = current_node->right;
-		}
-		else if (current->token == REDIR_IN || current->token == REDIR_OUT
-			|| current->token == APPEND || current->token == REDIR_HEREDOC)
-		{
-			if (current->next != parsed_stack && current->next->token == CMD)
-			{
-				if (!add_redirection_to_cmd(last_cmd_node, current->token,
-						current->next->cmd[0]))
-				{
-					free_ast(root);
-					return (NULL);
-				}
-				current = current->next;
-			}
-		}
-		current = current->next;
-	}
-	return (root);
-}
+// 	current = parsed_stack;
+// 	end = parsed_stack->prev;
+// 	root = init_first_cmd(parsed_stack, end, &current_node);
+// 	if (!root)
+// 		return (NULL);
+// 	last_cmd_node = current_node;
+// 	current = current->next;
+// 	while (current != parsed_stack)
+// 	{
+// 		if (current->token == PIPE)
+// 		{
+// 			handle_pipe(&current_node, &current, parsed_stack, &root);
+// 			if (current_node->token == PIPE && current_node->right)
+// 				last_cmd_node = current_node->right;
+// 		}
+// 		else if (current->token == REDIR_IN || current->token == REDIR_OUT
+// 			|| current->token == APPEND || current->token == REDIR_HEREDOC)
+// 		{
+// 			if (current->next != parsed_stack && current->next->token == CMD)
+// 			{
+// 				if (!add_redirection_to_cmd(last_cmd_node, current->token,
+// 						current->next->cmd[0]))
+// 				{
+// 					free_ast(root);
+// 					return (NULL);
+// 				}
+// 				current = current->next;
+// 			}
+// 		}
+// 		current = current->next;
+// 	}
+// 	return (root);
+// }
 
 // t_ast	*parse_and_build_ast(char *input)
 // {
@@ -96,34 +96,34 @@ t_ast	*init_first_cmd(t_stack *stack, t_stack *end, t_ast **current_node)
 	return (root);
 }
 
-int	add_redirection_to_cmd(t_ast *cmd_node, t_node_type type, char *file)
-{
-	t_redir	*new_redir;
-	t_redir	*current;
+// int	add_redirection_to_cmd(t_ast *cmd_node, t_node_type type, char *file)
+// {
+// 	t_redir	*new_redir;
+// 	t_redir	*current;
 
-	// if cmd_node comme << eof | << eof cree la node cmd pour mettre une redi
-	if (!cmd_node || !file)
-		return (0);
-	if (!cmd_node->cmd)
-	{
-		cmd_node->cmd = malloc(sizeof(t_cmd));
-		if (!cmd_node->cmd)
-			return (0);
-		cmd_node->cmd->args = NULL;
-		cmd_node->cmd->redirs = NULL;
-		cmd_node->cmd->path = NULL;
-	}
-	new_redir = create_redirection(type, file);
-	if (!new_redir)
-		return (0);
-	if (!cmd_node->cmd->redirs)
-		cmd_node->cmd->redirs = new_redir;
-	else
-	{
-		current = cmd_node->cmd->redirs;
-		while (current->next)
-			current = current->next;
-		current->next = new_redir;
-	}
-	return (1);
-}
+// 	// if cmd_node comme << eof | << eof cree la node cmd pour mettre une redi
+// 	if (!cmd_node || !file)
+// 		return (0);
+// 	if (!cmd_node->cmd)
+// 	{
+// 		cmd_node->cmd = malloc(sizeof(t_cmd));
+// 		if (!cmd_node->cmd)
+// 			return (0);
+// 		cmd_node->cmd->args = NULL;
+// 		cmd_node->cmd->redirs = NULL;
+// 		cmd_node->cmd->path = NULL;
+// 	}
+// 	new_redir = create_redirection(type, file);
+// 	if (!new_redir)
+// 		return (0);
+// 	if (!cmd_node->cmd->redirs)
+// 		cmd_node->cmd->redirs = new_redir;
+// 	else
+// 	{
+// 		current = cmd_node->cmd->redirs;
+// 		while (current->next)
+// 			current = current->next;
+// 		current->next = new_redir;
+// 	}
+// 	return (1);
+// }

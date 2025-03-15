@@ -72,19 +72,12 @@ char	*ft_strjoin_free(char *s1, char *s2)
 
 void	cleanup_heredoc_files(t_ast *node)
 {
-	t_redir	*redir;
-
 	if (!node)
 		return ;
-	if (node->token == CMD && node->cmd && node->cmd->redirs)
+	if (node->token == REDIR_HEREDOC && node->cmd && node->cmd->args)
 	{
-		redir = node->cmd->redirs;
-		while (redir)
-		{
-			if (redir->type == REDIR_HEREDOC)
-				unlink(redir->file);
-			redir = redir->next;
-		}
+		if (node->cmd->args[0])
+			unlink(node->cmd->args[0]);
 	}
 	cleanup_heredoc_files(node->left);
 	cleanup_heredoc_files(node->right);
@@ -94,38 +87,39 @@ int	process_all_heredocs(t_ast *node)
 {
 	char	*temp_filename;
 	char	*delimiter;
-	t_redir	*redir;
+	int		fd;
 
 	if (!node)
 		return (1);
-	if (node->token == CMD && node->cmd && node->cmd->redirs)
+	if (node->token == REDIR_HEREDOC && node->cmd && node->cmd->args)
 	{
-		redir = node->cmd->redirs;
-		while (redir)
+		delimiter = ft_strdup(node->cmd->args[0]);
+		if (!delimiter)
+			return (0);
+		temp_filename = create_temp_filename();
+		if (!temp_filename)
 		{
-			if (redir->type == REDIR_HEREDOC)
-			{
-				delimiter = ft_strdup(redir->file);
-				if (!delimiter)
-					return (0);
-				temp_filename = create_temp_filename();
-				if (!temp_filename)
-				{
-					free(delimiter);
-					return (0);
-				}
-				if (write_to_temp_file(delimiter, temp_filename) == -1)
-				{
-					free(delimiter);
-					free(temp_filename);
-					return (0);
-				}
-				free(delimiter);
-				free(redir->file);
-				redir->file = temp_filename;
-			}
-			redir = redir->next;
+			free(delimiter);
+			return (0);
 		}
+		if (write_to_temp_file(delimiter, temp_filename) == -1)
+		{
+			free(delimiter);
+			free(temp_filename);
+			return (0);
+		}
+		fd = open(temp_filename, O_RDONLY);
+		if (fd == -1)
+		{
+			free(delimiter);
+			free(temp_filename);
+			return (0);
+		}
+		close(fd);
+		free(delimiter);
+		free(node->cmd->args[0]);
+		node->cmd->args[0] = temp_filename;
+		node->cmd->has_heredoc = 1;
 	}
 	if (node->left && !process_all_heredocs(node->left))
 		return (0);
