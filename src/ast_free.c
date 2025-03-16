@@ -8,7 +8,7 @@ void	free_ast_children(t_ast *node)
 		free_ast(node->left);
 		node->left = NULL;
 	}
-	if (node->left)
+	if (node->right)
 	{
 		free_ast(node->right);
 		node->right = NULL;
@@ -33,8 +33,6 @@ void	free_redirections(t_redir *redirs)
 
 void	free_ast_cmd(t_ast *node)
 {
-	if (node->cmd)
-		return ;
 	if (node->cmd->args)
 		free_ast_cmd_args(node);
 	if (node->cmd->redirs)

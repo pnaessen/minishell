@@ -34,7 +34,7 @@ t_ast	*build_tree(t_stack *stack)
 	{
 		if (current->token == PIPE)
 		{
-			if (!handle_pipe(&last_cmd_node, &current, stack, &root)) // pas last cmd node mais current node sauf que mal relink avec les redi need modif handle redi
+			if (!handle_pipe(&current_node, &current, stack, &root)) // current node sauf que mal relink avec les redi need modif handle redi
 			{
 				free_ast(root);
 				return (NULL);
@@ -49,7 +49,6 @@ t_ast	*build_tree(t_stack *stack)
 			if (current->next != stack && current->next->token == CMD)
 				handle_redirection(&last_cmd_node, &current, &root);
 		}
-		printf("test---------------------------------------\n");
 		current = current->next;
 	}
 	return (root);
