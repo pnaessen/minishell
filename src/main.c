@@ -47,99 +47,84 @@ int	main(int argc, char **argv, char **env)
 	return (0);
 }
 
-void print_ast(t_ast *node, int level)
+void	print_ast(t_ast *node, int level)
 {
-    int i;
+	int	i;
 
-    if (!node)
-        return;
-
-    // Indentation pour la visualisation de la hiérarchie
-    for (i = 0; i < level; i++)
-        printf("  ");
-
-    // Afficher le type de nœud
-    switch (node->token)
-    {
-        case CMD:
-            printf("CMD: ");
-            if (node->cmd && node->cmd->args)
-            {
-                i = 0;
-                while (node->cmd->args[i])
-                {
-                    printf("%s", node->cmd->args[i]);
-                    if (node->cmd->args[i + 1])
-                        printf(" ");
-                    i++;
-                }
-            }
-            break;
-        case PIPE:
-            printf("PIPE");
-            break;
-        case REDIR_IN:
-            printf("REDIR_IN: %s", node->cmd->args[0]);
-            break;
-        case REDIR_OUT:
-            printf("REDIR_OUT: %s", node->cmd->args[0]);
-            break;
-        case REDIR_HEREDOC:
-            printf("HEREDOC: %s", node->cmd->args[0]);
-            break;
-        case APPEND:
-            printf("APPEND: %s", node->cmd->args[0]);
-            break;
-        default:
-            printf("UNKNOWN");
-    }
-    
-    printf("\n");
-
-    // Afficher les redirections associées à la commande
-    if (node->token == CMD && node->cmd && node->cmd->redirs)
-    {
-        print_redirections(node->cmd->redirs, level + 1);
-    }
-
-    // Afficher récursivement les nœuds enfants
-    if (node->left)
-        print_ast(node->left, level + 1);
-    if (node->right)
-        print_ast(node->right, level + 1);
+	if (!node)
+		return ;
+	for (i = 0; i < level; i++)
+		printf("  ");
+	switch (node->token)
+	{
+	case CMD:
+		printf("CMD: ");
+		if (node->cmd && node->cmd->args)
+		{
+			i = 0;
+			while (node->cmd->args[i])
+			{
+				printf("%s", node->cmd->args[i]);
+				if (node->cmd->args[i + 1])
+					printf(" ");
+				i++;
+			}
+		}
+		break ;
+	case PIPE:
+		printf("PIPE");
+		break ;
+	case REDIR_IN:
+		printf("REDIR_IN: %s", node->cmd->args[0]);
+		break ;
+	case REDIR_OUT:
+		printf("REDIR_OUT: %s", node->cmd->args[0]);
+		break ;
+	case REDIR_HEREDOC:
+		printf("HEREDOC: %s", node->cmd->args[0]);
+		break ;
+	case APPEND:
+		printf("APPEND: %s", node->cmd->args[0]);
+		break ;
+	default:
+		printf("UNKNOWN");
+	}
+	printf("\n");
+	if (node->token == CMD && node->cmd && node->cmd->redirs)
+		print_redirections(node->cmd->redirs, level + 1);
+	if (node->left)
+		print_ast(node->left, level + 1);
+	if (node->right)
+		print_ast(node->right, level + 1);
 }
 
-void print_redirections(t_redir *redirs, int level)
+void	print_redirections(t_redir *redirs, int level)
 {
-    t_redir *current;
-    int i;
+	t_redir	*current;
+	int		i;
 
-    current = redirs;
-    while (current)
-    {
-        // Indentation pour la visualisation de la hiérarchie
-        for (i = 0; i < level; i++)
-            printf("  ");
-        
-        // Afficher le type de redirection
-        switch (current->type)
-        {
-            case REDIR_IN:
-                printf("< %s\n", current->file);
-                break;
-            case REDIR_OUT:
-                printf("> %s\n", current->file);
-                break;
-            case REDIR_HEREDOC:
-                printf("<< %s\n", current->file);
-                break;
-            case APPEND:
-                printf(">> %s\n", current->file);
-                break;
-            default:
-                printf("Unknown redirection: %s\n", current->file);
-        }
-        
-        current = current->next;
-    }
+	current = redirs;
+	while (current)
+	{
+		for (i = 0; i < level; i++)
+			printf("  ");
+		switch (current->type)
+		{
+		case REDIR_IN:
+			printf("< %s\n", current->file);
+			break ;
+		case REDIR_OUT:
+			printf("> %s\n", current->file);
+			break ;
+		case REDIR_HEREDOC:
+			printf("<< %s\n", current->file);
+			break ;
+		case APPEND:
+			printf(">> %s\n", current->file);
+			break ;
+		default:
+			printf("Unknown redirection: %s\n", current->file);
+		}
+		current = current->next;
+	}
 }

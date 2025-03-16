@@ -9,7 +9,7 @@ int	ft_strrcmp(char *src, char *cmp)
 	t1 = (unsigned char *)src;
 	t2 = (unsigned char *)cmp;
 	i = 0;
-	while (t1[i])
+	while (t2[i])
 	{
 		if (t1[i] != t2[i])
 			return (t1[i] - t2[i]);

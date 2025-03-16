@@ -23,9 +23,9 @@ void	define_type(t_stack *temp, char *cmd, int quotes)
 
 int	identify_token_type(t_stack **stack)
 {
-	t_stack	*temp;
-	t_data	*data;
-	int		i;
+	t_stack *temp;
+	t_data *data;
+	int i;
 
 	temp = *stack;
 	data = malloc(sizeof(t_data));

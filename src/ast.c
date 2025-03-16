@@ -107,3 +107,26 @@ void	init_redir_node(t_ast *redir_node, char *filename, t_ast **current_node,
 	redir_node->head = *root;
 	redir_node->error_code = 0;
 }
+
+t_ast	*handle_pipe(t_ast **current_node, t_stack **current, t_stack *stack,
+	t_ast **root)
+{
+t_ast	*new_cmd;
+t_ast	*pipe_node;
+t_stack	*next_cmd;
+
+next_cmd = find_next_cmd((*current)->next, stack);
+if (next_cmd == stack)
+	return (NULL);
+new_cmd = create_ast_command(next_cmd->cmd);
+if (!new_cmd)
+	return (NULL);
+pipe_node = create_pipe_node(*current_node, new_cmd);
+if (!pipe_node)
+	return (NULL);
+if (*current_node == *root)
+	*root = pipe_node;
+*current_node = pipe_node;
+*current = next_cmd;
+return (pipe_node);
+}
