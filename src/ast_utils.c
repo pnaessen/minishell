@@ -3,7 +3,7 @@
 
 t_stack	*find_next_cmd(t_stack *current, t_stack *end)
 {
-	while (current != end && current->token != CMD)
+	while (current != end && current->token != CMD && is_redirection(current->prev->token))
 		current = current->next;
 	return (current);
 }

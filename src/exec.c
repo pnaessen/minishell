@@ -63,7 +63,6 @@ void	execute_cmd(t_ast *cmd_node, t_env *env)
 
 void	execute_cmd_node(t_ast *node, t_env *env)
 {
-
 	check_builtin(node, env);
 	if (node->error_code == -1)
 		execute_cmd(node, env);
@@ -89,9 +88,11 @@ void	execute_ast(t_ast *node, t_env *env)
 		exec_with_redirects(node, env);
 	if (node->head != node && node->head)
 		node->head->error_code = node->error_code;
-	if (node->head == node)
+	// printf("node->head->cmd->args[0] = %s\n", node->head->cmd->args[0]);
+	// printf("node %s\n", node->cmd->args[0]);
+	if (node->head == node) //node->head toujours 1 node de retard
 	{
-		heredocs_processed = 0;
+		heredocs_processed = 0; // ne reset jamais le flag
 		cleanup_heredoc_files(node);
 	}
 }

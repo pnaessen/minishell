@@ -25,16 +25,16 @@ t_ast	*build_tree(t_stack *stack)
 
 	end = stack->prev;
 	current = stack;
-	root = init_first_cmd(stack, end, &current_node);
+	root = init_first_cmd(stack, end, &current_node); //alerd modif init first cmd car now check si son prev est une redi donc pas de cmd si  << EOF
 	if (!root)
 		return (NULL);
-	last_cmd_node = current_node;// check si current == redi car si oui on doit ajouter la redi a la cmd
-	current = current->next; 
-	while (current != stack)
+	last_cmd_node = current_node; // check si current == redi car si oui on doit ajouter la redi a la cmd
+	current = current->next;
+	while (current != stack) // handle pipe mal lie si plusieur pipe surrement la head qui est mal set
 	{
 		if (current->token == PIPE)
 		{
-			if (!handle_pipe(&current_node, &current, stack, &root))
+			if (!handle_pipe(&last_cmd_node, &current, stack, &root)) // pas last cmd node mais current node sauf que mal relink avec les redi need modif handle redi
 			{
 				free_ast(root);
 				return (NULL);
@@ -49,6 +49,7 @@ t_ast	*build_tree(t_stack *stack)
 			if (current->next != stack && current->next->token == CMD)
 				handle_redirection(&last_cmd_node, &current, &root);
 		}
+		printf("test---------------------------------------\n");
 		current = current->next;
 	}
 	return (root);
@@ -109,24 +110,24 @@ void	init_redir_node(t_ast *redir_node, char *filename, t_ast **current_node,
 }
 
 t_ast	*handle_pipe(t_ast **current_node, t_stack **current, t_stack *stack,
-	t_ast **root)
+		t_ast **root)
 {
-t_ast	*new_cmd;
-t_ast	*pipe_node;
-t_stack	*next_cmd;
+	t_ast	*new_cmd;
+	t_ast	*pipe_node;
+	t_stack	*next_cmd;
 
-next_cmd = find_next_cmd((*current)->next, stack);
-if (next_cmd == stack)
-	return (NULL);
-new_cmd = create_ast_command(next_cmd->cmd);
-if (!new_cmd)
-	return (NULL);
-pipe_node = create_pipe_node(*current_node, new_cmd);
-if (!pipe_node)
-	return (NULL);
-if (*current_node == *root)
-	*root = pipe_node;
-*current_node = pipe_node;
-*current = next_cmd;
-return (pipe_node);
+	next_cmd = find_next_cmd((*current)->next, stack); //pas next commande mais next node
+	if (next_cmd == stack)
+		return (NULL);
+	new_cmd = create_ast_command(next_cmd->cmd);
+	if (!new_cmd)
+		return (NULL);
+	pipe_node = create_pipe_node(*current_node, new_cmd);
+	if (!pipe_node)
+		return (NULL);
+	if (*current_node == *root)
+		*root = pipe_node;
+	*current_node = pipe_node;
+	*current = next_cmd;
+	return (pipe_node);
 }
