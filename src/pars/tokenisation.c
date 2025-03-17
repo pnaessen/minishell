@@ -92,5 +92,6 @@ char	**tokenisation(char const *s)
 		}
 		i++;
 	}
+	res[j] = NULL;
 	return (res);
 }

@@ -3,24 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   tree_ast.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vicperri <vicperri@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 09:52:29 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/10 10:11:43 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/17 10:39:57 by vicperri         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "pars.h"
 
-t_ast	*parse_and_build_ast(char *input)
+t_ast	*parse_and_build_ast(char *input, t_env **env)
 {
 	t_stack	*parsed_stack;
 	t_ast	*ast_result;
 
 	if (!input || !*input)
 		return (NULL);
-	parsed_stack = parsing_input(input);
+	parsed_stack = parsing_input(input, env);
 	if (!parsed_stack)
 		return (NULL);
 	// parsed_stack = link_redi(parsed_stack);

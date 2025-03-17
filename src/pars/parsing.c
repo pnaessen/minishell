@@ -1,3 +1,4 @@
+#include "minishell.h"
 #include "pars.h"
 
 t_stack	*tokenise_args(char *args_cleaned)
@@ -29,10 +30,11 @@ t_stack	*tokenise_args(char *args_cleaned)
 	return (stack);
 }
 
-t_stack	*parsing_input(char *input)
+t_stack	*parsing_input(char *input, t_env **env)
 {
 	char	*args;
 	char	*args_cleaned;
+	char	*env_handled;
 	t_stack	*stack;
 
 	if (!input)
@@ -40,8 +42,18 @@ t_stack	*parsing_input(char *input)
 	args = handle_whitespaces(input);
 	if (!args)
 		return (NULL);
-	args_cleaned = handle_commands(args);
+	if (ft_strchr(args, '$'))
+	{
+		env_handled = find_and_replace_var(args, env);
+		printf("[DEBUG] = %s\n", env_handled);
+	}
+	else
+		env_handled = ft_strdup(args);
 	free(args);
+	if (!env_handled)
+		return (NULL);
+	args_cleaned = handle_commands(env_handled);
+	free(env_handled);
 	if (check_num_of_quotes(args_cleaned) == ERROR)
 	{
 		free(args_cleaned);
@@ -53,36 +65,4 @@ t_stack	*parsing_input(char *input)
 	if (!stack)
 		return (NULL);
 	return (stack);
-}
-
-int	main(int argc, char **env)
-{
-	char	*input;
-
-	(void)env;
-	if (argc != 1)
-	{
-		printf("Usage : minishell doesn't take argument\n");
-		return (0);
-	}
-	while (1)
-	{
-		input = readline("minishell$ ");
-		if (!input)
-		{
-			printf("exit\n");
-			exit(0);
-		}
-		if (*input)
-		{
-			add_history(input);
-			if (!parsing_input(input))
-			{
-				free(input);
-				return (ERROR);
-			}
-		}
-		free(input);
-	}
-	return (0);
 }

@@ -43,6 +43,8 @@ PARS_SRC := $(addprefix $(PARS_DIR), \
 	parsing.c \
 	pre_tokenisation.c \
 	tokenisation.c \
+	quoting.c \
+	handle_env.c \
 )
 
 SRC += $(BUILTINS_SRC) $(PARS_SRC)
@@ -50,7 +52,7 @@ OBJ := $(SRC:%.c=$(OBJ_DIR)%.o)
 DEPS := $(OBJ:%.o=%.d)
 
 CC := cc
-CFLAGS := -Wextra -Wall -Werror
+CFLAGS := 
 LDFLAGS := -lreadline
 CPPFLAGS := -MMD -MP
 HEADERS := -I./include -I$(LIBFT_DIR)

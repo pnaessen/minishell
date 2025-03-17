@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vicperri <vicperri@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/10 10:10:42 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/17 11:56:52 by vicperri         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,39 +51,36 @@ typedef struct s_cmd
 ////////////////////////SRC/////////////////////////////////////
 
 /////////////tree_ast//////////////////////////////
-t_ast	*parse_and_build_ast(char *input);
-t_ast	*build_tree(t_stack *parsed_stack);
-t_ast	*init_first_cmd(t_stack *stack, t_stack *end, t_ast **current_node);
-t_ast	*process_cmd_tokens(t_stack *current, t_stack *parsed_stack,
-		t_ast *root, t_ast *current_node);
-t_ast	*handle_pipe(t_ast **current_node, t_stack **current, t_stack *stack,
-		t_ast **root);
-
-
+t_ast				*parse_and_build_ast(char *input, t_env **env);
+t_ast				*build_tree(t_stack *parsed_stack);
+t_ast				*init_first_cmd(t_stack *stack, t_stack *end,
+						t_ast **current_node);
+t_ast				*process_cmd_tokens(t_stack *current, t_stack *parsed_stack,
+						t_ast *root, t_ast *current_node);
+t_ast				*handle_pipe(t_ast **current_node, t_stack **current,
+						t_stack *stack, t_ast **root);
 
 ////////////ast_tools//////////////
-t_ast	*create_pipe_node(t_ast *left_cmd, t_ast *right_cmd);
-t_ast	*create_ast_operator(t_node_type token, t_ast *left, t_ast *right);
-t_ast	*create_ast_command(char **args);
+t_ast				*create_pipe_node(t_ast *left_cmd, t_ast *right_cmd);
+t_ast				*create_ast_operator(t_node_type token, t_ast *left,
+						t_ast *right);
+t_ast				*create_ast_command(char **args);
 
 ///////////////////ast_free//////////////
-t_ast	*free_cmd_node(t_ast *node, int i);
-void	free_ast(t_ast *node);
-void	free_ast_children(t_ast *node);
-void	free_ast_cmd(t_ast *node);
-void	free_ast_cmd_args(t_ast *node);
+t_ast				*free_cmd_node(t_ast *node, int i);
+void				free_ast(t_ast *node);
+void				free_ast_children(t_ast *node);
+void				free_ast_cmd(t_ast *node);
+void				free_ast_cmd_args(t_ast *node);
 
-
-
-
-void free_stack(t_stack *node);
+void				free_stack(t_stack *node);
 
 //////////////////ast_utils////////////////
-t_stack	*find_next_cmd(t_stack *current, t_stack *end);
-int	count_args(char **args);
-t_ast	*init_cmd_struct(t_ast *node);
-t_ast	*init_cmd_node_alloc(t_ast *node, int args_count);
-t_ast	*init_cmd_node(t_ast *node, char **args, int args_count);
+t_stack				*find_next_cmd(t_stack *current, t_stack *end);
+int					count_args(char **args);
+t_ast				*init_cmd_struct(t_ast *node);
+t_ast				*init_cmd_node_alloc(t_ast *node, int args_count);
+t_ast				*init_cmd_node(t_ast *node, char **args, int args_count);
 
 ///////////exec.c///////////////////////
 void				execute_cmd(t_ast *cmd, t_env *env);
@@ -180,5 +177,11 @@ void				free_ast(t_ast *node);
 t_ast				*create_command_pipeline(char **cmds, int count);
 t_ast				*create_test_pipeline(char *cmds);
 void				print_ast(t_ast *node, int level);
+
+// handle env
+int					is_valid_var_char(char args);
+char				*find_and_replace_var(char *args, t_env **env);
+
+t_stack				*parsing_input(char *input, t_env **env);
 
 #endif

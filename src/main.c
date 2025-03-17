@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
+/*   By: vicperri <vicperri@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:38:59 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/09 20:20:58 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/03/17 10:39:25 by vicperri         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	main(int argc, char **argv, char **env)
 		if (*input)
 		{
 			add_history(input);
-			cmd = parse_and_build_ast(input);
+			cmd = parse_and_build_ast(input, &head);
 			if (cmd)
 			{
 				print_ast(cmd, 0);

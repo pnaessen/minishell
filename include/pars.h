@@ -43,7 +43,6 @@ typedef struct s_stack
 }					t_stack;
 
 // parsing
-t_stack				*parsing_input(char *input);
 t_stack				*tokenise_args(char *args_cleaned);
 
 /// handle commands
