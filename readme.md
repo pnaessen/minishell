@@ -163,15 +163,10 @@ Commandes intégrées au shell :
 
 ## 🛠 To do
 
-check if env var up if not add env var PWD and OLDPWD  with cd
-cd full leaks
 faire $?
-env full leaks
-unset full leaks
 secu for 1024 PROCESUS
-need expand var 
 here doc sans cat avant ou cmd
 signal 
-test auto
-
-add PWD=/home/pnaessen/Mil03/ when no env  at start
+prob ast quand ls > out.txt | w > out2.txt
+cat << eof bug
+<< eof bug car je skip la node 

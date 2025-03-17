@@ -24,15 +24,16 @@ t_ast	*build_tree(t_stack *stack)
 
 	end = stack->prev;
 	current = stack;
-	root = init_first_cmd(stack, end, &current_node); //alert modif init first cmd car now check si son prev est une redi donc pas de cmd si  << EOF
+	root = init_first_cmd(stack, end, &current_node);
+	// alert modif init first cmd car now check si son prev est une redi donc pas de cmd si  << EOF
 	if (!root)
 		return (NULL);
 	current = current->next;
-	while (current != stack) // handle pipe mal lie si plusieur pipe surrement la head qui est mal set
+	while (current != stack)
 	{
 		if (current->token == PIPE)
 		{
-			if (!handle_pipe(&current_node, &current, stack, &root)) // current node sauf que mal relink avec les redi need modif handle redi
+			if (!handle_pipe(&current_node, &current, stack, &root))
 			{
 				free_ast(root);
 				return (NULL);
@@ -105,9 +106,9 @@ void	init_redir_node(t_ast *redir_node, char *filename, t_ast **current_node,
 t_ast	*handle_pipe(t_ast **current_node, t_stack **current, t_stack *stack,
 		t_ast **root)
 {
-	t_ast	*new_cmd;
-	t_ast	*pipe_node;
-	t_stack	*next_cmd;
+	t_ast *new_cmd;
+	t_ast *pipe_node;
+	t_stack *next_cmd;
 
 	next_cmd = (*current)->next;
 	if (next_cmd == stack)
@@ -115,6 +116,7 @@ t_ast	*handle_pipe(t_ast **current_node, t_stack **current, t_stack *stack,
 	new_cmd = create_ast_command(next_cmd->cmd);
 	if (!new_cmd)
 		return (NULL);
+	//new_cmd = redi_with_pipe((*current)->next, root, stack, &new_cmd);
 	pipe_node = create_pipe_node(*current_node, new_cmd);
 	if (!pipe_node)
 		return (NULL);
@@ -123,4 +125,18 @@ t_ast	*handle_pipe(t_ast **current_node, t_stack **current, t_stack *stack,
 	*current_node = pipe_node;
 	*current = next_cmd;
 	return (pipe_node);
+}
+
+
+t_ast	*redi_with_pipe(t_stack **current, t_ast **root, t_stack *stack,
+		t_ast **new_cmd)
+{
+	if (!is_redirection((*current)->next->token))
+		return (*new_cmd);
+	while (isredirection((*current)->next->token))
+	{
+		handle_redirection(new_cmd ,(*current)->next, root);
+		if ((*current)->next == stack)
+			return (*new_cmd);
+	}
 }
