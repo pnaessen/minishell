@@ -32,7 +32,7 @@ int	apply_output_redirection(t_ast *redir)
 	}
 	if (dup2(fd, STDOUT_FILENO) == -1)
 	{
-		perror("minishell: dup2");
+		perror("minishell: dup2\n");
 		close(fd);
 		return (1);
 	}
@@ -64,7 +64,15 @@ int	apply_all_redirections(t_ast *node)
 {
 	if (!node)
 		return (0);
-	if (apply_redirection(node))
-		return (1);
+	if (node->left && node->left->token != CMD)
+	{
+		if (apply_all_redirections(node->left))
+			return (1);
+	}
+	if (is_redirection(node->token))
+	{
+		if (apply_redirection(node))
+			return (1);
+	}
 	return (0);
 }

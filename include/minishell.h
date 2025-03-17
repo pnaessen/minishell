@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
+/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/16 18:27:24 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/03/17 13:16:43 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ t_ast				*create_ast_operator(t_node_type token, t_ast *left,
 						t_ast *right);
 t_ast				*create_pipe_node(t_ast *left_cmd, t_ast *right_cmd);
 int					is_redirection(t_node_type token);
-//t_redir				*create_redirection(t_node_type type, char *file);
+// t_redir				*create_redirection(t_node_type type, char *file);
 
 /////////////////////////ast_utils.c////////////////////////////
 t_stack				*find_next_cmd(t_stack *current, t_stack *end);
@@ -217,7 +217,9 @@ void				check_builtin(t_ast *input, t_env *env);
 t_ast				*create_test_command(char *cmd_str);
 void				free_ast(t_ast *node);
 t_ast				*create_command_pipeline(char **cmds, int count);
-t_ast				*create_test_pipeline(char *cmds);
+// t_ast				*create_test_pipeline(char *cmds);
 void				print_ast(t_ast *node, int level);
-
+void				execute_cmd_with_redir(t_ast *cmd_node, t_ast *node,
+						t_env *env);
+t_ast				*find_cmd_node(t_ast *node, int *error);
 #endif

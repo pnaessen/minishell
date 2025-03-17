@@ -88,11 +88,9 @@ void	execute_ast(t_ast *node, t_env *env)
 		exec_with_redirects(node, env);
 	if (node->head != node && node->head)
 		node->head->error_code = node->error_code;
-	// printf("node->head->cmd->args[0] = %s\n", node->head->cmd->args[0]);
-	// printf("node %s\n", node->cmd->args[0]);
-	if (node->head == node) //node->head toujours 1 node de retard
+	if (node->head == node)
 	{
-		heredocs_processed = 0; // ne reset jamais le flag
+		heredocs_processed = 0;
 		cleanup_heredoc_files(node);
 	}
 }

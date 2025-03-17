@@ -21,14 +21,12 @@ t_ast	*build_tree(t_stack *stack)
 	t_ast	*root;
 	t_ast	*current_node;
 	t_stack	*end;
-	t_ast	*last_cmd_node;
 
 	end = stack->prev;
 	current = stack;
-	root = init_first_cmd(stack, end, &current_node); //alerd modif init first cmd car now check si son prev est une redi donc pas de cmd si  << EOF
+	root = init_first_cmd(stack, end, &current_node); //alert modif init first cmd car now check si son prev est une redi donc pas de cmd si  << EOF
 	if (!root)
 		return (NULL);
-	last_cmd_node = current_node; // check si current == redi car si oui on doit ajouter la redi a la cmd
 	current = current->next;
 	while (current != stack) // handle pipe mal lie si plusieur pipe surrement la head qui est mal set
 	{
@@ -39,15 +37,11 @@ t_ast	*build_tree(t_stack *stack)
 				free_ast(root);
 				return (NULL);
 			}
-			if (current_node->token == PIPE)
-				last_cmd_node = current_node->right;
-			else if (current_node->token == CMD)
-				last_cmd_node = current_node;
 		}
 		else if (is_redirection(current->token))
 		{
 			if (current->next != stack && current->next->token == CMD)
-				handle_redirection(&last_cmd_node, &current, &root);
+				handle_redirection(&current_node, &current, &root);
 		}
 		current = current->next;
 	}
@@ -104,7 +98,7 @@ void	init_redir_node(t_ast *redir_node, char *filename, t_ast **current_node,
 	redir_node->cmd->has_heredoc = 0;
 	redir_node->left = *current_node;
 	redir_node->right = NULL;
-	redir_node->head = *root;
+	redir_node->head = redir_node; // verif si pas *root
 	redir_node->error_code = 0;
 }
 
@@ -115,7 +109,7 @@ t_ast	*handle_pipe(t_ast **current_node, t_stack **current, t_stack *stack,
 	t_ast	*pipe_node;
 	t_stack	*next_cmd;
 
-	next_cmd = find_next_cmd((*current)->next, stack); //pas next commande mais next node
+	next_cmd = (*current)->next;
 	if (next_cmd == stack)
 		return (NULL);
 	new_cmd = create_ast_command(next_cmd->cmd);
