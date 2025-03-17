@@ -64,6 +64,7 @@ int	apply_all_redirections(t_ast *node)
 {
 	if (!node)
 		return (0);
+		
 	if (node->left && node->left->token != CMD)
 	{
 		if (apply_all_redirections(node->left))
@@ -74,5 +75,6 @@ int	apply_all_redirections(t_ast *node)
 		if (apply_redirection(node))
 			return (1);
 	}
+	
 	return (0);
 }

@@ -84,7 +84,7 @@ void	execute_ast(t_ast *node, t_env *env)
 	else if (node->token == PIPE)
 		execute_pipe(node, env);
 	else if (node->token == REDIR_IN || node->token == REDIR_OUT
-		|| node->token == APPEND)
+		|| node->token == APPEND || node->token == REDIR_HEREDOC)
 		exec_with_redirects(node, env);
 	if (node->head != node && node->head)
 		node->head->error_code = node->error_code;

@@ -25,6 +25,7 @@ SRC := $(addprefix $(SRC_DIR), \
 	apply_redi.c \
 	exec_redi.c \
 	ast.c \
+	ast_redi.c \
 )
 
 BUILTINS_SRC := $(addprefix $(BUILTINS_DIR), \

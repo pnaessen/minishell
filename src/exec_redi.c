@@ -17,7 +17,7 @@ void	exec_with_redirects(t_ast *node, t_env *env)
 		return ;
 	}
 	cmd_node = find_cmd_node(node, &error);
-	if (error)
+	if (error || !cmd_node)
 	{
 		node->error_code = 1;
 		restore_std_fds(saved_stdin, saved_stdout);
@@ -76,23 +76,31 @@ int	is_cmd_invalid(t_ast *cmd_node)
 
 t_ast	*find_cmd_node(t_ast *node, int *has_error)
 {
-	t_ast	*cmd_node;
-
 	*has_error = 0;
-	cmd_node = node->left;
-	while (cmd_node && cmd_node->token != CMD)
-		cmd_node = cmd_node->left;
-	return (cmd_node);
+	if (!node)
+	{
+		*has_error = 1;
+		return (NULL);
+	}
+	if (node->token == CMD)
+		return (node);
+	if (node->left)
+	{
+		if (node->left->token == CMD)
+			return (node->left);
+		else
+			return (find_cmd_node(node->left, has_error));
+	}
+	*has_error = 1;
+	return (NULL);
 }
 
 void	execute_cmd_with_redir(t_ast *cmd_node, t_ast *node, t_env *env)
 {
-	if (cmd_node && cmd_node->token == CMD)
-	{
-		check_builtin(cmd_node, env);
-		if (cmd_node->error_code == -1)
-			execute_ast(cmd_node, env);
-		if (cmd_node->error_code != -1)
-			node->error_code = cmd_node->error_code;
-	}
+	if (!cmd_node || cmd_node->token != CMD)
+		return ;
+	check_builtin(cmd_node, env);
+	if (cmd_node->error_code == -1)
+		execute_cmd(cmd_node, env);
+	node->error_code = cmd_node->error_code;
 }
