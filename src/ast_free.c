@@ -33,10 +33,9 @@ void	free_redirections(t_redir *redirs)
 
 void	free_ast_cmd(t_ast *node)
 {
-	if (!node->cmd)
+	if (!node || !node->cmd)
 		return ;
-	if (node->cmd->args)
-		free_ast_cmd_args(node);
+	free_ast_cmd_args(node);
 	if (node->cmd->redirs)
 		free_redirections(node->cmd->redirs);
 	if (node->cmd->path)
@@ -53,13 +52,14 @@ void	free_ast(t_ast *node)
 	free_ast(node->right);
 	free_ast_cmd(node);
 	free(node);
+	node = NULL;
 }
 
 void	free_ast_cmd_args(t_ast *node)
 {
 	int	i;
 
-	if (!node->cmd->args)
+	if (!node || !node->cmd || !node->cmd->args)
 		return ;
 	i = 0;
 	while (node->cmd->args[i])

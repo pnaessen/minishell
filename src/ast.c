@@ -25,7 +25,7 @@ t_ast	*build_tree(t_stack *stack)
 	root = NULL;
 	end = stack->prev;
 	current = stack;
-	root = init_first_cmd(stack, end, &current_node); // modif
+	root = init_first_cmd(stack, end, &current_node);
 	if (!root)
 	{
 		printf("error\n");

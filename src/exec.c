@@ -11,6 +11,7 @@ void	child_process(t_ast *cmd, char **env_array)
 		free_env_array(env_array);
 		exit(127);
 	}
+	//dupliquer les args puis free tout le reste car execve free seulement ce que j'envoie
 	if (execve(cmd->cmd->path, cmd->cmd->args, env_array) == -1)
 	{
 		ft_putstr_fd("minishell: ", 2);
@@ -26,7 +27,9 @@ int	parent_process(pid_t pid, t_ast *cmd, char **env_array)
 {
 	int	status;
 
-	waitpid(pid, &status, 0); // stch here with ls > out.txt | rev > out1.txt si cmd a besoin de lire dans le pipe alors reste bloque car personne ecrit 
+	//printf("parent process\n");
+	waitpid(pid, &status, 0); // stuk here with ls > out.txt | rev > out1.txt si cmd a besoin de lire dans le pipe alors reste bloque car personne ecrit 
+	//printf("parent process after waitpid\n");
 	if (WIFEXITED(status))
 		cmd->error_code = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
