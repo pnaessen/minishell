@@ -26,6 +26,8 @@ SRC := $(addprefix $(SRC_DIR), \
 	exec_redi.c \
 	ast.c \
 	ast_redi.c \
+	pipe_left.c \
+	pipe_right.c \
 )
 
 BUILTINS_SRC := $(addprefix $(BUILTINS_DIR), \

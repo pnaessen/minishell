@@ -1,51 +1,5 @@
 #include "minishell.h"
 
-void	pipe_child_left(t_ast *cmd, t_env *env, int *pipefd)
-{
-	int	exit_code;
-
-	close(pipefd[0]);
-	if (dup2(pipefd[1], STDOUT_FILENO) == -1)
-	{
-		perror("minishell: dup2");
-		close(pipefd[1]);
-		exit(1);
-	}
-	close(pipefd[1]);
-	if (cmd->left->token == CMD)
-	{
-		check_builtin(cmd->left, env);
-		if (cmd->left->error_code == -1)
-			execute_ast(cmd->left, env);
-	}
-	else
-		execute_ast(cmd->left, env);
-	if (cmd->left->error_code != -1)
-		exit_code = cmd->left->error_code;
-	else
-		exit_code = cmd->error_code;
-	exit(exit_code);
-}
-
-void	pipe_child_right(t_ast *cmd, t_env *env, int *pipefd)
-{
-	int	exit_code;
-
-	close(pipefd[1]);
-	if (dup2(pipefd[0], STDIN_FILENO) == -1)
-	{
-		perror("minishell: dup2");
-		close(pipefd[0]);
-		exit(1);
-	}
-	close(pipefd[0]);
-	execute_ast(cmd->right, env);
-	exit_code = cmd->right->error_code;
-	if (exit_code == -1)
-		exit_code = cmd->error_code;
-	exit(exit_code);
-}
-
 void	execute_pipe(t_ast *cmd, t_env *env)
 {
 	int		pipefd[2];

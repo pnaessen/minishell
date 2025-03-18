@@ -15,6 +15,15 @@ t_ast	*parse_and_build_ast(char *input)
 	return (ast_result);
 }
 
+void	set_root_pointers(t_ast *node, t_ast *root)
+{
+	if (!node)
+		return ;
+	node->root = root;
+	set_root_pointers(node->left, root);
+	set_root_pointers(node->right, root);
+}
+
 t_ast	*build_tree(t_stack *stack)
 {
 	t_stack	*current;
@@ -50,6 +59,8 @@ t_ast	*build_tree(t_stack *stack)
 		if (current == stack)
 			break ;
 	}
+	if (root)
+		set_root_pointers(root, root);
 	return (root);
 }
 
@@ -73,7 +84,7 @@ void	handle_redirection(t_ast **current_node, t_stack **current,
 		return (free_ast(*root));
 	}
 	init_redir_node(redir_node, filename, current_node, root);
-	if (*current_node == *root ) // if (*current_node == *root || *root == NULL)
+	if (*current_node == *root) // if (*current_node == *root || *root == NULL)
 		*root = redir_node;
 	*current_node = redir_node;
 	*current = (*current)->next;

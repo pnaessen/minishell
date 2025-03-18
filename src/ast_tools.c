@@ -31,6 +31,7 @@ t_ast	*create_ast_operator(t_node_type token, t_ast *left, t_ast *right)
 	node->right = right;
 	node->head = node;
 	node->error_code = 0;
+	node->root = node;
 	if (left)
 		left->head = node;
 	if (right)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/18 11:59:31 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/18 20:14:36 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ typedef struct s_ast
 	t_node_type		token;
 	struct s_ast	*head;
 	int				error_code;
+	struct s_ast	*root;
 }					t_ast;
 
 typedef struct s_env
@@ -82,9 +83,9 @@ t_ast				*init_cmd_struct(t_ast *node);
 t_ast				*init_cmd_node(t_ast *node, char **args, int args_count);
 
 /////////////////////////exec.c////////////////////////////
-void				child_process(t_ast *cmd, char **env_array);
+void				child_process(t_ast *cmd, t_env *env);
 void				execute_ast(t_ast *cmd, t_env *env);
-int					parent_process(pid_t pid, t_ast *cmd, char **env_array);
+int					parent_process(pid_t pid, t_ast *cmd);
 void				execute_cmd(t_ast *cmd_node, t_env *env);
 
 /////////////////////////free_tools.c////////////////////////////
@@ -213,5 +214,5 @@ void				sort_env_array(t_env **sorted, int env_size);
 void				check_builtin(t_ast *input, t_env *env);
 
 void				execute_cmd_node(t_ast *node, t_env *env);
-
+void				clean_and_exit(t_ast *cmd, t_env *env, int exit_code);
 #endif
