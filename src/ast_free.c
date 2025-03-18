@@ -17,19 +17,19 @@ void	free_redirections(t_redir *redirs)
 	}
 }
 
-void	free_ast_children(t_ast *node)
-{
-	if (node->left)
-	{
-		free_ast(node->left);
-		node->left = NULL;
-	}
-	if (node->right)
-	{
-		free_ast(node->right);
-		node->right = NULL;
-	}
-}
+// void	free_ast_children(t_ast *node)
+// {
+// 	if (node->left)
+// 	{
+// 		free_ast(node->left);
+// 		node->left = NULL;
+// 	}
+// 	if (node->right)
+// 	{
+// 		free_ast(node->right);
+// 		node->right = NULL;
+// 	}
+// }
 
 void	free_ast_cmd(t_ast *node)
 {
@@ -37,6 +37,8 @@ void	free_ast_cmd(t_ast *node)
 		return ;
 	if (node->cmd->args)
 		free_ast_cmd_args(node);
+	if (node->cmd->redirs)
+		free_redirections(node->cmd->redirs);
 	if (node->cmd->path)
 		free(node->cmd->path);
 	free(node->cmd);
@@ -47,11 +49,11 @@ void	free_ast(t_ast *node)
 {
 	if (!node)
 		return ;
-	free_ast_children(node);
+	free_ast(node->left);
+	free_ast(node->right);
 	free_ast_cmd(node);
 	free(node);
 }
-
 
 void	free_ast_cmd_args(t_ast *node)
 {

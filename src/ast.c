@@ -27,7 +27,10 @@ t_ast	*build_tree(t_stack *stack)
 	current = stack;
 	root = init_first_cmd(stack, end, &current_node); // modif
 	if (!root)
+	{
+		printf("error\n");
 		return (NULL); // 	handle_redirection(&current_node, &current, &root);
+	}
 	while (1)
 	{
 		if (current->token == PIPE)
@@ -70,7 +73,7 @@ void	handle_redirection(t_ast **current_node, t_stack **current,
 		return (free_ast(*root));
 	}
 	init_redir_node(redir_node, filename, current_node, root);
-	if (*current_node == *root || *root == NULL) // if (*current_node == *root || *root == NULL)
+	if (*current_node == *root ) // if (*current_node == *root || *root == NULL)
 		*root = redir_node;
 	*current_node = redir_node;
 	*current = (*current)->next;

@@ -26,7 +26,7 @@ int	parent_process(pid_t pid, t_ast *cmd, char **env_array)
 {
 	int	status;
 
-	waitpid(pid, &status, 0); // with cat << eof | grep a > out.txt ou ls | rev > out.txt stuck here no redi all works 
+	waitpid(pid, &status, 0); // stch here with ls > out.txt | rev > out1.txt si cmd a besoin de lire dans le pipe alors reste bloque car personne ecrit 
 	if (WIFEXITED(status))
 		cmd->error_code = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))

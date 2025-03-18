@@ -25,7 +25,7 @@ t_stack	*tokenise_args(char *args_cleaned)
 	if (quoting(&stack) == ERROR)
 		return (NULL);
 	//print_stack(&stack);
-	// ft_free_all(token);
+	ft_free_all(token);
 	return (stack);
 }
 
@@ -52,6 +52,7 @@ t_stack	*parsing_input(char *input)
 	stack = tokenise_args(args_cleaned);
 	if (!stack)
 		return (NULL);
+	free(args_cleaned);
 	return (stack);
 }
 

@@ -92,5 +92,6 @@ char	**tokenisation(char const *s)
 		}
 		i++;
 	}
+	free(data);
 	return (res);
 }

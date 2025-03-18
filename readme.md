@@ -164,6 +164,6 @@ Commandes intégrées au shell :
 ## 🛠 To do
 
 secu for 1024 PROCESUS
-here doc sans cat avant ou cmd
 signal 
 << eof bug car je skip la node 
+bug avec ls | rev > out2.txt bug a cause de stdout surrement 

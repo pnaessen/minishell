@@ -49,5 +49,6 @@ int	identify_token_type(t_stack **stack)
 		if (temp == *stack)
 			break ;
 	}
+	free(data);
 	return (SUCCESS);
 }
