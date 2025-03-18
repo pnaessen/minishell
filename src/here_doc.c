@@ -79,8 +79,10 @@ void	cleanup_heredoc_files(t_ast *node)
 		if (node->cmd->args[0])
 			unlink(node->cmd->args[0]);
 	}
-	cleanup_heredoc_files(node->left);
-	cleanup_heredoc_files(node->right);
+	if (node->left)
+		cleanup_heredoc_files(node->left);
+	if (node->right)
+		cleanup_heredoc_files(node->right);
 }
 
 int	process_all_heredocs(t_ast *node)

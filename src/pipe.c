@@ -29,7 +29,7 @@ void	pipe_child_left(t_ast *cmd, t_env *env, int *pipefd)
 
 void	pipe_child_right(t_ast *cmd, t_env *env, int *pipefd)
 {
-	t_env	*env_copy;
+	//t_env	*env_copy;
 	int		exit_code;
 
 	close(pipefd[1]);
@@ -44,8 +44,8 @@ void	pipe_child_right(t_ast *cmd, t_env *env, int *pipefd)
 		}
 	}
 	close(pipefd[0]);
-	env_copy = env;
-	execute_ast(cmd->right, env_copy);
+	//env_copy = env;
+	execute_ast(cmd->right, env);
 	exit_code = cmd->right->error_code;
 	if (exit_code == -1)
 		exit_code = cmd->error_code;

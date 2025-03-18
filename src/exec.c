@@ -26,7 +26,7 @@ int	parent_process(pid_t pid, t_ast *cmd, char **env_array)
 {
 	int	status;
 
-	waitpid(pid, &status, 0);
+	waitpid(pid, &status, 0); // with cat << eof | grep a > out.txt ou ls | rev > out.txt stuck here no redi all works 
 	if (WIFEXITED(status))
 		cmd->error_code = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))

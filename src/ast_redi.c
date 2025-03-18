@@ -19,7 +19,6 @@ int	init_redir_node_for_pipe(t_ast *node, char *filename)
 	}
 	node->cmd->args[1] = NULL;
 	node->cmd->path = NULL;
-	node->cmd->redirs = NULL;
 	node->cmd->has_heredoc = 0;
 	node->right = NULL;
 	node->head = node;

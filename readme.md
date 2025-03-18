@@ -163,10 +163,7 @@ Commandes intégrées au shell :
 
 ## 🛠 To do
 
-faire $?
 secu for 1024 PROCESUS
 here doc sans cat avant ou cmd
 signal 
-prob ast quand ls > out.txt | w > out2.txt
-cat << eof bug
 << eof bug car je skip la node 

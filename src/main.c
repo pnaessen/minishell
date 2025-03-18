@@ -44,6 +44,7 @@ int	main(int argc, char **argv, char **env)
 		}
 		free(input);
 	}
+	free_env_list(head);
 	return (0);
 }
 
