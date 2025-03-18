@@ -29,25 +29,21 @@ void	pipe_child_left(t_ast *cmd, t_env *env, int *pipefd)
 
 void	pipe_child_right(t_ast *cmd, t_env *env, int *pipefd)
 {
-	int		exit_code;
+	int	exit_code;
 
 	close(pipefd[1]);
-	if (cmd->right->token == CMD && cmd->right->cmd
-		&& !cmd->right->cmd->has_heredoc)
+	if (dup2(pipefd[0], STDIN_FILENO) == -1)
 	{
-		if (dup2(pipefd[0], STDIN_FILENO) == -1)
-		{
-			perror("minishell: dup2");
-			close(pipefd[0]);
-			exit(1);
-		}
+		perror("minishell: dup2");
+		close(pipefd[0]);
+		exit(1);
 	}
 	close(pipefd[0]);
 	execute_ast(cmd->right, env);
 	exit_code = cmd->right->error_code;
 	if (exit_code == -1)
 		exit_code = cmd->error_code;
-	exit(cmd->error_code);
+	exit(exit_code);
 }
 
 void	execute_pipe(t_ast *cmd, t_env *env)
