@@ -16,3 +16,11 @@ t_ast	*init_first_cmd(t_stack *stack, t_stack *end, t_ast **current_node)
 	return (root);
 }
 
+void	set_root_pointers(t_ast *node, t_ast *root)
+{
+	if (!node)
+		return ;
+	node->root = root;
+	set_root_pointers(node->left, root);
+	set_root_pointers(node->right, root);
+}

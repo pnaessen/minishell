@@ -15,15 +15,6 @@ t_ast	*parse_and_build_ast(char *input)
 	return (ast_result);
 }
 
-void	set_root_pointers(t_ast *node, t_ast *root)
-{
-	if (!node)
-		return ;
-	node->root = root;
-	set_root_pointers(node->left, root);
-	set_root_pointers(node->right, root);
-}
-
 t_ast	*build_tree(t_stack *stack)
 {
 	t_stack	*current;

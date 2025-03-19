@@ -166,4 +166,4 @@ Commandes intégrées au shell :
 secu for 1024 PROCESUS
 signal 
 << eof bug car je skip la node 
-bug avec ls | rev > out2.txt bug a cause de stdout surrement 
+changer arbre ast avec les redi pas dans le bonne ordre donc changer 

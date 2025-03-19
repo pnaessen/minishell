@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
+/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/18 20:14:36 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/03/19 14:04:59 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,15 @@ void				free_ast(t_ast *node);
 void				free_ast_cmd_args(t_ast *node);
 void				free_redirections(t_redir *redirs);
 
+//////////////////////////command.c////////////////////////////
+void				child_process(t_ast *cmd, t_env *env);
+void				handle_command_not_found(t_ast *cmd, char **env_array, t_env *env);
+void				execute_command(char *path, char **args, char **env_array);
+void				copy_args(t_ast *cmd, char **args_copy, char **env_array,
+						char *path);
+char				**create_args_copy(t_ast *cmd, char **env_array,
+						char *path);
+
 /////////////////////////ast_tools.c////////////////////////////
 t_ast				*create_ast_command(char **args);
 t_ast				*create_ast_operator(t_node_type token, t_ast *left,
@@ -92,6 +101,7 @@ void				execute_cmd(t_ast *cmd_node, t_env *env);
 void				free_stack(t_stack *stack);
 t_ast				*free_cmd_node(t_ast *node, int i);
 void				free_stack_node(t_stack *node);
+void				free_args_array(char **args);
 
 /////////////////////////here_doc.c////////////////////////////
 char				*create_temp_filename(void);
@@ -135,6 +145,7 @@ void				handle_signals(void);
 /////////////////////////tree_ast.c////////////////////////////
 t_ast				*init_first_cmd(t_stack *stack, t_stack *end,
 						t_ast **current_node);
+void				set_root_pointers(t_ast *node, t_ast *root);
 
 /////////////////////////utils_lst.c////////////////////////////
 void				handle_env(char **env, t_env **head);
