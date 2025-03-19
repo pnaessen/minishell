@@ -2,6 +2,9 @@
     "files.associations": {
         "type_traits": "c",
         "wait.h": "c",
-        "libft.h": "c"
+        "libft.h": "c",
+        "minishell.h": "c",
+        "text": "c",
+        "pretoken": "c"
     }
 }

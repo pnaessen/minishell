@@ -25,6 +25,18 @@ int	ft_is_quotes(char c)
 		return (SUCCESS);
 	return (ERROR);
 }
+
+void check_quotes(char argv, t_data *data)
+{
+	if (ft_is_quotes(argv) == SUCCESS)
+	{
+		if (data->quotes == SUCCESS)
+			data->quotes = ERROR;
+		else
+			data->quotes = SUCCESS;
+	}
+}
+
 void	handle_quotes(char argv, t_data *data)
 {
 	if (ft_is_quotes(argv) == SUCCESS)

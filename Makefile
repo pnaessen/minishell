@@ -42,9 +42,12 @@ PARS_SRC := $(addprefix $(PARS_DIR), \
 	parsing_utils.c \
 	parsing.c \
 	pre_tokenisation.c \
+	pre_token_utils.c \
 	tokenisation.c \
 	quoting.c \
 	handle_env.c \
+	env_utils.c \
+	replace_env.c \
 )
 
 SRC += $(BUILTINS_SRC) $(PARS_SRC)

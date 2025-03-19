@@ -24,25 +24,22 @@ void	define_type(t_stack *temp, char *cmd, int quotes)
 int	identify_token_type(t_stack **stack)
 {
 	t_stack	*temp;
-	t_data	*data;
+	t_data	data;
 	int		i;
 
 	temp = *stack;
-	data = malloc(sizeof(t_data));
-	if (!data)
-		return (ERROR);
 	while (1)
 	{
 		i = 0;
-		data->quotes = ERROR;
+		data.quotes = ERROR;
 		while (temp->cmd[i])
 		{
-			handle_quotes(temp->cmd[i][0], data);
+			check_quotes(temp->cmd[i][0], &data);
 			if (ft_is_operator(temp->cmd[i][0]) == ERROR
-				|| data->quotes == SUCCESS)
+				|| data.quotes == SUCCESS)
 				temp->token = CMD;
 			else
-				define_type(temp, temp->cmd[i], data->quotes);
+				define_type(temp, temp->cmd[i], data.quotes);
 			i++;
 		}
 		temp = temp->next;

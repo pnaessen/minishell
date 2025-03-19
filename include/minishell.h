@@ -6,7 +6,7 @@
 /*   By: vicperri <vicperri@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/17 11:56:52 by vicperri         ###   ########lyon.fr   */
+/*   Updated: 2025/03/19 10:04:53 by vicperri         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,10 +178,20 @@ t_ast				*create_command_pipeline(char **cmds, int count);
 t_ast				*create_test_pipeline(char *cmds);
 void				print_ast(t_ast *node, int level);
 
-// handle env
+// env utils
 int					is_valid_var_char(char args);
-char				*find_and_replace_var(char *args, t_env **env);
+int					size_of_var(char *args, int i);
+int					size_of_args(char *args);
+char				*extract_variable_name(char *args, int i);
+char				*get_env_value(char *var_name, t_env **env);
 
+// replace env
+char				*replace_with_empty(char *args, int pos);
+char				*replace_with_value(char *args, int pos, char *value);
+char				*replace_without_dollar(char *args, int pos, int quote);
+
+// handle env
+char				*find_and_replace_var(char *args, t_env **env);
 t_stack				*parsing_input(char *input, t_env **env);
 
 #endif

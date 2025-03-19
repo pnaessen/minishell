@@ -1,19 +1,21 @@
+
 #include "pars.h"
 
-int	lines_in_node(const char *s1, t_data *data)
+int	lines_in_node(const char *s1)
 {
-	int	i;
-	int	count;
+	int		i;
+	int		count;
+	t_data	data;
 
 	i = 0;
 	count = 0;
-	data->quotes = ERROR;
+	data.quotes = ERROR;
 	while (s1[i])
 	{
-		handle_quotes(s1[i], data);
+		check_quotes(s1[i], &data);
 		if (s1[i] != ' ' && (s1[i + 1] == ' ' || s1[i + 1] == '\0'))
 		{
-			if (data->quotes == ERROR)
+			if (data.quotes == ERROR)
 				count++;
 		}
 		i++;
@@ -21,18 +23,19 @@ int	lines_in_node(const char *s1, t_data *data)
 	return (count);
 }
 
-int	words_in_lines(const char *s1, t_data *data, int i)
+int	cnt_words(const char *s1, int i)
 {
-	int	count;
+	int		count;
+	t_data	data;
 
 	count = 0;
-	data->quotes = ERROR;
+	data.quotes = ERROR;
 	while (s1[i] == ' ')
 		i++;
 	while (s1[i])
 	{
-		handle_quotes(s1[i], data);
-		if (s1[i] == ' ' && data->quotes == ERROR)
+		check_quotes(s1[i], &data);
+		if (s1[i] == ' ' && data.quotes == ERROR)
 			return (count);
 		else
 			count++;
@@ -41,7 +44,7 @@ int	words_in_lines(const char *s1, t_data *data, int i)
 	return (count);
 }
 
-char	*new_line_in_tab(const char *s1, int size, int i)
+char	*create_tab(const char *s1, int size, int i)
 {
 	char	*dup;
 	int		j;
@@ -63,35 +66,28 @@ char	*new_line_in_tab(const char *s1, int size, int i)
 char	**tokenisation(char const *s)
 {
 	char	**res;
-	t_data	*data;
-	int		i;
-	int		j;
+	t_data	data;
 
-	data = malloc(sizeof(t_data));
-	if (!data)
-		return (NULL);
-	data->quotes = ERROR;
-	i = 0;
-	j = 0;
-	if (!(s))
-		return (0);
-	res = malloc((lines_in_node(s, data) + 1) * sizeof(char *));
+	data.quotes = ERROR;
+	data.i = 0;
+	data.count = 0;
+	res = malloc((lines_in_node(s) + 1) * sizeof(char *));
 	if (!(res))
 		return (0);
-	res[lines_in_node(s, data)] = NULL;
-	while (s[i] && j < lines_in_node(s, data))
+	res[lines_in_node(s)] = NULL;
+	while (s[data.i] && data.count < lines_in_node(s))
 	{
-		handle_quotes(s[i], data);
-		if (s[i] != ' ' || data->quotes == SUCCESS)
+		check_quotes(s[data.i], &data);
+		if (s[data.i] != ' ' || data.quotes == SUCCESS)
 		{
-			res[j] = new_line_in_tab(s, words_in_lines(s, data, i), i);
-			if (!(res[j]))
+			res[data.count] = create_tab(s, cnt_words(s, data.i), data.i);
+			if (!(res[data.count]))
 				return (ft_free_all(res));
-			i += words_in_lines(s, data, i);
-			j++;
+			data.i += cnt_words(s, data.i);
+			data.count++;
 		}
-		i++;
+		data.i++;
 	}
-	res[j] = NULL;
+	res[data.count] = NULL;
 	return (res);
 }

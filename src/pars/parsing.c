@@ -12,7 +12,6 @@ t_stack	*tokenise_args(char *args_cleaned)
 	i = 0;
 	if (!token)
 		return (NULL);
-	i = 0;
 	while (token[i])
 	{
 		if (fill_the_list(tokenisation(token[i]), &stack) == ERROR)
@@ -26,7 +25,7 @@ t_stack	*tokenise_args(char *args_cleaned)
 	if (quoting(&stack) == ERROR)
 		return (NULL);
 	print_stack(&stack);
-	// ft_free_all(token);
+	ft_free_all(token);
 	return (stack);
 }
 
@@ -40,6 +39,7 @@ t_stack	*parsing_input(char *input, t_env **env)
 	if (!input)
 		return (NULL);
 	args = handle_whitespaces(input);
+	printf("[DEBUG]args = %s\n", args);
 	if (!args)
 		return (NULL);
 	if (ft_strchr(args, '$'))
@@ -49,10 +49,12 @@ t_stack	*parsing_input(char *input, t_env **env)
 	}
 	else
 		env_handled = ft_strdup(args);
+	printf("[DEBUG] env = %s\n", env_handled);
 	free(args);
 	if (!env_handled)
 		return (NULL);
 	args_cleaned = handle_commands(env_handled);
+	printf("[DEBUG] env = %s\n", args_cleaned);
 	free(env_handled);
 	if (check_num_of_quotes(args_cleaned) == ERROR)
 	{

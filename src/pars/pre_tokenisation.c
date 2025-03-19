@@ -1,73 +1,59 @@
+
 #include "pars.h"
 
 int	num_of_lines(const char *s1)
 {
-	int		i;
-	int		count;
 	t_data	data;
 
-	i = 0;
-	count = 0;
+	data.i = 0;
+	data.count = 0;
 	data.quotes = ERROR;
+	data.quote_num = 0;
 	data.quote_type = '\0';
-	while (s1[i])
+	while (s1[data.i])
 	{
-		handle_quotes(s1[i], &data);
-		if ((s1[i - 2] == '<' || s1[i - 2] == '>') && data.quotes == ERROR)
-			count++;
-		else if ((ft_is_operator(s1[i]) == ERROR && ft_is_operator(s1[i
-					+ 1]) == SUCCESS) || s1[i + 1] == '\0')
+		handle_quotes(s1[data.i], &data);
+		if (is_redirection_operator(s1, data.i) && data.quotes == ERROR)
+			data.count++;
+		else if (is_end_of_word(s1, data.i, &data))
+			data.count++;
+		else if (is_operator_sequence(s1, data.i, &data))
 		{
-			if (data.quotes == ERROR)
-				count++;
+			while (ft_is_operator(s1[data.i]) == SUCCESS)
+				data.i++;
+			data.count++;
 		}
-		else if (ft_is_operator(s1[i]) == SUCCESS && data.quotes == ERROR)
-		{
-			while (ft_is_operator(s1[i]) == SUCCESS)
-				i++;
-			count++;
-		}
-		i++;
+		data.i++;
 	}
-	return (count);
+	return (data.count);
 }
 
 int	num_of_words(const char *s1, int i)
 {
-	int		count;
 	t_data	data;
 
-	count = 0;
 	data.quotes = ERROR;
 	data.quote_type = '\0';
-	if (ft_is_operator(s1[i]) == SUCCESS)
-	{
-		while (ft_is_operator(s1[i]) == SUCCESS)
-		{
-			i++;
-			count++;
-		}
-		return (count);
-	}
+	data.quote_num = 0;
+	data.count = handle_multi_operators(s1, i);
+	if (data.count != 0)
+		return (data.count);
 	while (s1[i])
 	{
 		handle_quotes(s1[i], &data);
-		if ((s1[i - 2] == '<' || s1[i - 2] == '>') && data.quotes == ERROR)
+		if (is_redirection_operator(s1, i) && data.quotes == ERROR)
 		{
-			while (s1[i] && s1[i] != ' ')
-			{
-				i++;
-				count++;
-			}
-			return (count);
+			while (s1[i++] && s1[i] != ' ')
+				data.count++;
+			return (data.count);
 		}
 		if (ft_is_operator(s1[i + 1]) == ERROR || data.quotes == SUCCESS)
-			count++;
+			data.count++;
 		else
-			return (count);
+			return (data.count);
 		i++;
 	}
-	return (count);
+	return (data.count);
 }
 
 static char	*ft_newtab(const char *s1, int size, int i)
@@ -97,8 +83,6 @@ char	**pre_tokenisation(char const *s)
 
 	i = 0;
 	j = 0;
-	if (!(s))
-		return (0);
 	res = malloc((num_of_lines(s) + 1) * sizeof(char *));
 	if (!(res))
 		return (0);
@@ -112,5 +96,6 @@ char	**pre_tokenisation(char const *s)
 		j++;
 		i++;
 	}
+	res[j] = NULL;
 	return (res);
 }
