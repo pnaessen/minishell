@@ -1,12 +1,7 @@
 {
-    leak readline
+    Readline
     Memcheck:Leak
+    match-leak-kinds: reachable
     ...
     fun:readline
-}
-{
-    leak add_history
-    Memcheck:Leak
-    ...
-    fun:add_history
 }

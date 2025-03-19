@@ -1,4 +1,3 @@
-
 #include "minishell.h"
 
 void	set_env_var(t_env **env, char *name, char *value)
@@ -55,18 +54,28 @@ void	update_env_cd(t_ast *cmd, t_env **env, char *old_dir)
 	free(old_dir);
 }
 
+void	handle_cd_path(t_ast *cmd, t_env **env, char *old_dir, char *path)
+{
+	if (chdir(path) != 0)
+	{
+		ft_putstr_fd("minishell: cd: ", 2);
+		ft_putstr_fd(path, 2);
+		ft_putstr_fd(": ", 2);
+		perror("");
+		cmd->error_code = 1;
+		free(old_dir);
+		return ;
+	}
+	update_env_cd(cmd, env, old_dir);
+	cmd->error_code = 0;
+}
+
 void	ft_cd(t_ast *cmd, t_env **env)
 {
 	char	*path;
 	char	*old_dir;
 
 	old_dir = getcwd(NULL, PATH_MAX);
-	// if (!old_dir)
-	// {
-	// 	perror("minishell: getcwd");
-	// 	cmd->error_code = 1;
-	// 	return ;
-	// }
 	if (!cmd->cmd->args[1])
 	{
 		path = get_home_var(*env);
@@ -80,16 +89,5 @@ void	ft_cd(t_ast *cmd, t_env **env)
 	}
 	else
 		path = cmd->cmd->args[1];
-	if (chdir(path) != 0)
-	{
-		ft_putstr_fd("minishell: cd: ", 2);
-		ft_putstr_fd(path, 2);
-		ft_putstr_fd(": ", 2);
-		perror("");
-		cmd->error_code = 1;
-		free(old_dir);
-		return ;
-	}
-	update_env_cd(cmd, env, old_dir);
-	cmd->error_code = 0;
+	handle_cd_path(cmd, env, old_dir, path);
 }

@@ -7,69 +7,79 @@ NAME := minishell
 AUTHOR := $(shell whoami)
 DATE := $(shell date '+%Y-%m-%d %H:%M:%S')
 
-
 SRC_DIR := src/
-BUILTINS_DIR := $(SRC_DIR)builtins/
+CORE_DIR := $(SRC_DIR)core/
+EXEC_DIR := $(SRC_DIR)exec/
+AST_DIR := $(SRC_DIR)ast/
 PARS_DIR := $(SRC_DIR)pars/
+BUILTINS_DIR := $(SRC_DIR)builtins/
 OBJ_DIR := .obj/
 BACKUP_DIR := .backups/
 INCLUDES := include/
 LIBFT_DIR := libft/
 
 # ------------------------------ Source Files --------------------------------- #
-
 SRC := $(addprefix $(SRC_DIR), \
 	main.c \
-	utils.c \
-	utils_lst.c \
-	signal.c \
-	exec.c \
-	path_env.c \
-	pipe.c \
-	redirection.c \
-	here_doc.c \
-	tree_ast.c \
-	ast_utils.c \
-	ast_free.c \
-	ast_tools.c \
-	free_tools.c \
-	mini_env.c \
-	apply_redi.c \
-	exec_redi.c \
-	ast.c \
-	ast_redi.c \
-	pipe_left.c \
-	pipe_right.c \
-	command.c \
 )
 
-BUILTINS_SRC := $(addprefix $(BUILTINS_DIR), \
-	ft_cd.c \
-	handle.c \
-	ft_pwd.c \
-	ft_env.c \
-	ft_exit.c \
-	ft_unset.c \
-	ft_echo.c \
-	ft_export.c \
-	print_export.c \
-	cd_tools.c \
+CORE_SRC := $(addprefix $(CORE_DIR), \
+	signal.c \
+	utils.c \
+	utils_lst.c \
+	mini_env.c \
+	path_env.c \
+)
+
+EXEC_SRC := $(addprefix $(EXEC_DIR), \
+	exec.c \
+	command.c \
+	pipe.c \
+	pipe_left.c \
+	pipe_right.c \
+	redirection.c \
+	apply_redi.c \
+	exec_redi.c \
+	here_doc.c \
+)
+
+AST_SRC := $(addprefix $(AST_DIR), \
+	ast.c \
+	ast_redi.c \
+	ast_tools.c \
+	ast_utils.c \
+	ast_free.c \
+	tree_ast.c \
+	free_tools.c \
 )
 
 PARS_SRC := $(addprefix $(PARS_DIR), \
+	parsing.c \
 	handle_commands.c \
 	handle_whitespace.c \
 	identify_tokens.c \
 	list_utils.c \
 	parsing_utils.c \
-	parsing.c \
 	pre_tokenisation.c \
 	tokenisation.c \
 	quoting.c \
 )
 
+BUILTINS_SRC := $(addprefix $(BUILTINS_DIR), \
+	handle.c \
+	ft_cd.c \
+	cd_tools.c \
+	ft_echo.c \
+	ft_env.c \
+	ft_exit.c \
+	ft_export.c \
+	print_export.c \
+	ft_pwd.c \
+	ft_unset.c \
+)
+
 # -------------------------- Combine All Sources ------------------------------ #
-SRC += $(BUILTINS_SRC) $(PARS_SRC)
+SRC += $(CORE_SRC) $(EXEC_SRC) $(AST_SRC) $(PARS_SRC) $(BUILTINS_SRC)
 
 # ------------------------ Object and Dependency Files ----------------------- #
 OBJ := $(SRC:%.c=$(OBJ_DIR)%.o)
@@ -81,7 +91,6 @@ CFLAGS := -Wextra -Wall -Werror
 LDFLAGS := -lreadline
 CPPFLAGS := -MMD -MP
 HEADERS := -I./$(INCLUDES) -I$(LIBFT_DIR)
-#VALGRIND_SUPPRESS_FILE := $(abspath .valgrind_suppress.txt)
 # -------------------------------- Libft ------------------------------------- #
 LIBFT := $(LIBFT_DIR)libft.a
 LIBFT_FLAGS := -L$(LIBFT_DIR) -lft
@@ -121,6 +130,7 @@ $(NAME): $(LIBFT) $(OBJ)
 
 $(OBJ_DIR)%.o: %.c Makefile
 	@mkdir -p $(dir $@)
+	@printf "$(CYAN)Compiling: $(WHITE)$<$(DEF_COLOR)\n"
 	@$(CC) $(CFLAGS) $(HEADERS) $(CPPFLAGS) -c $< -o $@
 
 $(LIBFT):
@@ -157,9 +167,13 @@ fclean: clean
 
 re: fclean all
 
-valgrind: $(NAME)
+VALGRIND_SUPPRESS_FILE := $(abspath readline.supp)
+
+valgrind: $(NAME) readline.supp
 	@echo "$(CYAN)🔍 Running Valgrind leak check...$(DEF_COLOR)"
-	@valgrind --leak-check=full --suppressions=readline.supp --show-leak-kinds=all --trace-children=yes --track-fds=yes ./$(NAME)
+	@valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes --track-fds=yes \
+		--suppressions="$(VALGRIND_SUPPRESS_FILE)" \
+		./$(NAME)
 
 readline.supp:
 	@echo "$(YELLOW)Creating readline suppression file...$(DEF_COLOR)"
@@ -214,26 +228,24 @@ info:
 	@echo "$(BOLD)$(BLUE)📂 Source files: $(WHITE)$(words $(SRC))$(DEF_COLOR)"
 	@echo "$(BOLD)$(BLUE)📁 Directories:$(DEF_COLOR)"
 	@echo "  $(YELLOW)➤ $(WHITE)Sources: $(SRC_DIR)$(DEF_COLOR)"
+	@echo "  $(YELLOW)➤ $(WHITE)Builtins: $(BUILTINS_DIR)$(DEF_COLOR)"
+	@echo "  $(YELLOW)➤ $(WHITE)Parser: $(PARS_DIR)$(DEF_COLOR)"
 	@echo "  $(YELLOW)➤ $(WHITE)Objects: $(OBJ_DIR)$(DEF_COLOR)"
 	@echo "  $(YELLOW)➤ $(WHITE)Includes: $(INCLUDES)$(DEF_COLOR)"
 	@echo "  $(YELLOW)➤ $(WHITE)Libft: $(LIBFT_DIR)$(DEF_COLOR)"
+	@echo "  $(YELLOW)➤ $(WHITE)Backups: $(BACKUP_DIR)$(DEF_COLOR)"
 	@echo "$(BOLD)$(CYAN)======================== TARGETS =========================$(DEF_COLOR)"
 	@echo "  $(GREEN)make$(DEF_COLOR)            - Build the project"
 	@echo "  $(GREEN)make clean$(DEF_COLOR)      - Remove object files"
 	@echo "  $(GREEN)make fclean$(DEF_COLOR)     - Remove all generated files"
 	@echo "  $(GREEN)make re$(DEF_COLOR)         - Rebuild from scratch"
-	@echo "  $(GREEN)make debug$(DEF_COLOR)      - Build with debug symbols"
-	@echo "  $(GREEN)make sanitize$(DEF_COLOR)   - Build with sanitizers"
-	@echo "  $(GREEN)make optimize$(DEF_COLOR)   - Build with optimization"
-	@echo "  $(GREEN)make strict$(DEF_COLOR)     - Build with extra warnings"
-	@echo "  $(GREEN)make valgrind$(DEF_COLOR)   - Run with valgrind"
-	@echo "  $(GREEN)make gdb$(DEF_COLOR)        - Debug with GDB"
-	@echo "  $(GREEN)make backup$(DEF_COLOR)     - Create a backup"
-	@echo "  $(GREEN)make restore$(DEF_COLOR)    - Restore from backup"
-	@echo "  $(GREEN)make format$(DEF_COLOR)     - Format code (clang-format)"
-	@echo "  $(GREEN)make analyze$(DEF_COLOR)    - Static analysis (cppcheck)"
-	@echo "  $(GREEN)make docs$(DEF_COLOR)       - Generate documentation"
+	@echo "  $(GREEN)make valgrind$(DEF_COLOR)   - Run with valgrind memory checker"
+	@echo "  $(GREEN)make backup$(DEF_COLOR)     - Create a backup of the project"
+	@echo "  $(GREEN)make restore$(DEF_COLOR)    - Restore latest backup"
 	@echo "  $(GREEN)make loc$(DEF_COLOR)        - Count lines of code"
+	@echo "  $(GREEN)make status$(DEF_COLOR)     - Display project status"
+	@echo "  $(GREEN)make run$(DEF_COLOR)        - Run the program with a splash screen"
+	@echo "  $(GREEN)make matrix$(DEF_COLOR)     - Show a Matrix-style animation"
 	@echo "  $(GREEN)make help$(DEF_COLOR)       - Show available targets"
 	@echo "$(BOLD)$(CYAN)=========================================================$(DEF_COLOR)"
 
@@ -247,27 +259,23 @@ help:
 	@echo "  $(GREEN)make fclean$(DEF_COLOR)     - Remove all generated files"
 	@echo "  $(GREEN)make re$(DEF_COLOR)         - Rebuild from scratch"
 	@echo ""
-	@echo "$(BOLD)$(YELLOW)Development:$(DEF_COLOR)"
-	@echo "  $(GREEN)make debug$(DEF_COLOR)      - Build with debug symbols"
-	@echo "  $(GREEN)make sanitize$(DEF_COLOR)   - Build with sanitizers"
-	@echo "  $(GREEN)make optimize$(DEF_COLOR)   - Build with optimization"
-	@echo "  $(GREEN)make strict$(DEF_COLOR)     - Build with extra warnings"
-	@echo ""
-	@echo "$(BOLD)$(YELLOW)Testing & Profiling:$(DEF_COLOR)"
-	@echo "  $(GREEN)make valgrind$(DEF_COLOR)   - Run with valgrind"
-	@echo "  $(GREEN)make gdb$(DEF_COLOR)        - Debug with GDB"
-	@echo "  $(GREEN)make profile$(DEF_COLOR)    - Build for profiling"
-	@echo "  $(GREEN)make profile-report$(DEF_COLOR) - Generate profiling report"
+	@echo "$(BOLD)$(YELLOW)Development & Testing:$(DEF_COLOR)"
+	@echo "  $(GREEN)make valgrind$(DEF_COLOR)   - Run with valgrind memory checker"
+	@echo "  $(GREEN)make readline.supp$(DEF_COLOR) - Create readline suppression file"
 	@echo ""
 	@echo "$(BOLD)$(YELLOW)Maintenance:$(DEF_COLOR)"
-	@echo "  $(GREEN)make backup$(DEF_COLOR)     - Create a backup"
-	@echo "  $(GREEN)make restore$(DEF_COLOR)    - Restore from backup"
+	@echo "  $(GREEN)make backup$(DEF_COLOR)     - Create a timestamped backup"
+	@echo "  $(GREEN)make restore$(DEF_COLOR)    - Restore from latest backup"
 	@echo ""
 	@echo "$(BOLD)$(YELLOW)Information:$(DEF_COLOR)"
 	@echo "  $(GREEN)make loc$(DEF_COLOR)        - Count lines of code"
-	@echo "  $(GREEN)make info$(DEF_COLOR)       - Show detailed project info"
+	@echo "  $(GREEN)make status$(DEF_COLOR)     - Show project status screen"
+	@echo "  $(GREEN)make info$(DEF_COLOR)       - Show detailed project information"
+	@echo ""
+	@echo "$(BOLD)$(YELLOW)Fun:$(DEF_COLOR)"
+	@echo "  $(GREEN)make run$(DEF_COLOR)        - Run the program with a splash screen"
+	@echo "  $(GREEN)make matrix$(DEF_COLOR)     - Show a Matrix-style animation"
 	@echo "$(BOLD)$(CYAN)=========================================================$(DEF_COLOR)"
-
 matrix:
 	@clear
 	@echo "$(GREEN)MinIsheLl MaTRiX MOdE AcTIvaTEd...$(DEF_COLOR)"
@@ -333,4 +341,4 @@ run: $(NAME)
 
 #valgrind --leak-check=full --suppressions=readline.supp --show-leak-kinds=all --trace-children=yes --track-fds=yes ./minishell
 
-.PHONY: all clean fclean re welcome info help backup restore status run matrix loc valgrind readline.supp 
+.PHONY: all clean fclean re welcome info help backup restore status run matrix loc valgrind readline.supp dirs libft

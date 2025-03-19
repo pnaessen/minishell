@@ -55,6 +55,41 @@ t_ast	*build_tree(t_stack *stack)
 	return (root);
 }
 
+void	handle_heredoc_case(t_ast **current_node, t_ast **root,
+		t_ast *redir_node)
+{
+	t_ast	*cmd_node;
+	t_ast	*temp;
+
+	cmd_node = NULL;
+	temp = *current_node;
+	while (temp && temp->token != CMD)
+		temp = temp->left;
+	cmd_node = temp;
+	if (cmd_node)
+	{
+		redir_node->left = cmd_node;
+		temp = *current_node;
+		while (temp->left && temp->left->token != CMD)
+			temp = temp->left;
+		temp->left = redir_node;
+	}
+	else
+	{
+		if (*current_node == *root)
+			*root = redir_node;
+		*current_node = redir_node;
+	}
+}
+
+void	handle_standard_case(t_ast **current_node, t_ast **root,
+		t_ast *redir_node)
+{
+	if (*current_node == *root)
+		*root = redir_node;
+	*current_node = redir_node;
+}
+
 void	handle_redirection(t_ast **current_node, t_stack **current,
 		t_ast **root)
 {
@@ -75,9 +110,10 @@ void	handle_redirection(t_ast **current_node, t_stack **current,
 		return (free_ast(*root));
 	}
 	init_redir_node(redir_node, filename, current_node, root);
-	if (*current_node == *root) // if (*current_node == *root || *root == NULL)
-		*root = redir_node;
-	*current_node = redir_node;
+	if ((*current)->token == REDIR_HEREDOC && (*current_node)->token != CMD)
+		handle_heredoc_case(current_node, root, redir_node);
+	else
+		handle_standard_case(current_node, root, redir_node);
 	*current = (*current)->next;
 }
 
