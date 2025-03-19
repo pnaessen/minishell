@@ -81,7 +81,7 @@ CFLAGS := -Wextra -Wall -Werror
 LDFLAGS := -lreadline
 CPPFLAGS := -MMD -MP
 HEADERS := -I./$(INCLUDES) -I$(LIBFT_DIR)
-
+#VALGRIND_SUPPRESS_FILE := $(abspath .valgrind_suppress.txt)
 # -------------------------------- Libft ------------------------------------- #
 LIBFT := $(LIBFT_DIR)libft.a
 LIBFT_FLAGS := -L$(LIBFT_DIR) -lft

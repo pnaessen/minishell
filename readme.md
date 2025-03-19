@@ -167,3 +167,6 @@ secu for 1024 PROCESUS
 signal 
 << eof bug car je skip la node 
 changer arbre ast avec les redi pas dans le bonne ordre donc changer 
+garbage collector for close 
+refacto for 25 lignes
+secu all malloc

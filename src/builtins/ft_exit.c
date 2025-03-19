@@ -6,7 +6,7 @@
 /*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 12:23:40 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/05 14:19:58 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/19 18:12:34 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,9 @@ void	ft_exit(t_ast *cmd, t_env *env)
 			ft_putstr_fd("minishell: exit: ", 2);
 			ft_putstr_fd(cmd->cmd->args[1], 2);
 			ft_putstr_fd(": numeric argument required\n", 2);
-			cmd->error_code = 2;
-			exit(cmd->error_code);
+			free_ast(cmd->root);
+			free_env_list(env);
+			exit(2);
 		}
 		exit_code = ft_atoi(cmd->cmd->args[1]);
 		if ((exit_code == -1 && cmd->cmd->args[1][0] != '-') || (exit_code == 0
@@ -40,8 +41,9 @@ void	ft_exit(t_ast *cmd, t_env *env)
 			ft_putstr_fd("minishell: exit: ", 2);
 			ft_putstr_fd(cmd->cmd->args[1], 2);
 			ft_putstr_fd(": numeric argument required\n", 2);
-			cmd->error_code = 2;
-			exit(cmd->error_code);
+			free_ast(cmd->root);
+			free_env_list(env);
+			exit(2);
 		}
 		if (exit_code < 0)
 			exit_code = 256 + (exit_code % 256);
@@ -51,7 +53,7 @@ void	ft_exit(t_ast *cmd, t_env *env)
 	else
 		exit_code = 0;
 	cmd->error_code = exit_code;
-	free_ast(cmd->head);
+	free_ast(cmd->root);
 	free_env_list(env);
 	exit(exit_code);
 }

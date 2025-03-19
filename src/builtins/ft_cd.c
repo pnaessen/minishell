@@ -17,12 +17,14 @@ void	set_env_var(t_env **env, char *name, char *value)
 	{
 		if (ft_strncmp(temp->str, name_equal, ft_strlen(name_equal)) == 0)
 		{
-			free(temp->str);
 			new_str = ft_strjoin(name_equal, value);
-			temp->str = new_str;
-			free(name_equal);
 			if (!new_str)
+			{
+				free(name_equal);
 				return ;
+			}
+			free(name_equal);
+			free(temp->str);
 			temp->str = new_str;
 			return ;
 		}

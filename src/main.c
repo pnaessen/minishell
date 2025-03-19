@@ -38,7 +38,7 @@ int	main(int argc, char **argv, char **env)
 				print_ast(cmd, 0);
 				execute_ast(cmd, head);
 				cleanup_heredoc_files(cmd);
-				// printf("%d\n", cmd->error_code);
+				printf("%d\n", cmd->error_code);
 				free_ast(cmd);
 			}
 		}
