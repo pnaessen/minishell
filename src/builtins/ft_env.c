@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_env.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/20 12:25:47 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/02/26 13:22:04 by pnaessen         ###   ########lyon.fr   */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "minishell.h"
 
@@ -16,7 +5,7 @@ void	print_env(t_env **head, t_ast *cmd)
 {
 	t_env	*current;
 
-	//check si cmd est NULL 
+	// check si cmd est NULL
 	if (*head == NULL)
 	{
 		printf("env: environment not set\n");
@@ -26,7 +15,8 @@ void	print_env(t_env **head, t_ast *cmd)
 	current = *head;
 	while (current != NULL)
 	{
-		printf("%s\n", current->str);
+		if (ft_strchr(current->str, '='))
+			printf("%s\n", current->str);
 		current = current->next;
 		cmd->error_code = 0;
 	}

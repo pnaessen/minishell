@@ -6,7 +6,7 @@
 /*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 14:43:00 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/10 10:12:51 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/17 11:49:35 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	check_builtin(t_ast *input, t_env *env)
 {
-	if (!input)
+	if (!input->cmd || !input->cmd->args)
 		return ;
 	if (strcmp(input->cmd->args[0], "pwd") == 0)
 		ft_pwd(input);

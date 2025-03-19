@@ -112,5 +112,6 @@ char	**pre_tokenisation(char const *s)
 		j++;
 		i++;
 	}
+	res[j] = NULL;
 	return (res);
 }

@@ -6,7 +6,7 @@
 /*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 12:31:55 by vicperri          #+#    #+#             */
-/*   Updated: 2025/03/09 17:19:15 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/12 10:01:15 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,6 @@ t_list				*ft_lstnew(void *content);
 t_list				*ft_lstlast(t_list *lst);
 t_list				*ft_lstmap(t_list *lst, void *(*f)(void *),
 						void (*del)(void *));
-						
-char	**ft_split_pn(char const *s, char c);
-
 
 void				ft_lstadd_front(t_list **lst, t_list *new);
 void				ft_lstadd_back(t_list **lst, t_list *new);
@@ -77,7 +74,7 @@ int					ft_tolower(int c);
 int					ft_toupper(int c);
 long				ft_atoi(const char *nptr);
 int					ft_memcmp(const void *s1, const void *s2, size_t n);
-//int					ft_strcmp(const char *s1, const char *s2);
+// int					ft_strcmp(const char *s1, const char *s2);
 int					ft_strncmp(const char *s1, const char *s2, size_t n);
 int					ft_lstsize(t_list *lst);
 

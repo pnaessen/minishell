@@ -163,18 +163,7 @@ Commandes intégrées au shell :
 
 ## 🛠 To do
 
-check if env var up if not add env var PWD and OLDPWD  with cd
-cd full leaks
-faire $?
-env full leaks
-unset full leaks
-qund command not next cmd = segfault cause free env dans exec cmd mais si pas free env leak
 secu for 1024 PROCESUS
-need expand var 
-here doc 
 signal 
-test auto
-handle exit more than 9223372036854775807
-export +=
-
-add PWD=/home/pnaessen/Mil03/ when no env  at start
+<< eof bug car je skip la node 
+bug avec ls | rev > out2.txt bug a cause de stdout surrement 

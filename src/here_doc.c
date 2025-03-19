@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   here_doc.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/04 15:10:00 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/10 10:13:21 by pnaessen         ###   ########lyon.fr   */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "minishell.h"
 
@@ -55,49 +44,6 @@ int	write_to_temp_file(char *delimiter, char *filename)
 	return (0);
 }
 
-void	execute_with_heredoc(t_ast *cmd, t_env *env, char *filename)
-{
-	int	saved_fd;
-	int	temp_fd;
-
-	temp_fd = open(filename, O_RDONLY);
-	if (temp_fd == -1)
-	{
-		cmd->error_code = 1;
-		return ;
-	}
-	saved_fd = dup(STDIN_FILENO);
-	dup2(temp_fd, STDIN_FILENO);
-	close(temp_fd);
-	execute_ast(cmd->left, env);
-	dup2(saved_fd, STDIN_FILENO);
-	close(saved_fd);
-}
-
-void	handle_heredoc(t_ast *cmd, t_env *env)
-{
-	char	*temp_filename;
-	char	*delimiter;
-
-	delimiter = cmd->right->cmd->args[0];
-	temp_filename = create_temp_filename();
-	if (!temp_filename)
-	{
-		cmd->error_code = 1;
-		return ;
-	}
-	if (write_to_temp_file(delimiter, temp_filename) == -1)
-	{
-		perror("minishell: heredoc");
-		cmd->error_code = 1;
-		free(temp_filename);
-		return ;
-	}
-	execute_with_heredoc(cmd->left, env, temp_filename);
-	unlink(temp_filename);
-	free(temp_filename);
-}
-
 char	*ft_strjoin_free(char *s1, char *s2)
 {
 	int		i;
@@ -122,4 +68,64 @@ char	*ft_strjoin_free(char *s1, char *s2)
 	free(s1);
 	str[i + j] = '\0';
 	return (str);
+}
+
+void	cleanup_heredoc_files(t_ast *node)
+{
+	if (!node)
+		return ;
+	if (node->token == REDIR_HEREDOC && node->cmd && node->cmd->args)
+	{
+		if (node->cmd->args[0])
+			unlink(node->cmd->args[0]);
+	}
+	if (node->left)
+		cleanup_heredoc_files(node->left);
+	if (node->right)
+		cleanup_heredoc_files(node->right);
+}
+
+int	process_all_heredocs(t_ast *node)
+{
+	char	*temp_filename;
+	char	*delimiter;
+	int		fd;
+
+	if (!node)
+		return (1);
+	if (node->token == REDIR_HEREDOC && node->cmd && node->cmd->args)
+	{
+		delimiter = ft_strdup(node->cmd->args[0]);
+		if (!delimiter)
+			return (0);
+		temp_filename = create_temp_filename();
+		if (!temp_filename)
+		{
+			free(delimiter);
+			return (0);
+		}
+		if (write_to_temp_file(delimiter, temp_filename) == -1)
+		{
+			free(delimiter);
+			free(temp_filename);
+			return (0);
+		}
+		fd = open(temp_filename, O_RDONLY);
+		if (fd == -1)
+		{
+			free(delimiter);
+			free(temp_filename);
+			return (0);
+		}
+		close(fd);
+		free(delimiter);
+		free(node->cmd->args[0]);
+		node->cmd->args[0] = temp_filename;
+		node->cmd->has_heredoc = 1;
+	}
+	if (node->left && !process_all_heredocs(node->left))
+		return (0);
+	if (node->right && !process_all_heredocs(node->right))
+		return (0);
+	return (1);
 }

@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/18 14:45:10 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/10 10:10:32 by pnaessen         ###   ########lyon.fr   */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
 int	ft_strrcmp(char *src, char *cmp)
@@ -21,7 +9,7 @@ int	ft_strrcmp(char *src, char *cmp)
 	t1 = (unsigned char *)src;
 	t2 = (unsigned char *)cmp;
 	i = 0;
-	while (t1[i])
+	while (t2[i])
 	{
 		if (t1[i] != t2[i])
 			return (t1[i] - t2[i]);
@@ -43,6 +31,7 @@ void	free_env_array(char **env_array)
 		i++;
 	}
 	free(env_array);
+	env_array = NULL;
 }
 
 int	ft_isdigiter(int c)

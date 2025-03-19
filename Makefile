@@ -20,6 +20,14 @@ SRC := $(addprefix $(SRC_DIR), \
 	ast_utils.c \
 	ast_free.c \
 	ast_tools.c \
+	free_tools.c \
+	mini_env.c \
+	apply_redi.c \
+	exec_redi.c \
+	ast.c \
+	ast_redi.c \
+	pipe_left.c \
+	pipe_right.c \
 )
 
 BUILTINS_SRC := $(addprefix $(BUILTINS_DIR), \
@@ -43,6 +51,7 @@ PARS_SRC := $(addprefix $(PARS_DIR), \
 	parsing.c \
 	pre_tokenisation.c \
 	tokenisation.c \
+	quoting.c \
 )
 
 SRC += $(BUILTINS_SRC) $(PARS_SRC)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/10 10:10:42 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/18 20:14:36 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ typedef struct s_ast
 	t_node_type		token;
 	struct s_ast	*head;
 	int				error_code;
+	struct s_ast	*root;
 }					t_ast;
 
 typedef struct s_env
@@ -46,92 +47,130 @@ typedef struct s_cmd
 {
 	char			**args;
 	char			*path;
+	t_redir			*redirs;
+	int				has_heredoc;
 }					t_cmd;
 
 ////////////////////////SRC/////////////////////////////////////
 
-/////////////tree_ast//////////////////////////////
-t_ast	*parse_and_build_ast(char *input);
-t_ast	*build_tree(t_stack *parsed_stack);
-t_ast	*init_first_cmd(t_stack *stack, t_stack *end, t_ast **current_node);
-t_ast	*process_cmd_tokens(t_stack *current, t_stack *parsed_stack,
-		t_ast *root, t_ast *current_node);
-t_ast	*handle_pipe(t_ast **current_node, t_stack **current, t_stack *stack,
-		t_ast **root);
+/////////////////////////main.c////////////////////////////
+void				print_ast(t_ast *node, int level);
+void				print_redirections(t_redir *redirs, int level);
 
+/////////////////////////ast_redi.c////////////////////////////
+t_ast				*build_right_side(t_stack *next_cmd, t_stack *stack,
+						t_ast *new_cmd, t_stack **last_token);
 
+/////////////////////////ast_free.c////////////////////////////
+void				free_ast_children(t_ast *node);
+void				free_ast_cmd(t_ast *node);
+void				free_ast(t_ast *node);
+void				free_ast_cmd_args(t_ast *node);
+void				free_redirections(t_redir *redirs);
 
-////////////ast_tools//////////////
-t_ast	*create_pipe_node(t_ast *left_cmd, t_ast *right_cmd);
-t_ast	*create_ast_operator(t_node_type token, t_ast *left, t_ast *right);
-t_ast	*create_ast_command(char **args);
+/////////////////////////ast_tools.c////////////////////////////
+t_ast				*create_ast_command(char **args);
+t_ast				*create_ast_operator(t_node_type token, t_ast *left,
+						t_ast *right);
+t_ast				*create_pipe_node(t_ast *left_cmd, t_ast *right_cmd);
+int					is_redirection(t_node_type token);
 
-///////////////////ast_free//////////////
-t_ast	*free_cmd_node(t_ast *node, int i);
-void	free_ast(t_ast *node);
-void	free_ast_children(t_ast *node);
-void	free_ast_cmd(t_ast *node);
-void	free_ast_cmd_args(t_ast *node);
+/////////////////////////ast_utils.c////////////////////////////
+t_stack				*find_next_cmd(t_stack *current, t_stack *end);
+int					count_args(char **args);
+t_ast				*init_cmd_node_alloc(t_ast *node, int args_count);
+t_ast				*init_cmd_struct(t_ast *node);
+t_ast				*init_cmd_node(t_ast *node, char **args, int args_count);
 
-
-
-
-void free_stack(t_stack *node);
-
-//////////////////ast_utils////////////////
-t_stack	*find_next_cmd(t_stack *current, t_stack *end);
-int	count_args(char **args);
-t_ast	*init_cmd_struct(t_ast *node);
-t_ast	*init_cmd_node_alloc(t_ast *node, int args_count);
-t_ast	*init_cmd_node(t_ast *node, char **args, int args_count);
-
-///////////exec.c///////////////////////
-void				execute_cmd(t_ast *cmd, t_env *env);
-void				child_process(t_ast *cmd, char **env_array);
-int					parent_process(pid_t pid, t_ast *cmd, char **env_array);
+/////////////////////////exec.c////////////////////////////
+void				child_process(t_ast *cmd, t_env *env);
 void				execute_ast(t_ast *cmd, t_env *env);
+int					parent_process(pid_t pid, t_ast *cmd);
+void				execute_cmd(t_ast *cmd_node, t_env *env);
 
-////////////here_doc////////////////////////////////
+/////////////////////////free_tools.c////////////////////////////
+void				free_stack(t_stack *stack);
+t_ast				*free_cmd_node(t_ast *node, int i);
+void				free_stack_node(t_stack *node);
+
+/////////////////////////here_doc.c////////////////////////////
 char				*create_temp_filename(void);
 int					write_to_temp_file(char *delimiter, char *filename);
-void				execute_with_heredoc(t_ast *cmd, t_env *env,
-						char *filename);
-void				handle_heredoc(t_ast *cmd, t_env *env);
 char				*ft_strjoin_free(char *s1, char *s2);
-///////////path_env.c///////////////////
+void				cleanup_heredoc_files(t_ast *node);
+int					process_all_heredocs(t_ast *node);
+
+/////////////////////////mini_env.c////////////////////////////
+t_env				*create_env_var(char *var_string);
+void				add_shlvl_to_env(t_env **head);
+void				add_underscore_to_env(t_env **head);
+void				add_pwd_to_env(t_env **head);
+void				create_mini_env(t_env **head);
+
+/////////////////////////path_env.c////////////////////////////
 char				*get_path(char *cmd, char **env_array);
 char				*find_in_path(char *cmd, char **env_array);
 char				*search_command_in_path(char *cmd, char **path_dirs);
 char				**env_to_tab(t_env **env);
 
-///////////pipe.c///////////////////////
+/////////////////////////pipe.c////////////////////////////
 void				pipe_child_left(t_ast *cmd, t_env *env, int *pipefd);
 void				pipe_child_right(t_ast *cmd, t_env *env, int *pipefd);
 void				execute_pipe(t_ast *cmd, t_env *env);
 void				handle_pipe_parent(t_ast *cmd, pid_t pid1, pid_t pid2,
 						int *pipefd);
+void				fork_fail(t_ast **cmd, int *pipefd);
 
-////////////redirection.c///////////////////
-void				handle_redir_in(t_ast *cmd, t_env *env);
-void				handle_redir_out(t_ast *cmd, t_env *env);
-void				handle_redir_append(t_ast *cmd, t_env *env);
+/////////////////////////redirection.c////////////////////////////
+int					save_std_fds(int *saved_stdin, int *saved_stdout,
+						t_ast *node);
+void				restore_std_fds(int saved_stdin, int saved_stdout);
+int					is_cmd_invalid(t_ast *cmd_node);
+int					handle_child_redirects(t_ast *cmd_node, char **env_array);
 
-//////////////////signal.c////////////////////////
-void				handle_signals(void);
+/////////////////////////signal.c////////////////////////////
 void				handle_sig(int sig);
+void				handle_signals(void);
 
-////////utils_lst////
+/////////////////////////tree_ast.c////////////////////////////
+t_ast				*init_first_cmd(t_stack *stack, t_stack *end,
+						t_ast **current_node);
+
+/////////////////////////utils_lst.c////////////////////////////
 void				handle_env(char **env, t_env **head);
 void				lstadd_back(t_env **head, t_env *new_node);
 void				free_env_list(t_env *env);
-void				creat_mini_env(t_env **head);
 
-/////////utils/////
+/////////////////////////utils.c////////////////////////////
 int					ft_strrcmp(char *src, char *cmp);
 void				free_env_array(char **env_array);
 int					ft_isdigiter(int c);
 char				**ft_free_ta(char **tab);
 
+/////////////////////////ast.c////////////////////////////
+t_ast				*build_tree(t_stack *stack);
+void				handle_redirection(t_ast **current_node, t_stack **current,
+						t_ast **root);
+void				init_redir_node(t_ast *redir_node, char *filename,
+						t_ast **current_node, t_ast **root);
+t_ast				*parse_and_build_ast(char *input);
+t_ast				*handle_pipe(t_ast **current_node, t_stack **current,
+						t_stack *stack, t_ast **root);
+
+/////////////////////////exec_redi.c////////////////////////////
+void				exec_with_redirects(t_ast *node, t_env *env);
+int					apply_all_redirections(t_ast *node);
+int					apply_redirection(t_ast *redir);
+int					apply_input_redirection(t_ast *redir);
+int					apply_output_redirection(t_ast *redir);
+int					apply_append_redirection(t_ast *redir);
+int					save_std_fds(int *saved_stdin, int *saved_stdout,
+						t_ast *node);
+void				restore_std_fds(int saved_stdin, int saved_stdout);
+int					is_cmd_invalid(t_ast *cmd_node);
+t_ast				*find_cmd_node(t_ast *node, int *has_error);
+void				execute_cmd_with_redir(t_ast *cmd_node, t_ast *node,
+						t_env *env);
 ////////////BUILTINS////////////////////////
 
 ///////////////ft_cd.c/////////////////////
@@ -174,11 +213,6 @@ void				sort_env_array(t_env **sorted, int env_size);
 ///////////////handle.c//////////////////////
 void				check_builtin(t_ast *input, t_env *env);
 
-////////////////main.c/////////////////////////
-t_ast				*create_test_command(char *cmd_str);
-void				free_ast(t_ast *node);
-t_ast				*create_command_pipeline(char **cmds, int count);
-t_ast				*create_test_pipeline(char *cmds);
-void				print_ast(t_ast *node, int level);
-
+void				execute_cmd_node(t_ast *node, t_env *env);
+void				clean_and_exit(t_ast *cmd, t_env *env, int exit_code);
 #endif

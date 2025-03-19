@@ -1,118 +1,80 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   redirection.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/23 12:13:47 by pn                #+#    #+#             */
-/*   Updated: 2025/03/02 17:41:51 by pn               ###   ########lyon.fr   */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
-void	handle_redir_in(t_ast *cmd, t_env *env)
+int	apply_input_redirection(t_ast *redir)
 {
 	int	fd;
-	int	saved_fd;
 
-	saved_fd = dup(STDIN_FILENO);
-	if (saved_fd == -1)
-	{
-		perror("minishell: dup");
-		cmd->error_code = 1;
-		return ;
-	}
-	fd = open(cmd->right->cmd->args[0], O_RDONLY);
+	fd = open(redir->cmd->args[0], O_RDONLY);
 	if (fd == -1)
 	{
 		perror("minishell: open");
-		cmd->error_code = 1;
-		close(saved_fd);
-		return ;
+		return (1);
 	}
 	if (dup2(fd, STDIN_FILENO) == -1)
 	{
 		perror("minishell: dup2");
-		cmd->error_code = 1;
 		close(fd);
-		close(saved_fd);
-		return ;
+		return (1);
 	}
 	close(fd);
-	execute_ast(cmd->left, env);
-	if (dup2(saved_fd, STDIN_FILENO) == -1)
-		perror("minishell: dup2");
-	close(saved_fd);
+	return (0);
 }
 
-void	handle_redir_out(t_ast *cmd, t_env *env)
+int	apply_output_redirection(t_ast *redir)
 {
 	int	fd;
-	int	saved_fd;
 
-	saved_fd = dup(STDOUT_FILENO);
-	if (saved_fd == -1)
-	{
-		perror("minishell: dup");
-		cmd->error_code = 1;
-		return ;
-	}
-	fd = open(cmd->right->cmd->args[0], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	fd = open(redir->cmd->args[0], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 	{
 		perror("minishell: open");
-		cmd->error_code = 1;
-		close(saved_fd);
-		return ;
+		return (1);
+	}
+	if (dup2(fd, STDOUT_FILENO) == -1)
+	{
+		perror("minishell: dup2\n");
+		close(fd);
+		return (1);
+	}
+	close(fd);
+	return (0);
+}
+
+int	apply_append_redirection(t_ast *redir)
+{
+	int	fd;
+
+	fd = open(redir->cmd->args[0], O_WRONLY | O_CREAT | O_APPEND, 0644);
+	if (fd == -1)
+	{
+		perror("minishell: open");
+		return (1);
 	}
 	if (dup2(fd, STDOUT_FILENO) == -1)
 	{
 		perror("minishell: dup2");
-		cmd->error_code = 1;
 		close(fd);
-		close(saved_fd);
-		return ;
+		return (1);
 	}
 	close(fd);
-	execute_ast(cmd->left, env);
-	if (dup2(saved_fd, STDOUT_FILENO) == -1)
-		perror("minishell: dup2");
-	close(saved_fd);
+	return (0);
 }
 
-void	handle_redir_append(t_ast *cmd, t_env *env)
+int	apply_all_redirections(t_ast *node)
 {
-	int	fd;
-	int	saved_fd;
-
-	saved_fd = dup(STDOUT_FILENO);
-	if (saved_fd == -1)
+	if (!node)
+		return (0);
+		
+	if (node->left && node->left->token != CMD)
 	{
-		perror("minishell: dup");
-		cmd->error_code = 1;
-		return ;
+		if (apply_all_redirections(node->left))
+			return (1);
 	}
-	fd = open(cmd->right->cmd->args[0], O_WRONLY | O_CREAT | O_APPEND, 0644);
-	if (fd == -1)
+	if (is_redirection(node->token))
 	{
-		perror("minishell: open");
-		cmd->error_code = 1;
-		close(saved_fd);
-		return ;
+		if (apply_redirection(node))
+			return (1);
 	}
-	if (dup2(fd, STDOUT_FILENO) == -1)
-	{
-		perror("minishell: dup2");
-		cmd->error_code = 1;
-		close(fd);
-		close(saved_fd);
-		return ;
-	}
-	close(fd);
-	execute_ast(cmd->left, env);
-	if (dup2(saved_fd, STDOUT_FILENO) == -1)
-		perror("minishell: dup2");
-	close(saved_fd);
+	
+	return (0);
 }

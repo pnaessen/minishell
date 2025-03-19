@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/15 15:38:59 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/09 20:20:58 by pn               ###   ########lyon.fr   */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
 int	main(int argc, char **argv, char **env)
@@ -24,6 +12,11 @@ int	main(int argc, char **argv, char **env)
 	{
 		printf("Usage : minishell doesn't take argument\n");
 		return (0);
+	}
+	if (!isatty(STDIN_FILENO) || !isatty(STDOUT_FILENO))
+	{
+		printf("minishell: cannot be used in pipes or redirections\n");
+		return (1);
 	}
 	handle_signals();
 	handle_env(env, &head);
@@ -44,12 +37,14 @@ int	main(int argc, char **argv, char **env)
 			{
 				print_ast(cmd, 0);
 				execute_ast(cmd, head);
-				printf("%d\n", cmd->error_code);
+				cleanup_heredoc_files(cmd);
+				// printf("%d\n", cmd->error_code);
 				free_ast(cmd);
 			}
 		}
 		free(input);
 	}
+	free_env_list(head);
 	return (0);
 }
 
@@ -59,38 +54,78 @@ void	print_ast(t_ast *node, int level)
 
 	if (!node)
 		return ;
-	for (int i = 0; i < level; i++)
+	for (i = 0; i < level; i++)
 		printf("  ");
-	if (node->token == CMD)
+	switch (node->token)
 	{
+	case CMD:
 		printf("CMD: ");
 		if (node->cmd && node->cmd->args)
 		{
 			i = 0;
 			while (node->cmd->args[i])
 			{
-				printf("%s ", node->cmd->args[i]);
+				printf("%s", node->cmd->args[i]);
+				if (node->cmd->args[i + 1])
+					printf(" ");
 				i++;
 			}
 		}
-		printf("\n");
+		break ;
+	case PIPE:
+		printf("PIPE");
+		break ;
+	case REDIR_IN:
+		printf("REDIR_IN: %s", node->cmd->args[0]);
+		break ;
+	case REDIR_OUT:
+		printf("REDIR_OUT: %s", node->cmd->args[0]);
+		break ;
+	case REDIR_HEREDOC:
+		printf("HEREDOC: %s", node->cmd->args[0]);
+		break ;
+	case APPEND:
+		printf("APPEND: %s", node->cmd->args[0]);
+		break ;
+	default:
+		printf("UNKNOWN");
 	}
-	else if (node->token == PIPE)
-	{
-		printf("PIPE\n");
+	printf("\n");
+	if (node->token == CMD && node->cmd && node->cmd->redirs)
+		print_redirections(node->cmd->redirs, level + 1);
+	if (node->left)
 		print_ast(node->left, level + 1);
+	if (node->right)
 		print_ast(node->right, level + 1);
-	}
-	else if (node->token == REDIR_IN)
+}
+
+void	print_redirections(t_redir *redirs, int level)
+{
+	t_redir	*current;
+	int		i;
+
+	current = redirs;
+	while (current)
 	{
-		printf("REDIR_IN\n");
-		print_ast(node->left, level + 1);
-		print_ast(node->right, level + 1);
-	}
-	else if (node->token == REDIR_OUT)
-	{
-		printf("REDIR_OUT\n");
-		print_ast(node->left, level + 1);
-		print_ast(node->right, level + 1);
+		for (i = 0; i < level; i++)
+			printf("  ");
+		switch (current->type)
+		{
+		case REDIR_IN:
+			printf("< %s\n", current->file);
+			break ;
+		case REDIR_OUT:
+			printf("> %s\n", current->file);
+			break ;
+		case REDIR_HEREDOC:
+			printf("<< %s\n", current->file);
+			break ;
+		case APPEND:
+			printf(">> %s\n", current->file);
+			break ;
+		default:
+			printf("Unknown redirection: %s\n", current->file);
+		}
+		current = current->next;
 	}
 }

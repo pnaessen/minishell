@@ -6,7 +6,7 @@
 /*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 14:44:37 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/03 14:17:16 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/12 10:58:07 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	handle_env(char **env, t_env **head)
 
 	i = 0;
 	if (!*env)
-		creat_mini_env(head);
+		create_mini_env(head);
 	while (env[i])
 	{
 		new_node = malloc(sizeof(t_env));
@@ -66,46 +66,4 @@ void	free_env_list(t_env *env)
 			free(temp->str);
 		free(temp);
 	}
-}
-
-void	creat_mini_env(t_env **head)
-{
-	t_env	*new_node;
-	char	*path;
-
-	path = getcwd(NULL, PATH_MAX);
-	path = ft_strjoin("PWD=", path);
-	new_node = malloc(sizeof(t_env));
-	if (!new_node)
-		return ;
-	new_node->str = ft_strdup(path);
-	if (!new_node->str)
-	{
-		free(new_node);
-		return ;
-	}
-	new_node->next = NULL;
-	lstadd_back(head, new_node);
-	new_node = malloc(sizeof(t_env));
-	if (!new_node)
-		return ;
-	new_node->str = ft_strdup("SHLVL=1");
-	if (!new_node->str)
-	{
-		free(new_node);
-		return ;
-	}
-	new_node->next = NULL;
-	lstadd_back(head, new_node);
-	new_node = malloc(sizeof(t_env));
-	if (!new_node)
-		return ;
-	new_node->str = ft_strdup("_=/usr/bin/env");
-	if (!new_node->str)
-	{
-		free(new_node);
-		return ;
-	}
-	new_node->next = NULL;
-	lstadd_back(head, new_node);
 }

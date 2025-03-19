@@ -67,6 +67,7 @@ char	*handle_whitespaces(char *args)
 	size = len_without_whitespaces(args, data) + 1;
 	args_cleaned = rm_whitespaces(args, data, size);
 	args_trim = ft_strtrim(args_cleaned, " ");
+	free(data);
 	free(args_cleaned);
 	return (args_trim);
 }
