@@ -59,24 +59,3 @@ void	handle_standard_case(t_ast **current_node, t_ast **root,
 		*root = redir_node;
 	*current_node = redir_node;
 }
-
-t_ast	*init_first_node(t_stack *stack, t_stack *end, t_ast **current_node)
-{
-	t_ast	*root;
-
-	root = NULL;
-	if (is_redirection(stack->token))
-	{
-		if (stack->next->token == CMD)
-			handle_redirection(current_node, &stack, &root);
-		// print_ast(*current_node, 0);
-		return (root);
-	}
-	else
-	{
-		root = init_first_cmd(stack, end, current_node);
-		if (!root)
-			return (NULL);
-		return (root);
-	}
-}

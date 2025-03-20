@@ -15,43 +15,6 @@ t_ast	*parse_and_build_ast(char *input)
 	return (ast_result);
 }
 
-t_ast	*build_tree(t_stack *stack)
-{
-	t_stack	*current;
-	t_ast	*root;
-	t_ast	*current_node;
-	t_stack	*end;
-
-	root = NULL;
-	end = stack->prev;
-	current = stack;
-	root = init_first_cmd(stack, end, &current_node);
-	if (!root)
-		return (NULL);
-	while (1)
-	{
-		if (current->token == PIPE)
-		{
-			if (!handle_pipe(&current_node, &current, stack, &root))
-			{
-				free_ast(root);
-				return (NULL);
-			}
-		}
-		else if (is_redirection(current->token))
-		{
-			if (current->next != stack && current->next->token == CMD)
-				handle_redirection(&current_node, &current, &root);
-		}
-		current = current->next;
-		if (current == stack)
-			break ;
-	}
-	if (root)
-		set_root_pointers(root, root);
-	return (root);
-}
-
 void	handle_redirection(t_ast **current_node, t_stack **current,
 		t_ast **root)
 {
@@ -72,7 +35,7 @@ void	handle_redirection(t_ast **current_node, t_stack **current,
 	if (!redir_node->cmd)
 	{
 		free(redir_node);
-		//return (free_ast(*root));
+		// return (free_ast(*root));
 		return ;
 	}
 	init_redir_node(redir_node, filename, current_node, root);
@@ -86,7 +49,7 @@ void	handle_redirection(t_ast **current_node, t_stack **current,
 void	init_redir_node(t_ast *redir_node, char *filename, t_ast **current_node,
 		t_ast **root)
 {
-	redir_node->cmd->args = malloc(sizeof(char *) * 2);  // hereee
+	redir_node->cmd->args = malloc(sizeof(char *) * 2); // hereee
 	if (!redir_node->cmd->args)
 	{
 		free(redir_node->cmd);

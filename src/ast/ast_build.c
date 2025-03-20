@@ -1,0 +1,66 @@
+#include "minishell.h"
+#include "pars.h"
+
+void	set_current_position(t_stack *stack, t_stack *end,
+		t_stack **current)
+{
+	if (is_redirection(stack->token) && stack->next != end->next
+		&& stack->next->token == CMD)
+	{
+		if (stack->next->next != end->next && stack->next->next->token == CMD)
+			*current = stack->next->next->next;
+		else
+			*current = stack->next->next;
+		stack->token = REDIR_IN;
+	}
+	else
+	{
+		*current = find_next_cmd(stack, end);
+		if (*current != end->next)
+			*current = (*current)->next;
+	}
+}
+
+int	process_current_token(t_ast **current_node, t_stack **current,
+		t_stack *stack, t_ast **root)
+{
+	if ((*current)->token == PIPE)
+	{
+		if (!handle_pipe(current_node, current, stack, root))
+			return (0);
+	}
+	else if (is_redirection((*current)->token))
+	{
+		if ((*current)->next != stack && (*current)->next->token == CMD)
+			handle_redirection(current_node, current, root);
+	}
+	return (1);
+}
+
+t_ast	*build_tree(t_stack *stack)
+{
+	t_stack	*current;
+	t_ast	*root;
+	t_ast	*current_node;
+	t_stack	*end;
+
+	root = NULL;
+	end = stack->prev;
+	current = stack;
+	root = init_first_node(stack, end, &current_node);
+	if (!root)
+		return (NULL);
+	set_current_position(stack, end, &current);
+	while (current != stack)
+	{
+		if (!process_current_token(&current_node, &current, stack, &root))
+		{
+			free_ast(root);
+			return (NULL);
+		}
+		current = current->next;
+	}
+	if (root)
+		set_root_pointers(root, root);
+	return (root);
+}

@@ -44,6 +44,8 @@ EXEC_SRC := $(addprefix $(EXEC_DIR), \
 )
 
 AST_SRC := $(addprefix $(AST_DIR), \
+	ast_build.c \
+	ast_first_node.c \
 	ast.c \
 	ast_redi.c \
 	ast_tools.c \
