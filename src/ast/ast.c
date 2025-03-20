@@ -27,7 +27,8 @@ void	handle_redirection(t_ast **current_node, t_stack **current,
 	redir_node = malloc(sizeof(t_ast)); // need check a NULL
 	if (!redir_node)
 	{
-		// return (free_ast(*root));
+		free_ast(*root);
+		*root = NULL;
 		return ;
 	}
 	redir_node->token = (*current)->token;
@@ -54,7 +55,9 @@ void	init_redir_node(t_ast *redir_node, char *filename, t_ast **current_node,
 	{
 		free(redir_node->cmd);
 		free(redir_node);
-		return (free_ast(*root));
+		free_ast(*root);
+		*root = NULL;
+		return ;
 	}
 	redir_node->cmd->args[0] = ft_strdup(filename);
 	if (!redir_node->cmd->args[0])

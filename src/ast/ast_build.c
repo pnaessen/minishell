@@ -1,8 +1,7 @@
 #include "minishell.h"
 #include "pars.h"
 
-void	set_current_position(t_stack *stack, t_stack *end,
-		t_stack **current)
+void	set_current_position(t_stack *stack, t_stack *end, t_stack **current)
 {
 	if (is_redirection(stack->token) && stack->next != end->next
 		&& stack->next->token == CMD)
@@ -13,6 +12,8 @@ void	set_current_position(t_stack *stack, t_stack *end,
 			*current = stack->next->next;
 		stack->token = REDIR_IN;
 	}
+	else if (stack->token == CMD)
+		*current = stack->next;
 	else
 	{
 		*current = find_next_cmd(stack, end);
@@ -33,6 +34,8 @@ int	process_current_token(t_ast **current_node, t_stack **current,
 	{
 		if ((*current)->next != stack && (*current)->next->token == CMD)
 			handle_redirection(current_node, current, root);
+		if (!*root)
+			return (0);
 	}
 	return (1);
 }
