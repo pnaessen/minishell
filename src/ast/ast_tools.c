@@ -45,11 +45,7 @@ t_ast	*create_pipe_node(t_ast *left_cmd, t_ast *right_cmd)
 
 	pipe_node = create_ast_operator(PIPE, left_cmd, right_cmd);
 	if (!pipe_node)
-	{
-		free_ast(left_cmd);
-		free_ast(right_cmd);
 		return (NULL);
-	}
 	return (pipe_node);
 }
 

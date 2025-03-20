@@ -27,10 +27,7 @@ t_ast	*build_tree(t_stack *stack)
 	current = stack;
 	root = init_first_cmd(stack, end, &current_node);
 	if (!root)
-	{
-		printf("error\n");
-		return (NULL); // 	handle_redirection(&current_node, &current, &root);
-	}
+		return (NULL);
 	while (1)
 	{
 		if (current->token == PIPE)
@@ -55,41 +52,6 @@ t_ast	*build_tree(t_stack *stack)
 	return (root);
 }
 
-void	handle_heredoc_case(t_ast **current_node, t_ast **root,
-		t_ast *redir_node)
-{
-	t_ast	*cmd_node;
-	t_ast	*temp;
-
-	cmd_node = NULL;
-	temp = *current_node;
-	while (temp && temp->token != CMD)
-		temp = temp->left;
-	cmd_node = temp;
-	if (cmd_node)
-	{
-		redir_node->left = cmd_node;
-		temp = *current_node;
-		while (temp->left && temp->left->token != CMD)
-			temp = temp->left;
-		temp->left = redir_node;
-	}
-	else
-	{
-		if (*current_node == *root)
-			*root = redir_node;
-		*current_node = redir_node;
-	}
-}
-
-void	handle_standard_case(t_ast **current_node, t_ast **root,
-		t_ast *redir_node)
-{
-	if (*current_node == *root)
-		*root = redir_node;
-	*current_node = redir_node;
-}
-
 void	handle_redirection(t_ast **current_node, t_stack **current,
 		t_ast **root)
 {
@@ -99,15 +61,19 @@ void	handle_redirection(t_ast **current_node, t_stack **current,
 	filename = (*current)->next->cmd[0];
 	if (!filename)
 		return ;
-	redir_node = malloc(sizeof(t_ast));
+	redir_node = malloc(sizeof(t_ast)); // need check a NULL
 	if (!redir_node)
-		return (free_ast(*root));
+	{
+		// return (free_ast(*root));
+		return ;
+	}
 	redir_node->token = (*current)->token;
-	redir_node->cmd = malloc(sizeof(t_cmd));
+	redir_node->cmd = malloc(sizeof(t_cmd)); // need to check a NULL
 	if (!redir_node->cmd)
 	{
 		free(redir_node);
-		return (free_ast(*root));
+		//return (free_ast(*root));
+		return ;
 	}
 	init_redir_node(redir_node, filename, current_node, root);
 	if ((*current)->token == REDIR_HEREDOC && (*current_node)->token != CMD)
@@ -120,7 +86,7 @@ void	handle_redirection(t_ast **current_node, t_stack **current,
 void	init_redir_node(t_ast *redir_node, char *filename, t_ast **current_node,
 		t_ast **root)
 {
-	redir_node->cmd->args = malloc(sizeof(char *) * 2);
+	redir_node->cmd->args = malloc(sizeof(char *) * 2);  // hereee
 	if (!redir_node->cmd->args)
 	{
 		free(redir_node->cmd);

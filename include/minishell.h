@@ -6,7 +6,7 @@
 /*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/19 14:04:59 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/20 11:48:15 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,8 @@ void				free_redirections(t_redir *redirs);
 
 //////////////////////////command.c////////////////////////////
 void				child_process(t_ast *cmd, t_env *env);
-void				handle_command_not_found(t_ast *cmd, char **env_array, t_env *env);
+void				handle_command_not_found(t_ast *cmd, char **env_array,
+						t_env *env);
 void				execute_command(char *path, char **args, char **env_array);
 void				copy_args(t_ast *cmd, char **args_copy, char **env_array,
 						char *path);
@@ -146,6 +147,12 @@ void				handle_signals(void);
 t_ast				*init_first_cmd(t_stack *stack, t_stack *end,
 						t_ast **current_node);
 void				set_root_pointers(t_ast *node, t_ast *root);
+void				handle_standard_case(t_ast **current_node, t_ast **root,
+						t_ast *redir_node);
+void				handle_heredoc_case(t_ast **current_node, t_ast **root,
+						t_ast *redir_node);
+t_ast				*init_first_node(t_stack *stack, t_stack *end,
+						t_ast **current_node);
 
 /////////////////////////utils_lst.c////////////////////////////
 void				handle_env(char **env, t_env **head);
@@ -226,4 +233,5 @@ void				check_builtin(t_ast *input, t_env *env);
 
 void				execute_cmd_node(t_ast *node, t_env *env);
 void				clean_and_exit(t_ast *cmd, t_env *env, int exit_code);
+
 #endif

@@ -33,10 +33,10 @@ t_ast	*create_new_redir_node(t_stack *redir_current, t_ast *current_node)
 
 	filename = redir_current->next->cmd[0];
 	if (!filename)
-		return (NULL);
+	return (NULL);
 	temp_node = malloc(sizeof(t_ast));
 	if (!temp_node)
-		return (NULL);
+	return (NULL);
 	temp_node->token = redir_current->token;
 	temp_node->cmd = malloc(sizeof(t_cmd));
 	if (!temp_node->cmd)
@@ -45,13 +45,13 @@ t_ast	*create_new_redir_node(t_stack *redir_current, t_ast *current_node)
 		return (NULL);
 	}
 	if (!init_redir_node_for_pipe(temp_node, filename))
-		return (NULL);
+	return (NULL);
 	temp_node->left = current_node;
 	return (temp_node);
 }
 
-t_ast	*process_redirections(t_stack *current, t_stack *stack,
-	t_ast *cmd_node, t_stack **last_token)
+t_ast	*process_redirections(t_stack *current, t_stack *stack, t_ast *cmd_node,
+		t_stack **last_token)
 {
 	t_ast	*current_node;
 	t_ast	*temp_node;
@@ -71,7 +71,7 @@ t_ast	*process_redirections(t_stack *current, t_stack *stack,
 }
 
 t_ast	*build_right_side(t_stack *next_cmd, t_stack *stack, t_ast *new_cmd,
-	t_stack **last_token)
+		t_stack **last_token)
 {
 	t_ast	*cmd_node;
 	t_stack	*redir_current;
@@ -80,4 +80,3 @@ t_ast	*build_right_side(t_stack *next_cmd, t_stack *stack, t_ast *new_cmd,
 	redir_current = next_cmd->next;
 	return (process_redirections(redir_current, stack, cmd_node, last_token));
 }
-

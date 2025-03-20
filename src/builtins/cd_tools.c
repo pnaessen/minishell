@@ -37,7 +37,10 @@ void	add_to_env(t_env **env, char *new_str)
 
 	new_node = malloc(sizeof(t_env));
 	if (!new_node)
+	{
+		free(new_str);
 		return ;
+	}
 	new_node->str = new_str;
 	new_node->next = NULL;
 	lstadd_back(env, new_node);

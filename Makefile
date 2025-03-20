@@ -93,7 +93,7 @@ CPPFLAGS := -MMD -MP
 HEADERS := -I./$(INCLUDES) -I$(LIBFT_DIR)
 # -------------------------------- Libft ------------------------------------- #
 LIBFT := $(LIBFT_DIR)libft.a
-LIBFT_FLAGS := -L$(LIBFT_DIR) -lft
+LIBFT_FLAGS := -L$(LIBFT_DIR) $(LIBFT)
 
 # -------------------------------- Colors ------------------------------------ #
 DEF_COLOR = \033[0;39m
@@ -133,9 +133,11 @@ $(OBJ_DIR)%.o: %.c Makefile
 	@printf "$(CYAN)Compiling: $(WHITE)$<$(DEF_COLOR)\n"
 	@$(CC) $(CFLAGS) $(HEADERS) $(CPPFLAGS) -c $< -o $@
 
+$(LIBFT): libft
+
 $(LIBFT):
 	@echo "$(BOLD)$(CYAN)📚 Building libft...$(DEF_COLOR)"
-	@$(MAKE) -C $(LIBFT_DIR)
+	$(MAKE) -C $(LIBFT_DIR)
 
 welcome:
 	@echo "$(BOLD)$(BLUE)╔═════════════════════════════════════════════════════════════╗$(DEF_COLOR)"
@@ -178,6 +180,7 @@ valgrind: $(NAME) readline.supp
 readline.supp:
 	@echo "$(YELLOW)Creating readline suppression file...$(DEF_COLOR)"
 	@echo "{\n    Readline\n    Memcheck:Leak\n    match-leak-kinds: reachable\n    ...\n    fun:readline\n}" > readline.supp
+	@echo "{\n    leak add_history\n    Memcheck:Leak\n    ...\n    fun:add_history\n}" >> readline.supp
 	@echo "$(GREEN)Created readline.supp file$(DEF_COLOR)"
 
 loc:
@@ -189,6 +192,10 @@ loc:
 	@echo "  - Main source: $$(cat $(addprefix $(SRC_DIR), *.c) 2>/dev/null | wc -l || echo "0")"
 	@echo "  - Builtins: $$(cat $(BUILTINS_SRC) 2>/dev/null | wc -l || echo "0")"
 	@echo "  - Parser: $$(cat $(PARS_SRC) 2>/dev/null | wc -l || echo "0")"
+	@echo "  - Core: $$(cat $(CORE_SRC) 2>/dev/null | wc -l || echo "0")"
+	@echo "  - Exec: $$(cat $(EXEC_SRC) 2>/dev/null | wc -l || echo "0")"
+	@echo "  - Ast: $$(cat $(AST_SRC) 2>/dev/null | wc -l || echo "0")"
+
 
 # --------------------------- Maintenance Tools ------------------------------ #
 

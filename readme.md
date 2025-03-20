@@ -166,8 +166,6 @@ Commandes intégrées au shell :
 secu for 1024 PROCESUS
 signal 
 << eof bug car je skip la node 
-check le limiter quand heredoc car si << eof  eofi ne devrai pas work
 garbage collector for close 
 refacto for 25 lignes
 secu all malloc
-makefile relink libft
