@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/20 11:48:15 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/20 21:00:50 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,20 @@ typedef struct s_cmd
 }					t_cmd;
 
 ////////////////////////SRC/////////////////////////////////////
-
+t_ast				*build_subtree(t_stack *start, t_stack *end,
+						t_stack **last_processed);
 /////////////////////////main.c////////////////////////////
 void				print_ast(t_ast *node, int level);
 void				print_redirections(t_redir *redirs, int level);
+
+/////////////////////////ast_pipe.c////////////////////////////
+char				**create_default_cmd(void);
+t_ast				*process_normal_pipe(t_stack *next_token, t_stack *stack,
+						t_stack **current);
+t_ast				*process_heredoc_no_cmd(t_stack *next_token,
+						t_stack **current);
+t_ast				*handle_pipe(t_ast **current_node, t_stack **current,
+						t_stack *stack, t_ast **root);
 
 /////////////////////////ast_redi.c////////////////////////////
 t_ast				*build_right_side(t_stack *next_cmd, t_stack *stack,
@@ -172,8 +182,14 @@ void				handle_redirection(t_ast **current_node, t_stack **current,
 void				init_redir_node(t_ast *redir_node, char *filename,
 						t_ast **current_node, t_ast **root);
 t_ast				*parse_and_build_ast(char *input);
-t_ast				*handle_pipe(t_ast **current_node, t_stack **current,
-						t_stack *stack, t_ast **root);
+t_ast				*process_redir_cmd(t_stack *next_token,
+						t_stack *cmd_after_redir, t_stack **current);
+t_ast				*create_redir_node(t_node_type token, char *filename,
+						t_ast *cmd_node);
+void				init_redir_properties(t_ast *redir_node, t_ast *cmd_node);
+t_ast				*create_redir_args(t_ast *redir_node, char *filename);
+void				init_redir_node(t_ast *redir_node, char *filename,
+						t_ast **current_node, t_ast **root);
 
 /////////////////////////exec_redi.c////////////////////////////
 void				exec_with_redirects(t_ast *node, t_env *env);

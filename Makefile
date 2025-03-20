@@ -53,6 +53,7 @@ AST_SRC := $(addprefix $(AST_DIR), \
 	ast_free.c \
 	tree_ast.c \
 	free_tools.c \
+	ast_pipe.c \
 )
 
 PARS_SRC := $(addprefix $(PARS_DIR), \

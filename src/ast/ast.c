@@ -77,36 +77,75 @@ void	init_redir_node(t_ast *redir_node, char *filename, t_ast **current_node,
 	redir_node->error_code = 0;
 }
 
-t_ast	*handle_pipe(t_ast **current_node, t_stack **current, t_stack *stack,
-		t_ast **root)
+t_ast	*create_redir_args(t_ast *redir_node, char *filename)
 {
-	t_ast	*new_cmd;
-	t_ast	*pipe_node;
-	t_stack	*next_cmd;
-	t_ast	*right_side;
-	t_stack	*last_token;
-
-	next_cmd = find_next_cmd((*current)->next, stack);
-	if (next_cmd == stack)
-		return (NULL);
-	new_cmd = create_ast_command(next_cmd->cmd);
-	if (!new_cmd)
-		return (NULL);
-	right_side = build_right_side(next_cmd, stack, new_cmd, &last_token);
-	if (!right_side)
+	redir_node->cmd->args = malloc(sizeof(char *) * 2);
+	if (!redir_node->cmd->args)
 	{
-		free_ast(new_cmd);
+		free(redir_node->cmd);
+		free(redir_node);
 		return (NULL);
 	}
-	pipe_node = create_pipe_node(*current_node, right_side);
-	if (!pipe_node)
+	redir_node->cmd->args[0] = ft_strdup(filename);
+	if (!redir_node->cmd->args[0])
+	{
+		free(redir_node->cmd->args);
+		free(redir_node->cmd);
+		free(redir_node);
+		return (NULL);
+	}
+	redir_node->cmd->args[1] = NULL;
+	return (redir_node);
+}
+
+void	init_redir_properties(t_ast *redir_node, t_ast *cmd_node)
+{
+	redir_node->cmd->path = NULL;
+	redir_node->cmd->redirs = NULL;
+	redir_node->cmd->has_heredoc = 0;
+	redir_node->left = cmd_node;
+	redir_node->right = NULL;
+	redir_node->head = redir_node;
+	redir_node->error_code = 0;
+}
+
+t_ast	*create_redir_node(t_node_type token, char *filename, t_ast *cmd_node)
+{
+	t_ast	*redir_node;
+
+	redir_node = malloc(sizeof(t_ast));
+	if (!redir_node)
+		return (NULL);
+	redir_node->token = token;
+	redir_node->cmd = malloc(sizeof(t_cmd));
+	if (!redir_node->cmd)
+	{
+		free(redir_node);
+		return (NULL);
+	}
+	redir_node = create_redir_args(redir_node, filename);
+	if (!redir_node)
+		return (NULL);
+	init_redir_properties(redir_node, cmd_node);
+	return (redir_node);
+}
+
+t_ast	*process_redir_cmd(t_stack *next_token, t_stack *cmd_after_redir,
+		t_stack **current)
+{
+	t_ast	*right_side;
+	t_ast	*redir_node;
+
+	right_side = create_ast_command(cmd_after_redir->cmd);
+	if (!right_side)
+		return (NULL);
+	redir_node = create_redir_node(next_token->token, next_token->next->cmd[0],
+			right_side);
+	if (!redir_node)
 	{
 		free_ast(right_side);
 		return (NULL);
 	}
-	if (*current_node == *root)
-		*root = pipe_node;
-	*current_node = pipe_node;
-	*current = last_token;
-	return (pipe_node);
+	*current = cmd_after_redir;
+	return (redir_node);
 }
