@@ -165,7 +165,8 @@ Commandes intégrées au shell :
 
 secu for 1024 PROCESUS
 signal 
-<< eof bug car je skip la node 
 garbage collector for close 
 refacto for 25 lignes
 secu all malloc
+si redi direct apres pipe bug 
+pas oublie de  check les strcmp en ft-strcmp

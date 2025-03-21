@@ -48,10 +48,14 @@ void	init_cmd_node_base(t_ast *root)
 t_ast	*check_cmd_after_redir(t_stack *stack, t_stack *end)
 {
 	t_ast	*root;
+	t_stack	*current;
 
 	root = NULL;
-	if (stack->next->next != end->next && stack->next->next->token == CMD)
-		root = create_ast_command(stack->next->next->cmd);
+	current = stack;
+	while (current != end->next && is_redirection(current->token))
+		current = current->next->next;
+	if (current != end->next && current->token == CMD)
+		root = create_ast_command(current->cmd);
 	else
 	{
 		init_cmd_true(&root);
@@ -66,18 +70,41 @@ t_ast	*init_first_node(t_stack *stack, t_stack *end, t_ast **current_node)
 {
 	t_ast	*root;
 	t_stack	*current;
+	t_stack	*cmd_node;
 
 	root = NULL;
 	current = stack;
 	if (is_redirection(current->token) && current->next != end->next
 		&& current->next->token == CMD)
 	{
-		root = check_cmd_after_redir(stack, end);
-		if (!root)
-			return (NULL);
+		cmd_node = current;
+		while (cmd_node != end && is_redirection(cmd_node->token))
+		{
+			cmd_node = cmd_node->next->next;
+			if (cmd_node == end->next)
+				break ;
+		}
+		if (cmd_node != end->next && cmd_node->token == CMD)
+			root = create_ast_command(cmd_node->cmd);
+		else
+		{
+			root = check_cmd_after_redir(stack, end);
+			if (!root)
+				return (NULL);
+			*current_node = root;
+			handle_redirection(current_node, &current, &root);
+			current->token = CMD;
+			return (root);
+		}
 		*current_node = root;
-		handle_redirection(current_node, &current, &root);
-		current->token = CMD;
+		current = stack;
+		while (current != cmd_node && is_redirection(current->token))
+		{
+			handle_redirection(current_node, &current, &root);
+			if (!root)
+				return (NULL);
+			current = current->next;
+		}
 	}
 	else
 		root = init_first_cmd(stack, end, current_node);
