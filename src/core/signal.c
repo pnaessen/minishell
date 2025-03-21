@@ -6,7 +6,7 @@
 /*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 14:11:14 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/14 14:02:09 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/21 17:31:00 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,3 +28,19 @@ void	handle_signals(void)
 	signal(SIGINT, &handle_sig);
 	signal(SIGQUIT, SIG_IGN);
 }
+
+void	handle_sig_subshell(int sig)
+{
+	if (sig == SIGINT)
+	{
+		//write(STDOUT_FILENO, "\n", 1);
+		exit(130);
+	}
+}
+
+void	handle_signals_subshell(void)
+{
+	signal(SIGINT, &handle_sig_subshell);
+	signal(SIGQUIT, SIG_DFL);
+}
+

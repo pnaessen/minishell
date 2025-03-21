@@ -25,7 +25,6 @@ typedef struct s_data
 typedef enum e_node_type
 {
 	CMD,
-	FILES,
 	PIPE,
 	AND,
 	OR,

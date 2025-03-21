@@ -63,7 +63,7 @@ t_ast	*process_redirections(t_stack *current, t_stack *stack, t_ast *cmd_node,
 		temp_node = create_new_redir_node(current, current_node);
 		if (!temp_node)
 			return (NULL);
-		current_node = temp_node;
+		current_node = temp_node; //wff
 		current = current->next->next;
 	}
 	*last_token = current->prev;

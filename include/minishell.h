@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
+/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/20 21:00:50 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/03/21 16:39:12 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ typedef struct s_cmd
 ////////////////////////SRC/////////////////////////////////////
 t_ast				*build_subtree(t_stack *start, t_stack *end,
 						t_stack **last_processed);
+void				handle_signals_subshell(void);
 /////////////////////////main.c////////////////////////////
 void				print_ast(t_ast *node, int level);
 void				print_redirections(t_redir *redirs, int level);

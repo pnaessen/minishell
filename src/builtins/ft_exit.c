@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
+/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 12:23:40 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/19 20:54:54 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/03/21 17:46:31 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ void	handle_numeric_exit(t_ast *cmd, t_env *env, char *arg)
 	int	exit_code;
 
 	exit_code = ft_atoi(arg);
-	if ((exit_code == -1 && arg[0] != '-') 
-		|| (exit_code == 0 && arg[0] == '-' && arg[1] != '0'))
+	if ((exit_code == -1 && arg[0] != '-') || (exit_code == 0 && arg[0] == '-'
+			&& arg[1] != '0'))
 	{
 		ft_putstr_fd("minishell: exit: ", 2);
 		ft_putstr_fd(arg, 2);
