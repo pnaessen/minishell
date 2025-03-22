@@ -68,9 +68,18 @@ t_ast	*handle_pipe_redir(t_stack **current, t_stack *stack,
 {
 	t_stack	*cmd_after_redir;
 
+	// t_ast	*root;
+	// t_ast *cmd_node;
 	cmd_after_redir = next_token->next->next;
-	while (cmd_after_redir != stack && cmd_after_redir->token != CMD)
-		cmd_after_redir = cmd_after_redir->next;
+	// root = create_ast_command(cmd_after_redir->cmd);
+	// cmd_node = root;
+	// while (*current != stack && is_redirection((*current)->token))
+	// {
+	// 	handle_redirection(&cmd_node, current, &root);
+	// 	if (!root)
+	// 		return (NULL);
+	// 	*current = (*current)->next;
+	// }
 	if (cmd_after_redir != stack && cmd_after_redir->token == CMD)
 		return (process_redir_cmd(next_token, cmd_after_redir, current));
 	else if (next_token->token == REDIR_HEREDOC)

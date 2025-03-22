@@ -59,3 +59,24 @@ void	handle_standard_case(t_ast **current_node, t_ast **root,
 		*root = redir_node;
 	*current_node = redir_node;
 }
+
+t_ast	*create_redir_args(t_ast *redir_node, char *filename)
+{
+	redir_node->cmd->args = malloc(sizeof(char *) * 2);
+	if (!redir_node->cmd->args)
+	{
+		free(redir_node->cmd);
+		free(redir_node);
+		return (NULL);
+	}
+	redir_node->cmd->args[0] = ft_strdup(filename);
+	if (!redir_node->cmd->args[0])
+	{
+		free(redir_node->cmd->args);
+		free(redir_node->cmd);
+		free(redir_node);
+		return (NULL);
+	}
+	redir_node->cmd->args[1] = NULL;
+	return (redir_node);
+}

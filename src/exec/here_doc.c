@@ -70,21 +70,6 @@ char	*ft_strjoin_free(char *s1, char *s2)
 	return (str);
 }
 
-void	cleanup_heredoc_files(t_ast *node)
-{
-	if (!node)
-		return ;
-	if (node->token == REDIR_HEREDOC && node->cmd && node->cmd->args)
-	{
-		if (node->cmd->args[0])
-			unlink(node->cmd->args[0]);
-	}
-	if (node->left)
-		cleanup_heredoc_files(node->left);
-	if (node->right)
-		cleanup_heredoc_files(node->right);
-}
-
 int	setup_heredoc_file(t_ast *node, char *delimiter)
 {
 	char	*temp_filename;

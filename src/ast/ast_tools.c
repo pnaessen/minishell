@@ -55,20 +55,22 @@ int	is_redirection(t_node_type token)
 		|| token == REDIR_HEREDOC);
 }
 
-t_redir	*create_redirection(t_node_type type, char *file)
+t_ast	*process_redir_cmd(t_stack *next_token, t_stack *cmd_after_redir,
+		t_stack **current)
 {
-	t_redir	*redir;
+	t_ast	*right_side;
+	t_ast	*redir_node;
 
-	redir = malloc(sizeof(t_redir));
-	if (!redir)
+	right_side = create_ast_command(cmd_after_redir->cmd);
+	if (!right_side)
 		return (NULL);
-	redir->type = type;
-	redir->file = ft_strdup(file);
-	if (!redir->file)
+	redir_node = create_redir_node(next_token->token, next_token->next->cmd[0],
+			right_side);
+	if (!redir_node)
 	{
-		free(redir);
+		free_ast(right_side);
 		return (NULL);
 	}
-	redir->next = NULL;
-	return (redir);
+	*current = cmd_after_redir;
+	return (redir_node);
 }

@@ -24,7 +24,7 @@ void	handle_redirection(t_ast **current_node, t_stack **current,
 	filename = (*current)->next->cmd[0];
 	if (!filename)
 		return ;
-	redir_node = malloc(sizeof(t_ast)); // need check a NULL
+	redir_node = malloc(sizeof(t_ast));
 	if (!redir_node)
 	{
 		free_ast(*root);
@@ -32,7 +32,7 @@ void	handle_redirection(t_ast **current_node, t_stack **current,
 		return ;
 	}
 	redir_node->token = (*current)->token;
-	redir_node->cmd = malloc(sizeof(t_cmd)); // need to check a NULL
+	redir_node->cmd = malloc(sizeof(t_cmd));
 	if (!redir_node->cmd)
 	{
 		free(redir_node);
@@ -78,37 +78,16 @@ void	init_redir_node(t_ast *redir_node, char *filename, t_ast **current_node,
 	redir_node->error_code = 0;
 }
 
-t_ast	*create_redir_args(t_ast *redir_node, char *filename)
+void	init_redir_properties(t_ast *redir_node, t_ast *cmd_node)
 {
-	redir_node->cmd->args = malloc(sizeof(char *) * 2);
-	if (!redir_node->cmd->args)
-	{
-		free(redir_node->cmd);
-		free(redir_node);
-		return (NULL);
-	}
-	redir_node->cmd->args[0] = ft_strdup(filename);
-	if (!redir_node->cmd->args[0])
-	{
-		free(redir_node->cmd->args);
-		free(redir_node->cmd);
-		free(redir_node);
-		return (NULL);
-	}
-	redir_node->cmd->args[1] = NULL;
-	return (redir_node);
-}
-
-void    init_redir_properties(t_ast *redir_node, t_ast *cmd_node)
-{
-    redir_node->cmd->path = NULL;
-    redir_node->cmd->redirs = NULL;
-    redir_node->cmd->has_heredoc = 0;
-    redir_node->left = cmd_node;
-    redir_node->right = NULL;
-    redir_node->head = redir_node;
-    redir_node->error_code = 0;
-    redir_node->root = NULL;
+	redir_node->cmd->path = NULL;
+	redir_node->cmd->redirs = NULL;
+	redir_node->cmd->has_heredoc = 0;
+	redir_node->left = cmd_node;
+	redir_node->right = NULL;
+	redir_node->head = redir_node;
+	redir_node->error_code = 0;
+	redir_node->root = NULL;
 }
 
 t_ast	*create_redir_node(t_node_type token, char *filename, t_ast *cmd_node)
@@ -129,25 +108,5 @@ t_ast	*create_redir_node(t_node_type token, char *filename, t_ast *cmd_node)
 	if (!redir_node)
 		return (NULL);
 	init_redir_properties(redir_node, cmd_node);
-	return (redir_node);
-}
-
-t_ast	*process_redir_cmd(t_stack *next_token, t_stack *cmd_after_redir,
-		t_stack **current)
-{
-	t_ast	*right_side;
-	t_ast	*redir_node;
-
-	right_side = create_ast_command(cmd_after_redir->cmd);
-	if (!right_side)
-		return (NULL);
-	redir_node = create_redir_node(next_token->token, next_token->next->cmd[0],
-			right_side);
-	if (!redir_node)
-	{
-		free_ast(right_side);
-		return (NULL);
-	}
-	*current = cmd_after_redir;
 	return (redir_node);
 }

@@ -97,7 +97,6 @@ t_ast	*init_first_node(t_stack *stack, t_stack *end, t_ast **current_node)
 			return (root);
 		}
 		*current_node = root;
-		current = stack;
 		while (current != cmd_node && is_redirection(current->token))
 		{
 			handle_redirection(current_node, &current, &root);
