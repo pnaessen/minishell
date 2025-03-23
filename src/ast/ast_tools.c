@@ -49,14 +49,7 @@ t_ast	*create_pipe_node(t_ast *left_cmd, t_ast *right_cmd)
 	return (pipe_node);
 }
 
-int	is_redirection(t_node_type token)
-{
-	return (token == REDIR_IN || token == REDIR_OUT || token == APPEND
-		|| token == REDIR_HEREDOC);
-}
-
-t_ast	*process_redir_cmd(t_stack *next_token, t_stack *cmd_after_redir,
-		t_stack **current)
+t_ast	*setup_initial_nodes(t_stack *next_token, t_stack *cmd_after_redir)
 {
 	t_ast	*right_side;
 	t_ast	*redir_node;
@@ -70,6 +63,31 @@ t_ast	*process_redir_cmd(t_stack *next_token, t_stack *cmd_after_redir,
 	{
 		free_ast(right_side);
 		return (NULL);
+	}
+	return (redir_node);
+}
+
+t_ast	*process_redir_cmd(t_stack *next_token, t_stack *cmd_after_redir,
+		t_stack **current)
+{
+	t_ast	*redir_node;
+	t_ast	*temp_node;
+	t_stack	*temp_stack;
+
+	redir_node = setup_initial_nodes(next_token, cmd_after_redir);
+	if (!redir_node)
+		return (NULL);
+	temp_node = redir_node;
+	temp_stack = next_token->next->next;
+	while (temp_stack != cmd_after_redir && is_redirection(temp_stack->token)
+		&& temp_stack->next != cmd_after_redir)
+	{
+		if (!create_and_link_redir(&temp_node, temp_stack))
+		{
+			free_ast(redir_node);
+			return (NULL);
+		}
+		temp_stack = temp_stack->next->next;
 	}
 	*current = cmd_after_redir;
 	return (redir_node);

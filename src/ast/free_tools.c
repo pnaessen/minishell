@@ -56,3 +56,9 @@ void	free_args_array(char **args)
 		free(args[i++]);
 	free(args);
 }
+
+int	is_redirection(t_node_type token)
+{
+	return (token == REDIR_IN || token == REDIR_OUT || token == APPEND
+		|| token == REDIR_HEREDOC);
+}

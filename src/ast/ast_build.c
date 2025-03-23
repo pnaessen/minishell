@@ -22,21 +22,51 @@ void	set_current_position(t_stack *stack, t_stack *end, t_stack **current)
 	}
 }
 
+int	handle_after_pipe(t_stack **current, t_stack *stack)
+{
+	if ((*current)->token == CMD)
+		return (0);
+	if ((*current)->next != stack && (*current)->next->token == CMD)
+		*current = (*current)->next;
+	return (1);
+}
+
+int	handle_regular_redirection(t_ast **current_node, t_stack **current,
+		t_stack *stack, t_ast **root)
+{
+	if ((*current)->next != stack && (*current)->next->token == CMD)
+	{
+		handle_redirection(current_node, current, root);
+		if (!*root)
+			return (0);
+	}
+	return (1);
+}
+
 int	process_current_token(t_ast **current_node, t_stack **current,
 		t_stack *stack, t_ast **root)
 {
+	static int	after_pipe = 0;
+
 	if ((*current)->token == PIPE)
 	{
+		after_pipe = 1;
 		if (!handle_pipe(current_node, current, stack, root))
 			return (0);
 	}
 	else if (is_redirection((*current)->token))
 	{
-		if ((*current)->next != stack && (*current)->next->token == CMD)
-			handle_redirection(current_node, current, root);
-		if (!*root)
+		if (after_pipe)
+		{
+			if (!handle_after_pipe(current, stack))
+				after_pipe = 0;
+		}
+		else if (!handle_regular_redirection(current_node, current, stack,
+				root))
 			return (0);
 	}
+	else if ((*current)->token == CMD)
+		after_pipe = 0;
 	return (1);
 }
 

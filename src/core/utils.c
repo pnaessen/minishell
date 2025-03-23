@@ -55,3 +55,13 @@ char	**ft_free_ta(char **tab)
 	free(tab);
 	return (NULL);
 }
+
+int	count_args(char **args)
+{
+	int	args_count;
+
+	args_count = 0;
+	while (args[args_count])
+		args_count++;
+	return (args_count);
+}

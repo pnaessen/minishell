@@ -1,115 +1,97 @@
 #include "minishell.h"
 #include "pars.h"
 
-char	**create_default_cmd(void)
+t_ast	*create_cmd_node(t_stack *cmd_token)
 {
+	t_ast	*cmd_node;
 	char	**default_cmd;
 
-	default_cmd = malloc(sizeof(char *) * 2);
-	if (!default_cmd)
-		return (NULL);
-	default_cmd[0] = ft_strdup("true");
-	if (!default_cmd[0])
-	{
-		free(default_cmd);
-		return (NULL);
-	}
-	default_cmd[1] = NULL;
-	return (default_cmd);
-}
-
-t_ast	*process_heredoc_no_cmd(t_stack *next_token, t_stack **current)
-{
-	t_ast	*right_side;
-	t_ast	*redir_node;
-	char	**default_cmd;
-
+	if (cmd_token)
+		return (create_ast_command(cmd_token->cmd));
 	default_cmd = create_default_cmd();
 	if (!default_cmd)
 		return (NULL);
-	right_side = create_ast_command(default_cmd);
+	cmd_node = create_ast_command(default_cmd);
 	free(default_cmd[0]);
 	free(default_cmd);
-	if (!right_side)
-		return (NULL);
-	redir_node = create_redir_node(next_token->token, next_token->next->cmd[0],
-			right_side);
-	if (!redir_node)
+	return (cmd_node);
+}
+
+int	count_redirections(t_stack *start, t_stack *end)
+{
+	t_stack	*temp;
+	int		count;
+
+	temp = start;
+	count = 0;
+	while (temp != end)
 	{
-		free_ast(right_side);
-		return (NULL);
+		if (is_redirection(temp->token) && temp->next != end)
+		{
+			count++;
+			temp = temp->next;
+		}
+		temp = temp->next;
 	}
-	*current = next_token->next;
-	return (redir_node);
+	return (count);
 }
 
-t_ast	*process_normal_pipe(t_stack *next_token, t_stack *stack,
-		t_stack **current)
+t_stack	**collect_redirections(t_stack *start, t_stack *end,
+		t_stack **cmd_token, int *redir_count)
 {
-	t_ast	*right_side;
-	t_stack	*next_cmd;
-	t_stack	*last_token;
+	t_stack	**redir_tokens;
+	t_stack	*temp;
+	int		i;
 
-	next_cmd = find_next_cmd(next_token, stack);
-	if (next_cmd == stack)
+	*redir_count = count_redirections(start, end);
+	if (*redir_count == 0)
 		return (NULL);
-	right_side = create_ast_command(next_cmd->cmd);
-	if (!right_side)
+	redir_tokens = malloc(sizeof(t_stack *) * (*redir_count));
+	if (!redir_tokens)
 		return (NULL);
-	right_side = build_right_side(next_cmd, stack, right_side, &last_token);
-	if (!right_side)
-		return (NULL);
-	*current = last_token;
-	return (right_side);
+	temp = start;
+	*cmd_token = NULL;
+	i = 0;
+	while (temp != end)
+	{
+		if (temp->token == CMD && !*cmd_token)
+			*cmd_token = temp;
+		else if (is_redirection(temp->token) && temp->next != end
+			&& i < *redir_count)
+		{
+			redir_tokens[i++] = temp;
+			temp = temp->next;
+		}
+		temp = temp->next;
+	}
+	return (redir_tokens);
 }
 
-t_ast	*handle_pipe_redir(t_stack **current, t_stack *stack,
-		t_stack *next_token)
+t_ast	*find_cmd_for_input_redir(t_ast *result)
 {
-	t_stack	*cmd_after_redir;
+	t_ast	*target_cmd;
 
-	// t_ast	*root;
-	// t_ast *cmd_node;
-	cmd_after_redir = next_token->next->next;
-	// root = create_ast_command(cmd_after_redir->cmd);
-	// cmd_node = root;
-	// while (*current != stack && is_redirection((*current)->token))
-	// {
-	// 	handle_redirection(&cmd_node, current, &root);
-	// 	if (!root)
-	// 		return (NULL);
-	// 	*current = (*current)->next;
-	// }
-	if (cmd_after_redir != stack && cmd_after_redir->token == CMD)
-		return (process_redir_cmd(next_token, cmd_after_redir, current));
-	else if (next_token->token == REDIR_HEREDOC)
-		return (process_heredoc_no_cmd(next_token, current));
-	return (NULL);
+	target_cmd = result;
+	while (target_cmd && target_cmd->token != CMD && target_cmd->left)
+		target_cmd = target_cmd->left;
+	return (target_cmd);
 }
 
-t_ast	*handle_pipe(t_ast **current_node, t_stack **current, t_stack *stack,
-		t_ast **root)
+void	replace_cmd_with_redir(t_ast **result, t_ast *target_cmd,
+		t_ast *redir_node)
 {
-	t_ast	*pipe_node;
-	t_ast	*right_side;
-	t_stack	*next_token;
+	t_ast	*parent;
 
-	right_side = NULL;
-	next_token = (*current)->next;
-	if (next_token != stack && is_redirection(next_token->token))
-		right_side = handle_pipe_redir(current, stack, next_token);
+	if (*result == target_cmd)
+		*result = redir_node;
 	else
-		right_side = process_normal_pipe(next_token, stack, current);
-	if (!right_side)
-		return (NULL);
-	pipe_node = create_pipe_node(*current_node, right_side);
-	if (!pipe_node)
 	{
-		free_ast(right_side);
-		return (NULL);
+		parent = *result;
+		while (parent->left && parent->left != target_cmd)
+			parent = parent->left;
+		if (parent->left == target_cmd)
+			parent->left = redir_node;
 	}
-	if (*current_node == *root)
-		*root = pipe_node;
-	*current_node = pipe_node;
-	return (pipe_node);
 }
+
+

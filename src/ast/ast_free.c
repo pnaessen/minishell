@@ -22,7 +22,6 @@ void	free_ast_cmd(t_ast *node)
 	if (!node || !node->cmd)
 		return ;
 	free_ast_cmd_args(node);
-
 	if (node->cmd->path)
 		free(node->cmd->path);
 	free(node->cmd);
@@ -45,7 +44,6 @@ void	free_ast(t_ast *node)
 	}
 	free_ast_cmd(node);
 	free(node);
-	node = NULL;
 }
 
 void	free_ast_cmd_args(t_ast *node)
@@ -62,4 +60,16 @@ void	free_ast_cmd_args(t_ast *node)
 	}
 	free(node->cmd->args);
 	node->cmd->args = NULL;
+}
+
+int	create_and_link_redir(t_ast **temp_node, t_stack *temp_stack)
+{
+	t_ast	*new_redir;
+
+	new_redir = create_redir_node(temp_stack->token, temp_stack->next->cmd[0],
+			(*temp_node)->left);
+	if (!new_redir)
+		return (0);
+	(*temp_node)->left = new_redir;
+	return (1);
 }
