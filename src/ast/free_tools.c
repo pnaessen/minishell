@@ -9,8 +9,8 @@ t_ast	*free_cmd_node(t_ast *node, int i)
 		free(node->cmd->args);
 	}
 	free(node->cmd->args);
-	if (node->cmd->redirs)
-		free_redirections(node->cmd->redirs);
+	// if (node->cmd->redirs)
+	// 	free_redirections(node->cmd->redirs);
 	free(node->cmd);
 	free(node);
 	return (NULL);

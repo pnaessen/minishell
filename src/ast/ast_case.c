@@ -5,7 +5,7 @@ t_ast	*process_input_redir(t_ast *result, t_stack *redir)
 	t_ast	*target_cmd;
 	t_ast	*redir_node;
 
-	target_cmd = find_cmd_for_input_redir(result);
+	target_cmd = find_cmd_for_input(result);
 	if (!target_cmd || target_cmd->token != CMD)
 		return (result);
 	redir_node = create_redir_node(redir->token, redir->next->cmd[0],
@@ -66,7 +66,21 @@ void	update_current_position(t_stack **current, t_stack *cmd_token,
 		*current = (*current)->next;
 }
 
-t_ast	*process_right_side_of_pipe(t_stack *start, t_stack *end,
+t_stack	*find_valid_cmd_token(t_stack *start, t_stack *end)
+{
+	t_stack	*temp;
+
+	temp = start;
+	while (temp != end && temp != end->next)
+	{
+		if (temp->token == CMD && temp->cmd)
+			return (temp);
+		temp = temp->next;
+	}
+	return (NULL);
+}
+
+t_ast	*process_right_side(t_stack *start, t_stack *end,
 		t_stack **current)
 {
 	t_stack	*cmd_token;
@@ -75,8 +89,12 @@ t_ast	*process_right_side_of_pipe(t_stack *start, t_stack *end,
 	t_stack	**redir_tokens;
 	int		redir_count;
 
+	cmd_token = find_valid_cmd_token(start, end);
 	redir_tokens = collect_redirections(start, end, &cmd_token, &redir_count);
-	cmd_node = create_cmd_node(cmd_token);
+	if (!cmd_token || cmd_token->token != CMD || !cmd_token->cmd)
+		cmd_node = create_cmd_node(NULL);
+	else
+		cmd_node = create_cmd_node(cmd_token);
 	if (!cmd_node)
 	{
 		free(redir_tokens);

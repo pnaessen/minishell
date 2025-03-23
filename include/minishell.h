@@ -6,7 +6,7 @@
 /*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/23 17:47:50 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/03/23 20:54:06 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ typedef struct s_cmd
 {
 	char				**args;
 	char				*path;
-	t_redir				*redirs;
+	//t_redir				*redirs;
 	int					has_heredoc;
 }						t_cmd;
 
@@ -71,8 +71,8 @@ int						process_current_token(t_ast **current_node,
 t_ast					*build_tree(t_stack *stack);
 
 ///////////////////////AST_CASE.C//////////////////////////////
-t_ast					*process_right_side_of_pipe(t_stack *start,
-							t_stack *end, t_stack **current);
+t_ast					*process_right_side(t_stack *start, t_stack *end,
+							t_stack **current);
 void					update_current_position(t_stack **current,
 							t_stack *cmd_token, t_stack *start, t_stack *end);
 t_ast					*process_redirections_ast(t_ast *result,
@@ -88,19 +88,18 @@ t_ast					*init_first_node(t_stack *stack, t_stack *end,
 							t_ast **current_node);
 
 ///////////////////////AST_FREE.C//////////////////////////////
-void					free_redirections(t_redir *redirs);
+//void					free_redirections(t_redir *redirs);
 void					free_ast_cmd(t_ast *node);
 void					free_ast(t_ast *node);
 void					free_ast_cmd_args(t_ast *node);
-int						create_and_link_redir(t_ast **temp_node,
-							t_stack *temp_stack);
+
 
 ///////////////////////AST_PIPE.C//////////////////////////////
 t_ast					*create_cmd_node(t_stack *cmd_token);
 int						count_redirections(t_stack *start, t_stack *end);
 t_stack					**collect_redirections(t_stack *start, t_stack *end,
 							t_stack **cmd_token, int *redir_count);
-t_ast					*find_cmd_for_input_redir(t_ast *result);
+t_ast					*find_cmd_for_input(t_ast *result);
 void					replace_cmd_with_redir(t_ast **result,
 							t_ast *target_cmd, t_ast *redir_node);
 
@@ -120,8 +119,7 @@ t_ast					*create_ast_command(char **args);
 t_ast					*create_ast_operator(t_node_type token, t_ast *left,
 							t_ast *right);
 t_ast					*create_pipe_node(t_ast *left_cmd, t_ast *right_cmd);
-t_ast					*process_redir_cmd(t_stack *next_token,
-							t_stack *cmd_after_redir, t_stack **current);
+
 
 ///////////////////////AST_UTILS.C/////////////////////////////
 t_stack					*find_next_cmd(t_stack *current, t_stack *end);
@@ -308,6 +306,6 @@ void					cleanup_heredoc_files(t_ast *node);
 
 ///////////////////////main.c/////////////////////////////////
 void					print_ast(t_ast *node, int level);
-void					print_redirections(t_redir *redirs, int level);
+//void					print_redirections(t_redir *redirs, int level);
 
 #endif

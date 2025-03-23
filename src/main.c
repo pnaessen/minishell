@@ -91,41 +91,9 @@ void	print_ast(t_ast *node, int level)
 		printf("UNKNOWN");
 	}
 	printf("\n");
-	if (node->token == CMD && node->cmd && node->cmd->redirs)
-		print_redirections(node->cmd->redirs, level + 1);
 	if (node->left)
 		print_ast(node->left, level + 1);
 	if (node->right)
 		print_ast(node->right, level + 1);
 }
 
-void	print_redirections(t_redir *redirs, int level)
-{
-	t_redir	*current;
-	int		i;
-
-	current = redirs;
-	while (current)
-	{
-		for (i = 0; i < level; i++)
-			printf("  ");
-		switch (current->type)
-		{
-		case REDIR_IN:
-			printf("< %s\n", current->file);
-			break ;
-		case REDIR_OUT:
-			printf("> %s\n", current->file);
-			break ;
-		case REDIR_HEREDOC:
-			printf("<< %s\n", current->file);
-			break ;
-		case APPEND:
-			printf(">> %s\n", current->file);
-			break ;
-		default:
-			printf("Unknown redirection: %s\n", current->file);
-		}
-		current = current->next;
-	}
-}

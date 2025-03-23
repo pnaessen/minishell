@@ -33,7 +33,7 @@ void	init_cmd_true(t_ast **root)
 	}
 	(*root)->cmd->args[1] = NULL;
 	(*root)->cmd->path = NULL;
-	(*root)->cmd->redirs = NULL;
+	//(*root)->cmd->redirs = NULL;
 	(*root)->cmd->has_heredoc = 0;
 }
 

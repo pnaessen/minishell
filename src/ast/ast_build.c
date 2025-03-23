@@ -46,19 +46,20 @@ int	handle_regular_redirection(t_ast **current_node, t_stack **current,
 int	process_current_token(t_ast **current_node, t_stack **current,
 		t_stack *stack, t_ast **root)
 {
-	static int	after_pipe = 0;
+	static int	after_pipe = 0; // a del
 
 	if ((*current)->token == PIPE)
 	{
-		after_pipe = 1;
+		//after_pipe = 1;
 		if (!handle_pipe(current_node, current, stack, root))
 			return (0);
+		after_pipe = 0;
 	}
 	else if (is_redirection((*current)->token))
 	{
 		if (after_pipe)
 		{
-			if (!handle_after_pipe(current, stack))
+			if (!handle_after_pipe(current, stack)) // a del
 				after_pipe = 0;
 		}
 		else if (!handle_regular_redirection(current_node, current, stack,

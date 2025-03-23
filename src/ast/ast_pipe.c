@@ -6,7 +6,7 @@ t_ast	*create_cmd_node(t_stack *cmd_token)
 	t_ast	*cmd_node;
 	char	**default_cmd;
 
-	if (cmd_token)
+	if (cmd_token && cmd_token->token == CMD && cmd_token->cmd)
 		return (create_ast_command(cmd_token->cmd));
 	default_cmd = create_default_cmd();
 	if (!default_cmd)
@@ -67,7 +67,7 @@ t_stack	**collect_redirections(t_stack *start, t_stack *end,
 	return (redir_tokens);
 }
 
-t_ast	*find_cmd_for_input_redir(t_ast *result)
+t_ast	*find_cmd_for_input(t_ast *result)
 {
 	t_ast	*target_cmd;
 
@@ -93,5 +93,3 @@ void	replace_cmd_with_redir(t_ast **result, t_ast *target_cmd,
 			parent->left = redir_node;
 	}
 }
-
-
