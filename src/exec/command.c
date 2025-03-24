@@ -75,6 +75,7 @@ void	child_process(t_ast *cmd, t_env *env)
 	char	**args_copy;
 	char	*path_copy;
 
+	handle_signals_child();
 	env_array = env_to_tab(&env);
 	if (!env_array)
 		exit(1);

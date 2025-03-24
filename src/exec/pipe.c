@@ -37,14 +37,23 @@ void	handle_pipe_parent(t_ast *cmd, pid_t pid1, pid_t pid2, int *pipefd)
 	int	status;
 	int	status2;
 
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	close(pipefd[0]);
 	close(pipefd[1]);
 	waitpid(pid1, &status, 0);
 	waitpid(pid2, &status2, 0);
+	handle_signals();
 	if (WIFEXITED(status2))
 		cmd->error_code = WEXITSTATUS(status2);
 	else if (WIFSIGNALED(status2))
+	{
 		cmd->error_code = 128 + WTERMSIG(status2);
+		if (WTERMSIG(status2) == SIGINT)
+			ft_putchar_fd('\n', STDOUT_FILENO);
+		else if (WTERMSIG(status2) == SIGQUIT)
+			ft_putstr_fd("Quit (core dumped)\n", STDOUT_FILENO);
+	}
 }
 
 void	fork_fail(t_ast **cmd, int *pipefd)

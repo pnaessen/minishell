@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/24 14:30:27 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/24 20:48:37 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,6 +223,8 @@ char					**env_to_tab(t_env **env);
 ////////////////////////signal.c///////////////////////////////
 void					handle_sig(int sig);
 void					handle_signals(void);
+void					handle_signals_child(void);
+void					reset_signals(void);
 
 ////////////////////////utils_lst.c////////////////////////////
 void					handle_env(char **env, t_env **head);
@@ -317,6 +319,5 @@ char					*replace_without_dollar(char *args, int pos, int quote);
 char					*replace_with_value(char *args, int pos, char *value);
 char					*replace_without_dollar(char *args, int pos, int quote);
 char					*replace_with_empty(char *args, int pos);
-
 
 #endif

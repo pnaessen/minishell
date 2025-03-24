@@ -30,6 +30,7 @@ void	pipe_child_left(t_ast *cmd, t_env *env, int *pipefd)
 {
 	int	exit_code;
 
+	handle_signals_child();
 	setup_pipe_left(pipefd);
 	if (cmd->left->token == CMD)
 	{

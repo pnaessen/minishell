@@ -1,10 +1,26 @@
 #include "minishell.h"
 
+int	update_existing_var(t_env *temp, char *name_equal, char *value)
+{
+	char	*new_str;
+
+	if (ft_strncmp(temp->str, name_equal, ft_strlen(name_equal)) == 0)
+	{
+		new_str = ft_strjoin(name_equal, value);
+		if (!new_str)
+			return (0);
+		free(temp->str);
+		temp->str = new_str;
+		return (1);
+	}
+	return (0);
+}
+
 void	set_env_var(t_env **env, char *name, char *value)
 {
 	t_env	*temp;
-	char	*new_str;
 	char	*name_equal;
+	char	*new_str;
 
 	if (!name || !value || !env)
 		return ;
@@ -12,28 +28,15 @@ void	set_env_var(t_env **env, char *name, char *value)
 	if (!name_equal)
 		return ;
 	temp = *env;
-	while (temp)
-	{
-		if (ft_strncmp(temp->str, name_equal, ft_strlen(name_equal)) == 0)
-		{
-			new_str = ft_strjoin(name_equal, value);
-			if (!new_str)
-			{
-				free(name_equal);
-				return ;
-			}
-			free(name_equal);
-			free(temp->str);
-			temp->str = new_str;
-			return ;
-		}
+	while (temp && !update_existing_var(temp, name_equal, value))
 		temp = temp->next;
+	if (!temp)
+	{
+		new_str = ft_strjoin(name_equal, value);
+		if (new_str)
+			add_to_env(env, new_str);
 	}
-	new_str = ft_strjoin(name_equal, value);
 	free(name_equal);
-	if (!new_str)
-		return ;
-	add_to_env(env, new_str);
 }
 
 void	update_env_cd(t_ast *cmd, t_env **env, char *old_dir)

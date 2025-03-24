@@ -26,6 +26,7 @@ void	pipe_child_right(t_ast *cmd, t_env *env, int *pipefd)
 {
 	int	exit_code;
 
+	handle_signals_child();
 	setup_pipe_right(pipefd);
 	execute_ast(cmd->right, env);
 	exit_code = get_right_exit_code(cmd);

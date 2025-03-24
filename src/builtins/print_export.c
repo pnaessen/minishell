@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_export.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 14:47:14 by pn                #+#    #+#             */
-/*   Updated: 2025/03/21 17:46:03 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/24 21:00:22 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,36 +56,53 @@ void	print_env_var(t_env *var)
 		printf("declare -x %s\n", var->str);
 }
 
+int	count_env_vars(t_env *env_list)
+{
+	int	count;
+
+	count = 0;
+	while (env_list)
+	{
+		count++;
+		env_list = env_list->next;
+	}
+	return (count);
+}
+
+void	populate_env_array(t_env **sorted, t_env *env_list)
+{
+	int	i;
+
+	i = 0;
+	while (env_list)
+	{
+		sorted[i++] = env_list;
+		env_list = env_list->next;
+	}
+}
+
+void	print_env_array(t_env **sorted, int size)
+{
+	int	i;
+
+	i = 0;
+	while (i < size)
+		print_env_var(sorted[i++]);
+}
+
 void	print_sorted_env(t_env **env)
 {
 	t_env	**sorted;
 	int		env_size;
-	int		i;
-	t_env	*temp;
 
-	env_size = 0;
-	temp = *env;
-	while (temp)
-	{
-		env_size++;
-		temp = temp->next;
-	}
+	if (!env || !*env)
+		return ;
+	env_size = count_env_vars(*env);
 	sorted = (t_env **)malloc(sizeof(t_env *) * env_size);
 	if (!sorted)
 		return ;
-	i = 0;
-	temp = *env;
-	while (temp)
-	{
-		sorted[i++] = temp;
-		temp = temp->next;
-	}
+	populate_env_array(sorted, *env);
 	sort_env_array(sorted, env_size);
-	i = 0;
-	while (i < env_size)
-	{
-		print_env_var(sorted[i]);
-		i++;
-	}
+	print_env_array(sorted, env_size);
 	free(sorted);
 }

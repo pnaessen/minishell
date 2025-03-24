@@ -4,11 +4,20 @@ int	parent_process(pid_t pid, t_ast *cmd)
 {
 	int	status;
 
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	waitpid(pid, &status, 0);
+	handle_signals();
 	if (WIFEXITED(status))
 		cmd->error_code = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
+	{
 		cmd->error_code = 128 + WTERMSIG(status);
+		if (WTERMSIG(status) == SIGINT)
+			ft_putchar_fd('\n', STDOUT_FILENO);
+		else if (WTERMSIG(status) == SIGQUIT)
+			ft_putstr_fd("Quit (core dumped)\n", STDOUT_FILENO);
+	}
 	return (cmd->error_code);
 }
 
