@@ -91,6 +91,10 @@ void	child_process(t_ast *cmd, t_env *env)
 		free_env_array(env_array);
 		exit(1);
 	}
+	// for (int i = 3; i < 1024; i++)
+	// 	close(i);
+	if (cmd->root && cmd->root->garbage)
+		clean_fd_garbage(&cmd->root->garbage);
 	free_ast(cmd->root);
 	free_env_list(env);
 	execute_command(path_copy, args_copy, env_array);

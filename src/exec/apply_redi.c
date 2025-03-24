@@ -25,6 +25,11 @@ int	save_std_fds(int *saved_stdin, int *saved_stdout, t_ast *node)
 			close(*saved_stdout);
 		return (1);
 	}
+	if (node->root)
+	{
+		add_fd_to_garbage(&node->root->garbage, *saved_stdin);
+		add_fd_to_garbage(&node->root->garbage, *saved_stdout);
+	}
 	return (0);
 }
 
@@ -32,6 +37,6 @@ void	restore_std_fds(int saved_stdin, int saved_stdout)
 {
 	dup2(saved_stdin, STDIN_FILENO);
 	dup2(saved_stdout, STDOUT_FILENO);
-	close(saved_stdin);
-	close(saved_stdout);
+	// close(saved_stdin);
+	// close(saved_stdout);
 }
