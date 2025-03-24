@@ -71,5 +71,6 @@ t_stack	*parsing_input(char *input, t_env **env)
 	stack = tokenise_args(args_cleaned);
 	if (!stack)
 		return (NULL);
+	free(args_cleaned);
 	return (stack);
 }

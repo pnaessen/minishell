@@ -6,7 +6,7 @@
 /*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 12:23:40 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/21 17:46:31 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/24 15:18:36 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,6 @@ void	handle_numeric_exit(t_ast *cmd, t_env *env, char *arg)
 void	ft_exit(t_ast *cmd, t_env *env)
 {
 	printf("exit\n");
-	if (cmd->cmd->args[1] && cmd->cmd->args[2])
-	{
-		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
-		cmd->error_code = 1;
-		return ;
-	}
 	if (cmd->cmd->args[1])
 	{
 		if (!ft_is_valid_number(cmd->cmd->args[1]))
@@ -76,6 +70,12 @@ void	ft_exit(t_ast *cmd, t_env *env)
 			exit(2);
 		}
 		handle_numeric_exit(cmd, env, cmd->cmd->args[1]);
+	}
+	if (cmd->cmd->args[1] && cmd->cmd->args[2])
+	{
+		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
+		cmd->error_code = 1;
+		return ;
 	}
 	else
 	{

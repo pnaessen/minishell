@@ -30,6 +30,7 @@ int	apply_output_redirection(t_ast *redir)
 		perror("minishell: open");
 		return (1);
 	}
+	//add_fd_to_garbage(&redir->garbage, fd);
 	if (dup2(fd, STDOUT_FILENO) == -1)
 	{
 		perror("minishell: dup2\n");
