@@ -10,6 +10,8 @@ char	*handle_variable_replacement(char *args, int i, t_data *data,
 
 	var_name = extract_variable_name(args, i + 1);
 	value = get_env_value(var_name, env);
+	if (args[i + 1] == '?')
+		value = ft_itoa((*env)->error_code);
 	if (!value)
 	{
 		if (data->quote_type == '"')
