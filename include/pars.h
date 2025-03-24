@@ -96,4 +96,16 @@ int					is_redirection_operator(const char *s1, int index);
 int					is_end_of_word(const char *s1, int index, t_data *data);
 int					is_operator_sequence(const char *s1, int index,
 						t_data *data);
+// replace env
+char				*replace_without_dollar(char *args, int pos, int quote);
+char				*replace_with_value(char *args, int pos, char *value);
+char				*replace_without_dollar(char *args, int pos, int quote);
+char				*replace_with_empty(char *args, int pos);
+
+// env utils
+int					is_valid_var_char(char args);
+int					size_of_var(char *args, int i);
+int					size_of_args(char *args);
+char				*extract_variable_name(char *args, int i);
+
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vicperri <vicperri@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/24 11:20:43 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/24 11:32:29 by vicperri         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -309,5 +309,11 @@ void					print_ast(t_ast *node, int level);
 // vivi
 char					*find_and_replace_var(char *args, t_env **env);
 t_stack					*parsing_input(char *input, t_env **env);
+char					*get_env_value(char *var_name, t_env **env);
+// replace env
+char					*replace_without_dollar(char *args, int pos, int quote);
+char					*replace_with_value(char *args, int pos, char *value);
+char					*replace_without_dollar(char *args, int pos, int quote);
+char					*replace_with_empty(char *args, int pos);
 
 #endif
