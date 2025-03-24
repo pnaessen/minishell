@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vicperri <vicperri@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/24 11:32:29 by vicperri         ###   ########lyon.fr   */
+/*   Updated: 2025/03/24 14:30:27 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,14 @@ typedef struct s_ast
 	struct s_ast		*head;
 	int					error_code;
 	struct s_ast		*root;
+	struct s_fd_garbage	*garbage;
 }						t_ast;
 
 typedef struct s_env
 {
 	char				*str;
 	struct s_env		*next;
+	int					error_code;
 }						t_env;
 
 typedef struct s_cmd
@@ -315,5 +317,6 @@ char					*replace_without_dollar(char *args, int pos, int quote);
 char					*replace_with_value(char *args, int pos, char *value);
 char					*replace_without_dollar(char *args, int pos, int quote);
 char					*replace_with_empty(char *args, int pos);
+
 
 #endif

@@ -57,6 +57,7 @@ void	execute_ast(t_ast *node, t_env *env)
 		exec_with_redirects(node, env);
 	if (node->head != node && node->head)
 		node->head->error_code = node->error_code;
+	env->error_code = node->error_code;
 	if (node->head == node)
 	{
 		heredocs_processed = 0;

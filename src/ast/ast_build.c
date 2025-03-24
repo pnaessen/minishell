@@ -46,11 +46,10 @@ int	handle_regular_redirection(t_ast **current_node, t_stack **current,
 int	process_current_token(t_ast **current_node, t_stack **current,
 		t_stack *stack, t_ast **root)
 {
-	static int	after_pipe = 0; // a del
-
+	static int after_pipe = 0; // a del
 	if ((*current)->token == PIPE)
 	{
-		//after_pipe = 1;
+		// after_pipe = 1;
 		if (!handle_pipe(current_node, current, stack, root))
 			return (0);
 		after_pipe = 0;
@@ -96,5 +95,6 @@ t_ast	*build_tree(t_stack *stack)
 	}
 	if (root)
 		set_root_pointers(root, root);
+	root->garbage = NULL;
 	return (root);
 }
