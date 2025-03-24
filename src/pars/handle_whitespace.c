@@ -22,7 +22,8 @@ int	len_without_whitespaces(char *args)
 	while (args[i])
 	{
 		check_quotes(args[i], &data);
-		if ((i - 1 > 0) && (add_whitespace(args[i], args[i - 1], data.quotes) == SUCCESS))
+		if ((i - 1 > 0) && (add_whitespace(args[i], args[i - 1],
+					data.quotes) == SUCCESS))
 			len++;
 		else if (ft_iswhitespace(args[i]) == ERROR || data.quotes == SUCCESS)
 			len++;
@@ -47,7 +48,8 @@ char	*rm_whitespaces(char *args, int size)
 	while (args[i])
 	{
 		check_quotes(args[i], &data);
-		if ((i - 1 > 0) && (add_whitespace(args[i], args[i - 1], data.quotes) == SUCCESS))
+		if ((i - 1 > 0) && (add_whitespace(args[i], args[i - 1],
+					data.quotes) == SUCCESS))
 			str[j++] = ' ';
 		else if (ft_iswhitespace(args[i]) == ERROR || data.quotes == SUCCESS)
 			str[j++] = args[i];
@@ -65,7 +67,11 @@ char	*handle_whitespaces(char *args)
 
 	size = len_without_whitespaces(args) + 1;
 	args_cleaned = rm_whitespaces(args, size);
+	if (!args_cleaned)
+		return (NULL);
 	args_trim = ft_strtrim(args_cleaned, " ");
 	free(args_cleaned);
+	if (!args_trim)
+		return (NULL);
 	return (args_trim);
 }

@@ -60,7 +60,8 @@ char	*handling_quotes(char *args, int size)
 	data.quotes = 0;
 	data.quote_type = '\0';
 	data.quote_num = 0;
-	str = malloc(size * sizeof(char));
+	str = NULL;
+//	str = malloc(size * sizeof(char));
 	if (!str)
 		return (NULL);
 	while (args[i])

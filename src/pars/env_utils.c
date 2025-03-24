@@ -54,6 +54,8 @@ char	*extract_variable_name(char *args, int i)
 	j = 0;
 	len = size_of_var(args, i);
 	var_name = malloc((len + 1) * sizeof(char));
+	if (!var_name)
+		return (NULL);
 	while (args[i])
 	{
 		var_name[j] = args[i];
@@ -73,6 +75,8 @@ char	*get_env_value(char *var_name, t_env **env)
 	int		len;
 	int		len_str;
 
+	if (!var_name)
+		return (NULL);
 	temp = *env;
 	len = ft_strlen(var_name);
 	len_str = ft_strlen(temp->str);
@@ -87,5 +91,6 @@ char	*get_env_value(char *var_name, t_env **env)
 		if (temp == NULL)
 			break ;
 	}
+	free(var_name);
 	return (NULL);
 }

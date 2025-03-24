@@ -24,7 +24,6 @@ char	*handle_variable_replacement(char *args, int i, t_data *data,
 		else
 			new_args = replace_with_value(args, i, value);
 	}
-	free(var_name);
 	free(value);
 	return (new_args);
 }
@@ -54,7 +53,7 @@ char	*find_and_replace_var(char *args, t_env **env)
 			if (is_valid_var_char(args[i + 1]) == SUCCESS)
 			{
 				if (data.quote_type != 39)
-					new_args = handle_variable_replacement(args, i, &data, env);
+					new_args = handle_variable_replacement(args, i, &data, env); // ici !!!
 			}
 			else
 				new_args = handle_invalid_variable(args, i);

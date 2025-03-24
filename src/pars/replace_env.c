@@ -12,6 +12,8 @@ char	*replace_with_empty(char *args, int pos)
 	j = 0;
 	len_args = size_of_args(args);
 	new_args = malloc((len_args + 4) * sizeof(char));
+	if (!new_args)
+		return (NULL);
 	while (args[i])
 	{
 		if (i == pos)
@@ -39,6 +41,8 @@ char	*replace_with_value(char *args, int pos, char *value)
 	len_value = ft_strlen(value);
 	len_args = size_of_args(args);
 	new_args = malloc((len_args + len_value + 3) * sizeof(char));
+	if (!new_args)
+		return (NULL);
 	while (args[data.i])
 	{
 		if (data.i == pos)
@@ -70,6 +74,8 @@ char	*replace_without_dollar(char *args, int pos, int quote)
 	else
 		len = size_of_args(args) - 2;
 	new_args = malloc((len + 1) * sizeof(char));
+	if (!new_args)
+		return (NULL);
 	while (args[i])
 	{
 		if (i == pos)
