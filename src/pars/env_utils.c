@@ -1,11 +1,14 @@
 #include "minishell.h"
 #include "pars.h"
 
-int	is_valid_var_char(char args)
+int	is_valid_var_char(char *args, int i)
 {
-	if (args == '_')
+	if (args[i - 2] == '<' && args[i - 3] == '<')
+		return (ERROR);
+	if (args[i + 1] == '_')
 		return (SUCCESS);
-	if ((args >= 'a' && args <= 'z') || (args >= 'A' && args <= 'Z'))
+	if ((args[i + 1] >= 'a' && args[i + 1] <= 'z') || (args[i + 1] >= 'A'
+			&& args[i + 1] <= 'Z'))
 		return (SUCCESS);
 	return (ERROR);
 }

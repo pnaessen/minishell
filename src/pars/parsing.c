@@ -36,6 +36,7 @@ t_stack	*parsing_input(char *input, t_env **env)
 	char	*args_cleaned;
 	char	*env_handled;
 	t_stack	*stack;
+	int		args_len;
 
 	if (!input)
 		return (NULL);
@@ -45,6 +46,9 @@ t_stack	*parsing_input(char *input, t_env **env)
 	printf("[DEBUG] args = %s\n", args);
 	if (ft_strchr(args, '$'))
 	{
+		args_len = ft_strlen(args);
+		if (ft_strnstr(args, "$?", args_len))
+			env_handled = find_and_replace_var(args, env);
 		env_handled = find_and_replace_var(args, env);
 		printf("[DEBUG] env = %s\n", env_handled);
 	}

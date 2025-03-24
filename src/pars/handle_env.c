@@ -50,10 +50,10 @@ char	*find_and_replace_var(char *args, t_env **env)
 		handle_quotes(args[i], &data);
 		if (args[i] == '$')
 		{
-			if (is_valid_var_char(args[i + 1]) == SUCCESS)
+			if (is_valid_var_char(args, i) == SUCCESS)
 			{
 				if (data.quote_type != 39)
-					new_args = handle_variable_replacement(args, i, &data, env); // ici !!!
+					new_args = handle_variable_replacement(args, i, &data, env);
 			}
 			else
 				new_args = handle_invalid_variable(args, i);

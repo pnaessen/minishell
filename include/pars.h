@@ -103,7 +103,7 @@ char				*replace_without_dollar(char *args, int pos, int quote);
 char				*replace_with_empty(char *args, int pos);
 
 // env utils
-int					is_valid_var_char(char args);
+int					is_valid_var_char(char *args, int i);
 int					size_of_var(char *args, int i);
 int					size_of_args(char *args);
 char				*extract_variable_name(char *args, int i);

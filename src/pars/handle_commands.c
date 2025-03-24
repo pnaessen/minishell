@@ -4,7 +4,7 @@ int	handle_operators(char *args, int i)
 {
 	if (ft_is_operator(args[i]) == SUCCESS)
 	{
-		if (ft_isalnum(args[i - 1]) == SUCCESS)
+		if (ft_isalnum(args[i - 1]) == SUCCESS || args[i] != args[i - 1])
 			return (SUCCESS);
 	}
 	else if (ft_isalnum(args[i]) == SUCCESS)
