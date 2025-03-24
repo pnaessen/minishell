@@ -32,7 +32,7 @@ int	main(int argc, char **argv, char **env)
 		if (*input)
 		{
 			add_history(input);
-			cmd = parse_and_build_ast(input);
+			cmd = parse_and_build_ast(input, &head);
 			if (cmd)
 			{
 				print_ast(cmd, 0);

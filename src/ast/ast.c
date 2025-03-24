@@ -1,13 +1,13 @@
 #include "minishell.h"
 
-t_ast	*parse_and_build_ast(char *input)
+t_ast	*parse_and_build_ast(char *input, t_env **env)
 {
 	t_stack	*parsed_stack;
 	t_ast	*ast_result;
 
 	if (!input || !*input)
 		return (NULL);
-	parsed_stack = parsing_input(input);
+	parsed_stack = parsing_input(input, env);
 	if (!parsed_stack)
 		return (NULL);
 	ast_result = build_tree(parsed_stack);

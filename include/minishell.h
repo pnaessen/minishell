@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vicperri <vicperri@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/24 11:12:10 by vicperri         ###   ########lyon.fr   */
+/*   Updated: 2025/03/24 11:20:43 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ t_ast					*init_cmd_node(t_ast *node, char **args,
 char					**create_default_cmd(void);
 
 ///////////////////////AST.C//////////////////////////////////
-t_ast					*parse_and_build_ast(char *input);
+t_ast					*parse_and_build_ast(char *input, t_env **env);
 void					handle_redirection(t_ast **current_node,
 							t_stack **current, t_ast **root);
 void					init_redir_node(t_ast *redir_node, char *filename,
