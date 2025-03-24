@@ -25,7 +25,6 @@ typedef struct s_data
 typedef enum e_node_type
 {
 	CMD,
-	FILES,
 	PIPE,
 	AND,
 	OR,
@@ -43,12 +42,12 @@ typedef struct s_stack
 	struct s_stack	*prev;
 }					t_stack;
 
-typedef struct s_redir
-{
-	t_node_type		type;
-	char			*file;
-	struct s_redir	*next;
-}					t_redir;
+// typedef struct s_redir
+// {
+// 	t_node_type		type;
+// 	char			*file;
+// 	struct s_redir	*next;
+// }					t_redir;
 
 // parsing
 t_stack				*parsing_input(char *input);

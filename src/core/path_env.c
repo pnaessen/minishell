@@ -69,7 +69,7 @@ char	*search_command_in_path(char *cmd, char **path_dirs)
 			ft_free_ta(path_dirs);
 			return (NULL);
 		}
-		if (access(full_path, X_OK) == 0)
+		if (access(full_path, F_OK | X_OK) == 0)
 		{
 			ft_free_ta(path_dirs);
 			return (full_path);

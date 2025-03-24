@@ -31,7 +31,7 @@ int	write_to_temp_file(char *delimiter, char *filename)
 	while (1)
 	{
 		line = readline("> ");
-		if (!line || ft_strrcmp(line, delimiter) == 0)
+		if (!line || strcmp(line, delimiter) == 0)
 		{
 			free(line);
 			break ;
@@ -70,26 +70,41 @@ char	*ft_strjoin_free(char *s1, char *s2)
 	return (str);
 }
 
-void	cleanup_heredoc_files(t_ast *node)
+int	setup_heredoc_file(t_ast *node, char *delimiter)
 {
-	if (!node)
-		return ;
-	if (node->token == REDIR_HEREDOC && node->cmd && node->cmd->args)
+	char	*temp_filename;
+	int		fd;
+
+	temp_filename = create_temp_filename();
+	if (!temp_filename)
 	{
-		if (node->cmd->args[0])
-			unlink(node->cmd->args[0]);
+		free(delimiter);
+		return (0);
 	}
-	if (node->left)
-		cleanup_heredoc_files(node->left);
-	if (node->right)
-		cleanup_heredoc_files(node->right);
+	if (write_to_temp_file(delimiter, temp_filename) == -1)
+	{
+		free(delimiter);
+		free(temp_filename);
+		return (0);
+	}
+	fd = open(temp_filename, O_RDONLY);
+	if (fd == -1)
+	{
+		free(delimiter);
+		free(temp_filename);
+		return (0);
+	}
+	close(fd);
+	free(delimiter);
+	free(node->cmd->args[0]);
+	node->cmd->args[0] = temp_filename;
+	node->cmd->has_heredoc = 1;
+	return (1);
 }
 
 int	process_all_heredocs(t_ast *node)
 {
-	char	*temp_filename;
 	char	*delimiter;
-	int		fd;
 
 	if (!node)
 		return (1);
@@ -98,30 +113,8 @@ int	process_all_heredocs(t_ast *node)
 		delimiter = ft_strdup(node->cmd->args[0]);
 		if (!delimiter)
 			return (0);
-		temp_filename = create_temp_filename();
-		if (!temp_filename)
-		{
-			free(delimiter);
+		if (!setup_heredoc_file(node, delimiter))
 			return (0);
-		}
-		if (write_to_temp_file(delimiter, temp_filename) == -1)
-		{
-			free(delimiter);
-			free(temp_filename);
-			return (0);
-		}
-		fd = open(temp_filename, O_RDONLY);
-		if (fd == -1)
-		{
-			free(delimiter);
-			free(temp_filename);
-			return (0);
-		}
-		close(fd);
-		free(delimiter);
-		free(node->cmd->args[0]);
-		node->cmd->args[0] = temp_filename;
-		node->cmd->has_heredoc = 1;
 	}
 	if (node->left && !process_all_heredocs(node->left))
 		return (0);

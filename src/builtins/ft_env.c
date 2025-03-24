@@ -5,7 +5,6 @@ void	print_env(t_env **head, t_ast *cmd)
 {
 	t_env	*current;
 
-	// check si cmd est NULL
 	if (*head == NULL)
 	{
 		printf("env: environment not set\n");
@@ -19,22 +18,5 @@ void	print_env(t_env **head, t_ast *cmd)
 			printf("%s\n", current->str);
 		current = current->next;
 		cmd->error_code = 0;
-	}
-}
-
-void	print_env_debug(t_env **head)
-{
-	t_env	*current;
-
-	if (*head == NULL)
-	{
-		printf("env: environment not set\n");
-		return ;
-	}
-	current = *head;
-	while (current != NULL)
-	{
-		printf("%s\n", current->str);
-		current = current->next;
 	}
 }

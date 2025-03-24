@@ -6,7 +6,7 @@
 /*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 14:47:14 by pn                #+#    #+#             */
-/*   Updated: 2025/03/10 10:14:39 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/21 17:46:03 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,17 +62,17 @@ void	print_sorted_env(t_env **env)
 	int		env_size;
 	int		i;
 	t_env	*temp;
-	
+
 	env_size = 0;
 	temp = *env;
-	while(temp)
+	while (temp)
 	{
 		env_size++;
 		temp = temp->next;
 	}
 	sorted = (t_env **)malloc(sizeof(t_env *) * env_size);
 	if (!sorted)
-		return;
+		return ;
 	i = 0;
 	temp = *env;
 	while (temp)

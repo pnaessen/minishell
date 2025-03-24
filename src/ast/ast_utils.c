@@ -9,16 +9,6 @@ t_stack	*find_next_cmd(t_stack *current, t_stack *end)
 	return (current);
 }
 
-int	count_args(char **args)
-{
-	int	args_count;
-
-	args_count = 0;
-	while (args[args_count])
-		args_count++;
-	return (args_count);
-}
-
 t_ast	*init_cmd_node_alloc(t_ast *node, int args_count)
 {
 	node->cmd = malloc(sizeof(t_cmd));
@@ -34,7 +24,7 @@ t_ast	*init_cmd_node_alloc(t_ast *node, int args_count)
 		free(node);
 		return (NULL);
 	}
-	node->cmd->redirs = NULL;
+	//node->cmd->redirs = NULL;
 	return (node);
 }
 
@@ -45,6 +35,7 @@ t_ast	*init_cmd_struct(t_ast *node)
 	node->right = NULL;
 	node->head = node;
 	node->error_code = 0;
+	node->root = NULL;
 	return (node);
 }
 
@@ -67,4 +58,21 @@ t_ast	*init_cmd_node(t_ast *node, char **args, int args_count)
 	node->cmd->path = NULL;
 	node->cmd->has_heredoc = 0;
 	return (node);
+}
+
+char	**create_default_cmd(void)
+{
+	char	**default_cmd;
+
+	default_cmd = malloc(sizeof(char *) * 2);
+	if (!default_cmd)
+		return (NULL);
+	default_cmd[0] = ft_strdup("true");
+	if (!default_cmd[0])
+	{
+		free(default_cmd);
+		return (NULL);
+	}
+	default_cmd[1] = NULL;
+	return (default_cmd);
 }

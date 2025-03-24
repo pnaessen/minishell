@@ -9,8 +9,8 @@ t_ast	*free_cmd_node(t_ast *node, int i)
 		free(node->cmd->args);
 	}
 	free(node->cmd->args);
-	if (node->cmd->redirs)
-		free_redirections(node->cmd->redirs);
+	// if (node->cmd->redirs)
+	// 	free_redirections(node->cmd->redirs);
 	free(node->cmd);
 	free(node);
 	return (NULL);
@@ -45,4 +45,20 @@ void	free_stack(t_stack *stack)
 		free_stack_node(current);
 		current = next;
 	}
+}
+
+void	free_args_array(char **args)
+{
+	int	i;
+
+	i = 0;
+	while (args[i])
+		free(args[i++]);
+	free(args);
+}
+
+int	is_redirection(t_node_type token)
+{
+	return (token == REDIR_IN || token == REDIR_OUT || token == APPEND
+		|| token == REDIR_HEREDOC);
 }

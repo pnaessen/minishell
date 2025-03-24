@@ -17,11 +17,33 @@ int	valid_var(char *str)
 	return (1);
 }
 
-void	ft_unset(t_ast *input, t_env **env)
+void	remove_env_var(t_env **env, char *var_name)
 {
-	int		i;
 	t_env	*current;
 	t_env	*prev;
+
+	prev = NULL;
+	current = *env;
+	while (current)
+	{
+		if (ft_strncmp(current->str, var_name, ft_strlen(var_name)) == 0)
+		{
+			if (prev)
+				prev->next = current->next;
+			else
+				*env = current->next;
+			free(current->str);
+			free(current);
+			break ;
+		}
+		prev = current;
+		current = current->next;
+	}
+}
+
+void	ft_unset(t_ast *input, t_env **env)
+{
+	int	i;
 
 	i = 1;
 	while (input->cmd->args[i])
@@ -34,24 +56,7 @@ void	ft_unset(t_ast *input, t_env **env)
 			input->error_code = 1;
 			return ;
 		}
-		prev = NULL;
-		current = *env;
-		while (current)
-		{
-			if (ft_strncmp(current->str, input->cmd->args[i],
-					ft_strlen(input->cmd->args[i])) == 0)
-			{
-				if (prev)
-					prev->next = current->next;
-				else
-					*env = current->next;
-				free(current->str);
-				free(current);
-				break ;
-			}
-			prev = current;
-			current = current->next;
-		}
+		remove_env_var(env, input->cmd->args[i]);
 		i++;
 	}
 	input->error_code = 0;
