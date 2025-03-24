@@ -1,3 +1,4 @@
+#include "minishell.h"
 #include "pars.h"
 
 t_stack	*tokenise_args(char *args_cleaned)
@@ -11,7 +12,6 @@ t_stack	*tokenise_args(char *args_cleaned)
 	i = 0;
 	if (!token)
 		return (NULL);
-	i = 0;
 	while (token[i])
 	{
 		if (fill_the_list(tokenisation(token[i]), &stack) == ERROR)
@@ -21,18 +21,20 @@ t_stack	*tokenise_args(char *args_cleaned)
 		}
 		i++;
 	}
-	identify_token_type(&stack);
+	if (identify_token_type(&stack) == ERROR)
+		return (NULL);
 	if (quoting(&stack) == ERROR)
 		return (NULL);
-	//print_stack(&stack);
+	print_stack(&stack);
 	ft_free_all(token);
 	return (stack);
 }
 
-t_stack	*parsing_input(char *input)
+t_stack	*parsing_input(char *input, t_env **env)
 {
 	char	*args;
 	char	*args_cleaned;
+	char	*env_handled;
 	t_stack	*stack;
 
 	if (!input)
@@ -40,50 +42,30 @@ t_stack	*parsing_input(char *input)
 	args = handle_whitespaces(input);
 	if (!args)
 		return (NULL);
-	args_cleaned = handle_commands(args);
+	printf("[DEBUG] args = %s\n", args);
+	if (ft_strchr(args, '$'))
+	{
+		env_handled = find_and_replace_var(args, env);
+		printf("[DEBUG] env = %s\n", env_handled);
+	}
+	else
+		env_handled = ft_strdup(args);
+	printf("[DEBUG] env = %s\n", env_handled);
 	free(args);
+	if (!env_handled)
+		return (NULL);
+	args_cleaned = handle_commands(env_handled);
+	printf("[DEBUG] args cleaned = %s\n", args_cleaned);
+	free(env_handled);
+	if (!args_cleaned)
+		return (NULL);
 	if (check_num_of_quotes(args_cleaned) == ERROR)
 	{
 		free(args_cleaned);
 		return (NULL);
 	}
-	if (!args_cleaned)
-		return (NULL);
 	stack = tokenise_args(args_cleaned);
 	if (!stack)
 		return (NULL);
-	free(args_cleaned);
 	return (stack);
 }
-
-// int	main(int argc, char **env)
-// {
-// 	char	*input;
-
-// 	(void)env;
-// 	if (argc != 1)
-// 	{
-// 		printf("Usage : minishell doesn't take argument\n");
-// 		return (0);
-// 	}
-// 	while (1)
-// 	{
-// 		input = readline("minishell$ ");
-// 		if (!input)
-// 		{
-// 			printf("exit\n");
-// 			exit(0);
-// 		}
-// 		if (*input)
-// 		{
-// 			add_history(input);
-// 			if (!parsing_input(input))
-// 			{
-// 				free(input);
-// 				return (ERROR);
-// 			}
-// 		}
-// 		free(input);
-// 	}
-// 	return (0);
-// }

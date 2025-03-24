@@ -59,15 +59,19 @@ AST_SRC := $(addprefix $(AST_DIR), \
 )
 
 PARS_SRC := $(addprefix $(PARS_DIR), \
-	parsing.c \
 	handle_commands.c \
 	handle_whitespace.c \
 	identify_tokens.c \
 	list_utils.c \
 	parsing_utils.c \
+	parsing.c \
 	pre_tokenisation.c \
+	pre_token_utils.c \
 	tokenisation.c \
 	quoting.c \
+	handle_env.c \
+	env_utils.c \
+	replace_env.c \
 )
 
 BUILTINS_SRC := $(addprefix $(BUILTINS_DIR), \

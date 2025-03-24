@@ -40,6 +40,8 @@ int	fill_the_list(char **cmd, t_stack **stack)
 {
 	t_stack	*new_node;
 
+	if (!cmd)
+		return (ERROR);
 	new_node = node_init(cmd);
 	if (!new_node)
 		return (ERROR);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
+/*   By: vicperri <vicperri@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/23 20:54:06 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/03/24 11:12:10 by vicperri         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ typedef struct s_cmd
 {
 	char				**args;
 	char				*path;
-	//t_redir				*redirs;
+	// t_redir				*redirs;
 	int					has_heredoc;
 }						t_cmd;
 
@@ -88,11 +88,10 @@ t_ast					*init_first_node(t_stack *stack, t_stack *end,
 							t_ast **current_node);
 
 ///////////////////////AST_FREE.C//////////////////////////////
-//void					free_redirections(t_redir *redirs);
+// void					free_redirections(t_redir *redirs);
 void					free_ast_cmd(t_ast *node);
 void					free_ast(t_ast *node);
 void					free_ast_cmd_args(t_ast *node);
-
 
 ///////////////////////AST_PIPE.C//////////////////////////////
 t_ast					*create_cmd_node(t_stack *cmd_token);
@@ -119,7 +118,6 @@ t_ast					*create_ast_command(char **args);
 t_ast					*create_ast_operator(t_node_type token, t_ast *left,
 							t_ast *right);
 t_ast					*create_pipe_node(t_ast *left_cmd, t_ast *right_cmd);
-
 
 ///////////////////////AST_UTILS.C/////////////////////////////
 t_stack					*find_next_cmd(t_stack *current, t_stack *end);
@@ -306,6 +304,10 @@ void					cleanup_heredoc_files(t_ast *node);
 
 ///////////////////////main.c/////////////////////////////////
 void					print_ast(t_ast *node, int level);
-//void					print_redirections(t_redir *redirs, int level);
+// void					print_redirections(t_redir *redirs, int level);
+
+// vivi
+char					*find_and_replace_var(char *args, t_env **env);
+t_stack					*parsing_input(char *input, t_env **env);
 
 #endif

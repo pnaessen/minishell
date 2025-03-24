@@ -29,6 +29,7 @@ int	final_len(char *args)
 	len = 0;
 	data.quotes = ERROR;
 	data.quote_type = '\0';
+	data.quote_num = 0;
 	while (args[i])
 	{
 		handle_quotes(args[i], &data);
@@ -58,7 +59,9 @@ char	*handling_quotes(char *args, int size)
 	j = 0;
 	data.quotes = 0;
 	data.quote_type = '\0';
-	str = malloc(size * sizeof(char));
+	data.quote_num = 0;
+	str = NULL;
+//	str = malloc(size * sizeof(char));
 	if (!str)
 		return (NULL);
 	while (args[i])

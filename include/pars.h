@@ -17,6 +17,8 @@
 
 typedef struct s_data
 {
+	int				i;
+	int				count;
 	int				quotes;
 	int				quote_num;
 	char			quote_type;
@@ -25,13 +27,13 @@ typedef struct s_data
 typedef enum e_node_type
 {
 	CMD,
-	PIPE,
-	AND,
-	OR,
-	REDIR_IN,
-	REDIR_OUT,
-	REDIR_HEREDOC,
-	APPEND
+	PIPE,          // |
+	AND,           // &&
+	OR,            // ||
+	REDIR_IN,      // <
+	REDIR_OUT,     // >
+	REDIR_HEREDOC, // <<
+	APPEND         // >>
 }					t_node_type;
 
 typedef struct s_stack
@@ -42,15 +44,7 @@ typedef struct s_stack
 	struct s_stack	*prev;
 }					t_stack;
 
-// typedef struct s_redir
-// {
-// 	t_node_type		type;
-// 	char			*file;
-// 	struct s_redir	*next;
-// }					t_redir;
-
 // parsing
-t_stack				*parsing_input(char *input);
 t_stack				*tokenise_args(char *args_cleaned);
 
 /// handle commands
@@ -61,8 +55,8 @@ int					handle_operators(char *args, int i);
 
 /// handle whitespace
 char				*handle_whitespaces(char *args);
-char				*rm_whitespaces(char *args, t_data *data, int size);
-int					len_without_whitespaces(char *args, t_data *data);
+char				*rm_whitespaces(char *args, int size);
+int					len_without_whitespaces(char *args);
 int					add_whitespace(char b, char a, int quotes);
 
 // quoting
@@ -79,6 +73,7 @@ char				**ft_free_all(char **args);
 int					ft_iswhitespace(int c);
 int					ft_is_operator(int c);
 int					ft_is_quotes(char c);
+void				check_quotes(char argv, t_data *data);
 void				handle_quotes(char argv, t_data *data);
 
 // list_utils
@@ -95,4 +90,10 @@ void				define_type(t_stack *temp, char *cmd, int quotes);
 char				**pre_tokenisation(char const *s);
 char				**tokenisation(char const *s);
 
+// pre_token_utils
+int					handle_multi_operators(const char *s1, int i);
+int					is_redirection_operator(const char *s1, int index);
+int					is_end_of_word(const char *s1, int index, t_data *data);
+int					is_operator_sequence(const char *s1, int index,
+						t_data *data);
 #endif

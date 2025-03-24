@@ -24,7 +24,7 @@ int	len_to_sep_commands(char *args)
 	len = 0;
 	while (args[i])
 	{
-		if (handle_operators(args, i) == SUCCESS)
+		if ((i > 0) && (handle_operators(args, i) == SUCCESS))
 			len++;
 		i++;
 		len++;
@@ -40,12 +40,13 @@ char	*separate_commands(char *args, int size)
 
 	i = 0;
 	j = 0;
+	str = NULL;
 	str = malloc(size * sizeof(char));
 	if (!str)
 		return (NULL);
 	while (args[i])
 	{
-		if (handle_operators(args, i) == SUCCESS)
+		if ((i > 0) && (handle_operators(args, i) == SUCCESS))
 		{
 			str[j] = ' ';
 			j++;
