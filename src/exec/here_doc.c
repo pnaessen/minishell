@@ -31,7 +31,7 @@ int	write_to_temp_file(char *delimiter, char *filename)
 	while (1)
 	{
 		line = readline("> ");
-		if (!line || strcmp(line, delimiter) == 0)
+		if (!line || ft_strcmp(line, delimiter) == 0)
 		{
 			free(line);
 			break ;

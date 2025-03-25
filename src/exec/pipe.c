@@ -24,7 +24,7 @@ void	execute_pipe(t_ast *cmd, t_env *env)
 	if (pid2 == -1)
 	{
 		fork_fail(&cmd, pipefd);
-		kill(pid1, SIGTERM);
+		//kill(pid1, SIGTERM);
 		return ;
 	}
 	if (pid2 == 0)

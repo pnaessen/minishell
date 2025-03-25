@@ -10,7 +10,7 @@ int	apply_input_redirection(t_ast *redir)
 		perror("minishell: open");
 		return (1);
 	}
-	add_fd_to_garbage(&redir->root->garbage, fd);
+	//add_fd_to_garbage(&redir->root->garbage, fd);
 	if (dup2(fd, STDIN_FILENO) == -1)
 	{
 		perror("minishell: dup2");
@@ -31,7 +31,7 @@ int	apply_output_redirection(t_ast *redir)
 		perror("minishell: open");
 		return (1);
 	}
-	add_fd_to_garbage(&redir->root->garbage, fd);
+	//add_fd_to_garbage(&redir->root->garbage, fd);
 	if (dup2(fd, STDOUT_FILENO) == -1)
 	{
 		perror("minishell: dup2\n");
@@ -52,7 +52,7 @@ int	apply_append_redirection(t_ast *redir)
 		perror("minishell: open");
 		return (1);
 	}
-	add_fd_to_garbage(&redir->root->garbage, fd);
+	//add_fd_to_garbage(&redir->root->garbage, fd);
 	if (dup2(fd, STDOUT_FILENO) == -1)
 	{
 		perror("minishell: dup2");

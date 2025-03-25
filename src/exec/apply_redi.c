@@ -37,6 +37,7 @@ void	restore_std_fds(int saved_stdin, int saved_stdout)
 {
 	dup2(saved_stdin, STDIN_FILENO);
 	dup2(saved_stdout, STDOUT_FILENO);
-	// close(saved_stdin);
-	// close(saved_stdout);
+	// clean_fd_garbage(&node->garbage);
+	close(saved_stdin);
+	close(saved_stdout);
 }

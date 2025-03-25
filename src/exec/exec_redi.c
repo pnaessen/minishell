@@ -24,7 +24,7 @@ void	exec_with_redirects(t_ast *node, t_env *env)
 		return ;
 	}
 	execute_cmd_with_redir(cmd_node, node, env);
-	restore_std_fds(saved_stdin, saved_stdout);
+	 restore_std_fds(saved_stdin, saved_stdout);
 }
 
 int	is_cmd_invalid(t_ast *cmd_node)

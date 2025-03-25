@@ -6,7 +6,7 @@
 #    By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/12 12:55:24 by vicperri          #+#    #+#              #
-#    Updated: 2025/03/20 10:01:33 by pnaessen         ###   ########lyon.fr    #
+#    Updated: 2025/03/25 10:21:42 by pnaessen         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ SRCS = ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isascii.c ft_isprint.c \
 	ft_hexa_nbr.c ft_putnbr_printf.c ft_hexa_void.c get_next_line.c \
 	ft_lstnew_bonus.c ft_lstadd_front_bonus.c ft_lstsize_bonus.c \
 	ft_lstlast_bonus.c ft_lstadd_back_bonus.c ft_lstdelone_bonus.c \
-	ft_lstclear_bonus.c  ft_lstiter_bonus.c ft_lstmap_bonus.c
+	ft_lstclear_bonus.c  ft_lstiter_bonus.c ft_lstmap_bonus.c ft_strcmp.c
 
 OBJDIR = .obj
 OBJS = $(addprefix $(OBJDIR)/,$(SRCS:.c=.o))

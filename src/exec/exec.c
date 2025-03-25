@@ -71,6 +71,6 @@ void	execute_ast(t_ast *node, t_env *env)
 	{
 		heredocs_processed = 0;
 		cleanup_heredoc_files(node);
+		clean_fd_garbage(&node->garbage);
 	}
-	clean_fd_garbage(&node->garbage);
 }

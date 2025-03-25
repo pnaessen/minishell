@@ -6,7 +6,7 @@
 /*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/25 09:20:42 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/25 16:01:56 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,14 +249,12 @@ int						save_std_fds(int *saved_stdin, int *saved_stdout,
 void					restore_std_fds(int saved_stdin, int saved_stdout);
 
 ////////////////////////command.c//////////////////////////////
-char					**create_args_copy(t_ast *cmd, char **env_array,
-							char *path);
+char					**create_args_copy(t_ast *cmd, char **env_array);
 void					copy_args(t_ast *cmd, char **args_copy,
-							char **env_array, char *path);
+							char **env_array);
 void					execute_command(char *path, char **args,
 							char **env_array);
-void					handle_command_not_found(t_ast *cmd, char **env_array,
-							t_env *env);
+void					handle_command_not_found(t_ast *cmd, char **env_array);
 void					child_process(t_ast *cmd, t_env *env);
 
 ////////////////////////exec_redi.c////////////////////////////

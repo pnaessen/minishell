@@ -21,10 +21,12 @@ void	free_ast_cmd(t_ast *node)
 {
 	if (!node || !node->cmd)
 		return ;
-	free_ast_cmd_args(node);
+	if (node->cmd->args)
+		free_ast_cmd_args(node);
 	if (node->cmd->path)
 		free(node->cmd->path);
-	free(node->cmd);
+	if (node->cmd)
+		free(node->cmd);
 	node->cmd = NULL;
 }
 
