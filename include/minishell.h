@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/25 16:01:56 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/25 20:19:58 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ typedef struct s_env
 	char				*str;
 	struct s_env		*next;
 	int					error_code;
+	int 				process_count;
 }						t_env;
 
 typedef struct s_cmd
@@ -181,7 +182,7 @@ void					print_env(t_env **head, t_ast *cmd);
 
 ////////////////////////ft_exit.c//////////////////////////////
 int						ft_is_valid_number(char *str);
-void					handle_numeric_exit(t_ast *cmd, t_env *env, char *arg);
+int					handle_numeric_exit(t_ast *cmd, t_env *env, char *arg);
 void					ft_exit(t_ast *cmd, t_env *env);
 
 ////////////////////////ft_export.c////////////////////////////
@@ -189,6 +190,7 @@ int						is_valid_identifier(char *str);
 void					update_env_var(t_env **env, char *var_str);
 void					ft_export(t_ast *cmd, t_env **env);
 void					print_sorted_env(t_env **env);
+
 
 ////////////////////////ft_pwd.c///////////////////////////////
 void					ft_pwd(t_ast *cmd);
@@ -228,6 +230,10 @@ void					handle_sig(int sig);
 void					handle_signals(void);
 void					handle_signals_child(void);
 void					reset_signals(void);
+
+/////////////////////////stack.c///////////////////////////////
+int						can_create_process(t_env *env);
+void					process_finished(t_env *env);
 
 ////////////////////////utils_lst.c////////////////////////////
 void					handle_env(char **env, t_env **head);
