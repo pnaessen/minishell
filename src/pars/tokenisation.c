@@ -74,7 +74,6 @@ char	**tokenisation(char const *s)
 	res = malloc((lines_in_node(s) + 1) * sizeof(char *));
 	if (!(res))
 		return (0);
-	res[lines_in_node(s)] = NULL;
 	while (s[data.i] && data.count < lines_in_node(s))
 	{
 		check_quotes(s[data.i], &data);
@@ -86,7 +85,8 @@ char	**tokenisation(char const *s)
 			data.i += cnt_words(s, data.i);
 			data.count++;
 		}
-		data.i++;
+		if (s[data.i])
+			data.i++;
 	}
 	res[data.count] = NULL;
 	return (res);

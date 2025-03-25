@@ -1,33 +1,31 @@
 #include "minishell.h"
 #include "pars.h"
 
-t_stack	*tokenise_args(char *args_cleaned)
+int	tokenise_args(char *args_cleaned, t_stack **stack)
 {
 	char	**token;
 	int		i;
-	t_stack	*stack;
 
-	stack = NULL;
 	token = pre_tokenisation(args_cleaned);
 	i = 0;
 	if (!token)
-		return (NULL);
+		return (ERROR);
 	while (token[i])
 	{
-		if (fill_the_list(tokenisation(token[i]), &stack) == ERROR)
+		if (fill_the_list(tokenisation(token[i]), stack) == ERROR)
 		{
 			ft_free_all(token);
-			return (NULL);
+			return (ERROR);
 		}
 		i++;
 	}
-	if (identify_token_type(&stack) == ERROR)
-		return (NULL);
-	if (quoting(&stack) == ERROR)
-		return (NULL);
-	print_stack(&stack);
+	if (identify_token_type(stack) == ERROR)
+		return (ERROR);
+	if (quoting(stack) == ERROR)
+		return (ERROR);
+	print_stack(stack);
 	ft_free_all(token);
-	return (stack);
+	return (SUCCESS);
 }
 
 t_stack	*parsing_input(char *input, t_env **env)
@@ -37,6 +35,7 @@ t_stack	*parsing_input(char *input, t_env **env)
 	char	*env_handled;
 	t_stack	*stack;
 
+	stack = NULL;
 	if (!input)
 		return (NULL);
 	args = handle_whitespaces(input);
@@ -64,7 +63,8 @@ t_stack	*parsing_input(char *input, t_env **env)
 		free(args_cleaned);
 		return (NULL);
 	}
-	stack = tokenise_args(args_cleaned);
+	if (tokenise_args(args_cleaned, &stack) == ERROR)
+		return (NULL);
 	if (!stack)
 		return (NULL);
 	return (stack);
