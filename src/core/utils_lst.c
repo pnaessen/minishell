@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_lst.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 14:44:37 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/24 14:32:07 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/25 18:42:35 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	handle_env(char **env, t_env **head)
 		if (!new_node)
 			return ;
 		new_node->error_code = 0;
+		new_node->process_count = 0;
 		new_node->str = ft_strdup(env[i]);
 		if (!new_node->str)
 		{

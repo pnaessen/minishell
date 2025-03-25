@@ -1,4 +1,3 @@
-
 #include "minishell.h"
 
 int	valid_var(char *str)

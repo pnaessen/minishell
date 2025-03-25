@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_export.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 14:47:14 by pn                #+#    #+#             */
-/*   Updated: 2025/03/25 09:19:04 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/25 20:22:18 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,5 +89,3 @@ void	print_env_array(t_env **sorted, int size)
 	while (i < size)
 		print_env_var(sorted[i++]);
 }
-
-

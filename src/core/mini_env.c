@@ -14,6 +14,7 @@ t_env	*create_env_var(char *var_string)
 		return (NULL);
 	}
 	new_node->next = NULL;
+	new_node->process_count = 0;
 	return (new_node);
 }
 
@@ -62,4 +63,6 @@ void	create_mini_env(t_env **head)
 	add_pwd_to_env(head);
 	add_shlvl_to_env(head);
 	add_underscore_to_env(head);
+	if (*head)
+		(*head)->process_count = 0;
 }

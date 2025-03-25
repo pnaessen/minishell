@@ -1,4 +1,3 @@
-
 #include "minishell.h"
 
 int	is_valid_identifier(char *str)
@@ -30,9 +29,31 @@ int	is_valid_identifier(char *str)
 	return (1);
 }
 
-void	update_env_var(t_env **env, char *var_str)
+int	check_env_match(t_env *current, char *name, int name_len)
+{
+	return (ft_strncmp(current->str, name, name_len) == 0
+		&& (current->str[name_len] == '=' || current->str[name_len] == '\0'));
+}
+
+void	update_var_export(t_env *env, char *name, int name_len, char *var_str)
 {
 	t_env	*current;
+
+	current = env;
+	while (current)
+	{
+		if (check_env_match(current, name, name_len))
+		{
+			free(current->str);
+			current->str = ft_strdup(var_str);
+			return ;
+		}
+		current = current->next;
+	}
+}
+
+void	update_env_var(t_env **env, char *var_str)
+{
 	char	*equal_pos;
 	char	*name;
 	int		name_len;
@@ -44,22 +65,28 @@ void	update_env_var(t_env **env, char *var_str)
 	name = ft_substr(var_str, 0, name_len);
 	if (!name)
 		return ;
-	current = *env;
-	while (current)
-	{
-		if (ft_strncmp(current->str, name, name_len) == 0
-			&& (current->str[name_len] == '='
-				|| current->str[name_len] == '\0'))
-		{
-			free(current->str);
-			current->str = ft_strdup(var_str);
-			free(name);
-			return ;
-		}
-		current = current->next;
-	}
+	update_var_export(*env, name, name_len, var_str);
+	if (!env_var_exists(*env, name))
+		add_to_env(env, ft_strdup(var_str));
 	free(name);
-	add_to_env(env, ft_strdup(var_str));
+}
+
+void	handle_export_arg(t_env **env, char *arg, int *error_code)
+{
+	if (is_valid_identifier(arg))
+	{
+		if (ft_strchr(arg, '='))
+			update_env_var(env, arg);
+		else if (!env_var_exists(*env, arg))
+			add_to_env(env, ft_strdup(arg));
+	}
+	else
+	{
+		ft_putstr_fd("minishell: export: '", 2);
+		ft_putstr_fd(arg, 2);
+		ft_putstr_fd("': not a valid identifier\n", 2);
+		*error_code = 1;
+	}
 }
 
 void	ft_export(t_ast *cmd, t_env **env)
@@ -76,20 +103,7 @@ void	ft_export(t_ast *cmd, t_env **env)
 	cmd->error_code = 0;
 	while (cmd->cmd->args[i])
 	{
-		if (is_valid_identifier(cmd->cmd->args[i]))
-		{
-			if (ft_strchr(cmd->cmd->args[i], '='))
-				update_env_var(env, cmd->cmd->args[i]);
-			else if (!env_var_exists(*env, cmd->cmd->args[i]))
-				add_to_env(env, ft_strdup(cmd->cmd->args[i]));
-		}
-		else
-		{
-			ft_putstr_fd("minishell: export: '", 2);
-			ft_putstr_fd(cmd->cmd->args[i], 2);
-			ft_putstr_fd("': not a valid identifier\n", 2);
-			cmd->error_code = 1;
-		}
+		handle_export_arg(env, cmd->cmd->args[i], &cmd->error_code);
 		i++;
 	}
 }

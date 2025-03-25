@@ -27,16 +27,25 @@ void	execute_cmd(t_ast *cmd_node, t_env *env)
 
 	if (is_cmd_invalid(cmd_node))
 		return ;
+	if (!can_create_process(env))
+	{
+		cmd_node->error_code = 1;
+		return ;
+	}
 	pid = fork();
 	if (pid == -1)
 	{
+		process_finished(env);
 		cmd_node->error_code = 1;
 		return ;
 	}
 	if (pid == 0)
 		child_process(cmd_node, env);
 	else
+	{
 		parent_process(pid, cmd_node);
+		process_finished(env);
+	}
 }
 
 void	execute_cmd_node(t_ast *node, t_env *env)

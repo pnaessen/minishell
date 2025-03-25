@@ -1,4 +1,3 @@
-
 #include "minishell.h"
 
 void	print_env(t_env **head, t_ast *cmd)
