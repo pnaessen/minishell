@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
+/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/24 20:48:37 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/03/25 09:20:42 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,6 +188,7 @@ void					ft_exit(t_ast *cmd, t_env *env);
 int						is_valid_identifier(char *str);
 void					update_env_var(t_env **env, char *var_str);
 void					ft_export(t_ast *cmd, t_env **env);
+void					print_sorted_env(t_env **env);
 
 ////////////////////////ft_pwd.c///////////////////////////////
 void					ft_pwd(t_ast *cmd);
@@ -202,8 +203,10 @@ void					check_builtin(t_ast *input, t_env *env);
 
 ////////////////////////print_export.c/////////////////////////
 void					sort_env_array(t_env **sorted, int env_size);
+void					print_env_array(t_env **sorted, int size);
+void					populate_env_array(t_env **sorted, t_env *env_list);
+int						count_env_vars(t_env *env_list);
 void					print_env_var(t_env *var);
-void					print_sorted_env(t_env **env);
 
 ////////////////////////CORE//////////////////////////////////
 
