@@ -65,7 +65,7 @@ static char	*ft_newtab(const char *s1, int size, int i)
 	j = 0;
 	if (!(dup))
 		return (0);
-	while (j <= size && s1[i])
+	while (s1[i] && j < size)
 	{
 		dup[j] = s1[i];
 		j++;
@@ -86,15 +86,17 @@ char	**pre_tokenisation(char const *s)
 	res = malloc((num_of_lines(s) + 1) * sizeof(char *));
 	if (!(res))
 		return (0);
-	res[num_of_lines(s)] = NULL;
 	while (s[i] && j < num_of_lines(s))
 	{
+		if (num_of_words(s, i) <= 0)
+			break ;
 		res[j] = ft_newtab(s, num_of_words(s, i), i);
-		if (!(res[j]))
+		if (!res[j])
 			return (ft_free_all(res));
 		i += num_of_words(s, i);
+		if (s[i])
+			i++;
 		j++;
-		i++;
 	}
 	res[j] = NULL;
 	return (res);

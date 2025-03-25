@@ -47,6 +47,8 @@ char	*find_and_replace_var(char *args, t_env **env)
 	new_args = ft_strdup(args);
 	i = 0;
 	data.quote_type = '\0';
+	data.quote_num = 0;
+	data.quotes = ERROR;
 	while (args[i])
 	{
 		handle_quotes(args[i], &data);
