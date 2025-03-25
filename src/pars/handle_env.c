@@ -40,9 +40,9 @@ char	*handle_invalid_variable(char *args, int i)
 
 char	*find_and_replace_var(char *args, t_env **env)
 {
-	char	*new_args;
-	int		i;
-	t_data	data;
+	char *new_args;
+	int i;
+	t_data data;
 
 	new_args = ft_strdup(args);
 	i = 0;
