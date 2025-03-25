@@ -5,6 +5,8 @@ int	is_valid_var_char(char *args, int i)
 {
 	if (args[i - 2] == '<' && args[i - 3] == '<')
 		return (ERROR);
+	if (args[i + 1] == '?')
+		return (SUCCESS);
 	if (args[i + 1] == '_')
 		return (SUCCESS);
 	if ((args[i + 1] >= 'a' && args[i + 1] <= 'z') || (args[i + 1] >= 'A'
