@@ -93,3 +93,20 @@ void	ft_export(t_ast *cmd, t_env **env)
 		i++;
 	}
 }
+
+void	print_sorted_env(t_env **env)
+{
+	t_env	**sorted;
+	int		env_size;
+
+	if (!env || !*env)
+		return ;
+	env_size = count_env_vars(*env);
+	sorted = (t_env **)malloc(sizeof(t_env *) * env_size);
+	if (!sorted)
+		return ;
+	populate_env_array(sorted, *env);
+	sort_env_array(sorted, env_size);
+	print_env_array(sorted, env_size);
+	free(sorted);
+}

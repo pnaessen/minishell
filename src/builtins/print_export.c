@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_export.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
+/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 14:47:14 by pn                #+#    #+#             */
-/*   Updated: 2025/03/24 21:00:22 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/03/25 09:19:04 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,19 +90,4 @@ void	print_env_array(t_env **sorted, int size)
 		print_env_var(sorted[i++]);
 }
 
-void	print_sorted_env(t_env **env)
-{
-	t_env	**sorted;
-	int		env_size;
 
-	if (!env || !*env)
-		return ;
-	env_size = count_env_vars(*env);
-	sorted = (t_env **)malloc(sizeof(t_env *) * env_size);
-	if (!sorted)
-		return ;
-	populate_env_array(sorted, *env);
-	sort_env_array(sorted, env_size);
-	print_env_array(sorted, env_size);
-	free(sorted);
-}

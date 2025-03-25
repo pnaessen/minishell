@@ -48,20 +48,3 @@ void	clean_fd_garbage(t_fd_garbage **head)
 	}
 	*head = NULL;
 }
-
-// void	add_back_garbage(t_fd_garbage **head, t_fd_garbage *new_node)
-// {
-// 	t_fd_garbage	*tmp;
-
-// 	if (!head || !new_node)
-// 		return ;
-// 	if (!(*head))
-// 		*head = new_node;
-// 	else
-// 	{
-// 		tmp = *head;
-// 		while (tmp->next != NULL)
-// 			tmp = tmp->next;
-// 		tmp->next = new_node;
-// 	}
-// }
