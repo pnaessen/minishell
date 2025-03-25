@@ -41,12 +41,8 @@ t_stack	*parsing_input(char *input, t_env **env)
 	args = handle_whitespaces(input);
 	if (!args)
 		return (NULL);
-	printf("[DEBUG] args = %s\n", args);
 	if (ft_strchr(args, '$'))
-	{
 		env_handled = find_and_replace_var(args, env);
-		printf("[DEBUG] env = %s\n", env_handled);
-	}
 	else
 		env_handled = ft_strdup(args);
 	printf("[DEBUG] env = %s\n", env_handled);

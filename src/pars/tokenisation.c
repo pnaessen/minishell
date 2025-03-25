@@ -53,7 +53,7 @@ char	*create_tab(const char *s1, int size, int i)
 	j = 0;
 	if (!(dup))
 		return (0);
-	while (j < size && s1[i])
+	while (s1[i] && j < size)
 	{
 		dup[j] = s1[i];
 		j++;

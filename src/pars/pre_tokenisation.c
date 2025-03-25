@@ -43,8 +43,11 @@ int	num_of_words(const char *s1, int i)
 		handle_quotes(s1[i], &data);
 		if (is_redirection_operator(s1, i) && data.quotes == ERROR)
 		{
-			while (s1[i++] && s1[i] != ' ')
+			while (s1[i] && s1[i] != ' ')
+			{
+				i++;
 				data.count++;
+			}
 			return (data.count);
 		}
 		if (ft_is_operator(s1[i + 1]) == ERROR || data.quotes == SUCCESS)
@@ -88,8 +91,6 @@ char	**pre_tokenisation(char const *s)
 		return (0);
 	while (s[i] && j < num_of_lines(s))
 	{
-		if (num_of_words(s, i) <= 0)
-			break ;
 		res[j] = ft_newtab(s, num_of_words(s, i), i);
 		if (!res[j])
 			return (ft_free_all(res));
