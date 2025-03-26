@@ -164,9 +164,8 @@ Commandes intégrées au shell :
 ## 🛠 To do
 
 secu for 1024 PROCESUS
-signal 
-garbage collector for close 
+signal dans here_doc
 refacto for 25 lignes
 secu all malloc
-si redi direct apres pipe bug 
-pas oublie de  check les strcmp en ft-strcmp
+quand plusieur expand
+export ==

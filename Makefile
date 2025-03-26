@@ -29,6 +29,7 @@ CORE_SRC := $(addprefix $(CORE_DIR), \
 	utils_lst.c \
 	mini_env.c \
 	path_env.c \
+	stack.c \
 )
 
 EXEC_SRC := $(addprefix $(EXEC_DIR), \

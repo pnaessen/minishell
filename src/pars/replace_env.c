@@ -39,7 +39,6 @@ char	*replace_with_value(char *args, int pos, char *value)
 	data.i = 0;
 	data.count = 0;
 	len_value = ft_strlen(value);
-	printf("len value : %d | pos : %d\n", len_value, pos);
 	len_args = size_of_args(args);
 	new_args = malloc((len_args + len_value + 3) * sizeof(char));
 	if (!new_args)
@@ -63,10 +62,10 @@ char	*replace_with_value(char *args, int pos, char *value)
 
 char	*replace_without_dollar(char *args, int pos, int quote)
 {
-	char	*new_args;
-	int		len;
-	int		i;
-	int		j;
+	char *new_args;
+	int len;
+	int i;
+	int j;
 
 	i = 0;
 	j = 0;

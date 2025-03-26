@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
+/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 14:11:14 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/24 21:58:53 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/03/26 12:40:49 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,3 +43,13 @@ void	reset_signals(void)
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 }
+
+// int	check_heredoc_signals(void)
+// {
+// 	if (g_signal_status == 131)
+// 	{
+// 		rl_done = 1;
+// 		return (1);
+// 	}
+// 	return (0);
+// }
