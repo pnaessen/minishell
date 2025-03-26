@@ -24,14 +24,18 @@ int	write_to_temp_file(char *delimiter, char *filename)
 {
 	int		temp_fd;
 	char	*line;
+	int		status;
 
+	status = g_signal_status;
+	g_signal_status = 0;
+	handle_signals_heredoc();
 	temp_fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0600);
 	if (temp_fd == -1)
 		return (-1);
 	while (1)
 	{
 		line = readline("> ");
-		if (!line || ft_strcmp(line, delimiter) == 0)
+		if (!line || g_signal_status == 131 || ft_strcmp(line, delimiter) == 0)
 		{
 			free(line);
 			break ;
@@ -41,6 +45,17 @@ int	write_to_temp_file(char *delimiter, char *filename)
 		free(line);
 	}
 	close(temp_fd);
+	rl_event_hook = NULL;
+	if (g_signal_status == 131)
+	{
+		g_signal_status = 130;
+		signal(SIGINT, handle_sig);
+		signal(SIGQUIT, SIG_IGN);
+		return (-2);
+	}
+	handle_signals();
+	if (status != 0)
+		g_signal_status = status;
 	return (0);
 }
 
