@@ -45,7 +45,7 @@ typedef struct s_stack
 }					t_stack;
 
 // parsing
-int				tokenise_args(char *args_cleaned, t_stack **stack);
+int					tokenise_args(char *args_cleaned, t_stack **stack);
 
 /// handle commands
 char				*handle_commands(char *args);
@@ -107,5 +107,7 @@ int					is_valid_var_char(char *args, int i);
 int					size_of_var(char *args, int i);
 int					size_of_args(char *args);
 char				*extract_variable_name(char *args, int i);
+char				*join_tabs(char **tab_args);
+int len_tab_of_tab(char **tab_args);
 
 #endif
