@@ -15,8 +15,10 @@ void	execute_pipe(t_ast *cmd, t_env *env)
 	if (!can_create_process(env))
 	{
 		process_finished(env);
-		close(pipefd[0]);
-		close(pipefd[1]);
+		if (close(pipefd[0]) == -1)
+			perror("minishell: close");
+		if (close(pipefd[1]) == -1)
+			perror("minishell: close");
 		cmd->error_code = 1;
 		return ;
 	}
@@ -30,8 +32,10 @@ void	execute_pipe(t_ast *cmd, t_env *env)
 		pipe_child_left(cmd, env, pipefd);
 	if (!can_create_process(env))
 	{
-		close(pipefd[0]);
-		close(pipefd[1]);
+		if (close(pipefd[0]) == -1)
+			perror("minishell: close");
+		if (close(pipefd[1]) == -1)
+			perror("minishell: close");
 		waitpid(pid1, NULL, 0);
 		process_finished(env);
 		cmd->error_code = 1;
@@ -61,8 +65,10 @@ void	handle_pipe_parent(t_ast *cmd, pid_t pid1, pid_t pid2, int *pipefd)
 
 	signal(SIGINT, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
-	close(pipefd[0]);
-	close(pipefd[1]);
+	if (close(pipefd[0]) == -1)
+		perror("minishell: close");
+	if (close(pipefd[1]) == -1)
+		perror("minishell: close");
 	waitpid(pid1, &status, 0);
 	waitpid(pid2, &status2, 0);
 	handle_signals();
@@ -81,7 +87,9 @@ void	handle_pipe_parent(t_ast *cmd, pid_t pid1, pid_t pid2, int *pipefd)
 void	fork_fail(t_ast **cmd, int *pipefd)
 {
 	perror("minishell: fork");
-	close(pipefd[0]);
-	close(pipefd[1]);
+	if (close(pipefd[0]) == -1)
+		perror("minishell: close");
+	if (close(pipefd[1]) == -1)
+		perror("minishell: close");
 	(*cmd)->error_code = 1;
 }

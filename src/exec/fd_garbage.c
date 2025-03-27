@@ -9,7 +9,10 @@ void	add_fd_to_garbage(t_fd_garbage **head, int fd)
 		return ;
 	new_node = malloc(sizeof(t_fd_garbage));
 	if (!new_node)
+	{
+		close(fd);
 		return ;
+	}
 	new_node->fd = fd;
 	new_node->next = NULL;
 	if (!(*head))

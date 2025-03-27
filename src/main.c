@@ -35,9 +35,9 @@ int	main(int argc, char **argv, char **env)
 			cmd = parse_and_build_ast(input, &head);
 			if (cmd)
 			{
-				print_ast(cmd, 0);
+				//print_ast(cmd, 0);
 				execute_ast(cmd, head);
-				cleanup_heredoc_files(cmd);
+				//cleanup_heredoc_files(cmd);
 				//printf("%d\n", cmd->error_code);
 				//printf("%d\n", head->error_code);
 				free_ast(cmd);
@@ -45,7 +45,6 @@ int	main(int argc, char **argv, char **env)
 		}
 		free(input);
 	}
-	free_env_list(head);
 	return (0);
 }
 

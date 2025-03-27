@@ -6,7 +6,7 @@ void	exec_with_redirects(t_ast *node, t_env *env)
 	int		saved_stdin;
 	int		saved_stdout;
 	t_ast	*cmd_node;
-	int		error;
+	int		error = -1;
 
 	if (save_std_fds(&saved_stdin, &saved_stdout, node))
 		return ;
@@ -19,6 +19,7 @@ void	exec_with_redirects(t_ast *node, t_env *env)
 	cmd_node = find_cmd_node(node, &error);
 	if (error || !cmd_node)
 	{
+		perror("minishell: find_cmd_node");
 		node->error_code = 1;
 		restore_std_fds(saved_stdin, saved_stdout);
 		return ;

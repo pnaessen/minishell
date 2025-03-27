@@ -2,14 +2,16 @@
 
 void	setup_pipe_left(int *pipefd)
 {
-	close(pipefd[0]);
+	if (close(pipefd[0]) == -1)
+		perror("minishell: close");
 	if (dup2(pipefd[1], STDOUT_FILENO) == -1)
 	{
 		perror("minishell: dup2");
 		close(pipefd[1]);
 		exit(1);
 	}
-	close(pipefd[1]);
+	if (close(pipefd[1]) == -1)
+		perror("minishell: close");
 }
 
 int	get_exit_code(t_ast *cmd)

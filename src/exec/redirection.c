@@ -10,14 +10,15 @@ int	apply_input_redirection(t_ast *redir)
 		perror("minishell: open");
 		return (1);
 	}
-	//add_fd_to_garbage(&redir->root->garbage, fd);
 	if (dup2(fd, STDIN_FILENO) == -1)
 	{
 		perror("minishell: dup2");
-		close(fd);
+		if (close(fd) == -1)
+			perror("minishell: close");
 		return (1);
 	}
-	close(fd);
+	if (close(fd) == -1)
+		perror("minishell: close");
 	return (0);
 }
 
@@ -31,14 +32,15 @@ int	apply_output_redirection(t_ast *redir)
 		perror("minishell: open");
 		return (1);
 	}
-	//add_fd_to_garbage(&redir->root->garbage, fd);
 	if (dup2(fd, STDOUT_FILENO) == -1)
 	{
 		perror("minishell: dup2\n");
-		close(fd);
+		if (close(fd) == -1)
+			perror("minishell: close");
 		return (1);
 	}
-	close(fd);
+	if (close(fd) == -1)
+		perror("minishell: close");
 	return (0);
 }
 
@@ -52,14 +54,14 @@ int	apply_append_redirection(t_ast *redir)
 		perror("minishell: open");
 		return (1);
 	}
-	//add_fd_to_garbage(&redir->root->garbage, fd);
 	if (dup2(fd, STDOUT_FILENO) == -1)
 	{
 		perror("minishell: dup2");
 		close(fd);
 		return (1);
 	}
-	close(fd);
+	if (close(fd) == -1)
+		perror("minishell: close");
 	return (0);
 }
 
@@ -67,7 +69,6 @@ int	apply_all_redirections(t_ast *node)
 {
 	if (!node)
 		return (0);
-		
 	if (node->left && node->left->token != CMD)
 	{
 		if (apply_all_redirections(node->left))
@@ -78,7 +79,6 @@ int	apply_all_redirections(t_ast *node)
 		if (apply_redirection(node))
 			return (1);
 	}
-	
 	return (0);
 }
 
@@ -89,7 +89,10 @@ void	cleanup_heredoc_files(t_ast *node)
 	if (node->token == REDIR_HEREDOC && node->cmd && node->cmd->args)
 	{
 		if (node->cmd->args[0])
-			unlink(node->cmd->args[0]);
+		{
+			if (unlink(node->cmd->args[0]) == -1)
+				perror("minishell: unlink");
+		}
 	}
 	if (node->left)
 		cleanup_heredoc_files(node->left);

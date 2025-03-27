@@ -2,7 +2,7 @@
 
 int	can_create_process(t_env *env)
 {
-	if (env->process_count >= 1025)
+	if (env->process_count >= PROCESS_LIMIT)
 	{
 		ft_putstr_fd("minishell: fork: Resource temporarily unavailable\n", 2);
 		return (0);

@@ -11,6 +11,7 @@ char	**create_args_copy(t_ast *cmd, char **env_array)
 	args_copy = malloc(sizeof(char *) * (i + 1));
 	if (!args_copy)
 	{
+		perror("minishell: malloc args_copy");
 		free_ast(cmd->root);
 		free_env_array(env_array);
 		exit(1);
@@ -33,6 +34,7 @@ void	copy_args(t_ast *cmd, char **args_copy, char **env_array)
 			free(args_copy);
 			free_ast(cmd->root);
 			free_env_array(env_array);
+			perror("minishell: strdup copy_args");
 			exit(1);
 		}
 		i++;
