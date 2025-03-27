@@ -18,10 +18,12 @@
 typedef struct s_data
 {
 	int				i;
+	int				j;
 	int				count;
 	int				quotes;
 	int				quote_num;
 	char			quote_type;
+	char			*temp;
 }					t_data;
 
 typedef enum e_node_type
@@ -88,6 +90,7 @@ void				define_type(t_stack *temp, char *cmd, int quotes);
 
 // minishell_split
 char				**pre_tokenisation(char const *s);
+int					lines_in_node(const char *s1);
 char				**tokenisation(char const *s);
 
 // pre_token_utils
@@ -107,7 +110,8 @@ int					is_valid_var_char(char *args, int i);
 int					size_of_var(char *args, int i);
 int					size_of_args(char *args);
 char				*extract_variable_name(char *args, int i);
-char				*join_tabs(char **tab_args);
-int len_tab_of_tab(char **tab_args);
-
+char				*join_tabs(char **tab_args, int space);
+int					len_tab_of_tab(char **tab_args);
+int					spaces_to_add(const char *s1);
+char				*return_env(char *args, char **tab_args);
 #endif

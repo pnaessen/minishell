@@ -38,52 +38,80 @@ char	*handle_invalid_variable(char *args, int i)
 	return (ft_strdup(args));
 }
 
+void	process_variable_replacement(char **tab, t_data *data, t_env **env)
+{
+	data->j = 0;
+	while (tab[data->i][data->j])
+	{
+		handle_quotes(tab[data->i][data->j], data);
+		if (tab[data->i][data->j] == '$')
+		{
+			data->temp = tab[data->i];
+			if (is_valid_var_char(tab[data->i], data->j) == SUCCESS
+				&& data->quote_type != 39)
+				tab[data->i] = handle_variable_replacement(tab[data->i],
+						data->j, data, env);
+			else
+				tab[data->i] = handle_invalid_variable(tab[data->i], data->j);
+			free(data->temp);
+		}
+		data->j++;
+	}
+}
+
 char	*find_and_replace_var(char *args, t_env **env)
 {
-	char	**tab_args;
-	char	*new_args;
-	int		j;
+	char	**tab;
 	t_data	data;
-	char	*temp;
 
-	tab_args = tokenisation(args);
+	tab = tokenisation(args);
 	data.i = 0;
-	while (tab_args[data.i])
+	while (tab[data.i])
 	{
-		j = 0;
 		data.quote_type = '\0';
 		data.quote_num = 0;
 		data.quotes = ERROR;
-		while (tab_args[data.i][j])
-		{
-			handle_quotes(tab_args[data.i][j], &data);
-			if (tab_args[data.i][j] == '$')
-			{
-				if (is_valid_var_char(tab_args[data.i], j) == SUCCESS)
-				{
-					if (data.quote_type != 39)
-					{
-						temp = tab_args[data.i];
-						tab_args[data.i] = handle_variable_replacement(tab_args[data.i],
-								j, &data, env);
-						free(temp);
-					}
-				}
-				else
-				{
-					temp = tab_args[data.i];
-					tab_args[data.i] = handle_invalid_variable(tab_args[data.i], j);
-					free(temp);
-				}
-			}
-			j++;
-		}
+		process_variable_replacement(tab, &data, env);
 		data.i++;
 	}
-	new_args = join_tabs(tab_args);
+	data.temp = return_env(args, tab);
+	return (data.temp);
+}
+char	*return_env(char *args, char **tab_args)
+{
+	int		space;
+	char	*new_args;
+
+	space = spaces_to_add(args);
+	new_args = join_tabs(tab_args, space);
 	ft_free_all(tab_args);
 	return (new_args);
 }
+
+int	spaces_to_add(const char *s1)
+{
+	int		i;
+	int		count;
+	t_data	data;
+
+	i = 0;
+	count = 0;
+	data.quotes = ERROR;
+	while (s1[i])
+	{
+		check_quotes(s1[i], &data);
+		if (s1[i + 1] == '\0')
+			return (count);
+		if (s1[i] != ' ' && s1[i + 1] == ' ')
+		{
+			if (data.quotes == ERROR)
+				count++;
+		}
+		i++;
+	}
+	return (count);
+}
+
 int	len_tab_of_tab(char **tab_args)
 {
 	int	i;
@@ -99,29 +127,30 @@ int	len_tab_of_tab(char **tab_args)
 	return (size + (i - 1));
 }
 
-char	*join_tabs(char **tab_args)
+char	*join_tabs(char **tab_args, int space)
 {
-	int		i;
-	int		j;
-	int		k;
+	t_data	data;
 	int		len;
 	char	*new_args;
 
-	i = 0;
-	k = 0;
+	data.i = 0;
+	data.count = 0;
 	len = len_tab_of_tab(tab_args);
 	new_args = malloc((len + 1) * sizeof(char));
 	if (!new_args)
 		return (NULL);
-	while (tab_args[i])
+	while (tab_args[data.i])
 	{
-		j = 0;
-		while (tab_args[i][j])
-			new_args[k++] = tab_args[i][j++];
-		if (tab_args[i + 1]) // Only add a space if there's another word
-			new_args[k++] = ' ';
-		i++;
+		data.j = 0;
+		while (tab_args[data.i][data.j])
+			new_args[data.count++] = tab_args[data.i][data.j++];
+		if (space > 0)
+		{
+			new_args[data.count++] = ' ';
+			space--;
+		}
+		data.i++;
 	}
-	new_args[k] = '\0'; // Null-terminate the string
+	new_args[data.count] = '\0'; // Null-terminate the string
 	return (new_args);
 }
