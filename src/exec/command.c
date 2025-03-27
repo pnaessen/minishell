@@ -62,6 +62,8 @@ void	execute_command(char *path, char **args, char **env_array)
 
 void	handle_command_not_found(t_ast *cmd, char **env_array)
 {
+	if (cmd->root && cmd->root->garbage)
+		clean_fd_garbage(&cmd->root->garbage);
 	ft_putstr_fd("minishell: command not found: ", 2);
 	ft_putstr_fd(cmd->cmd->args[0], 2);
 	ft_putstr_fd("\n", 2);

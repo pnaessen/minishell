@@ -24,7 +24,10 @@ t_ast	*create_ast_operator(t_node_type token, t_ast *left, t_ast *right)
 
 	node = malloc(sizeof(t_ast));
 	if (!node)
+	{
+		perror("minishell: malloc create_ast_operator");
 		return (NULL);
+	}
 	node->token = token;
 	node->cmd = NULL;
 	node->left = left;

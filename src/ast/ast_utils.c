@@ -20,11 +20,12 @@ t_ast	*init_cmd_node_alloc(t_ast *node, int args_count)
 	node->cmd->args = malloc(sizeof(char *) * (args_count + 1));
 	if (!node->cmd->args)
 	{
+		perror("minishell: malloc init_cmd_node_alloc");
 		free(node->cmd);
 		free(node);
 		return (NULL);
 	}
-	//node->cmd->redirs = NULL;
+	// node->cmd->redirs = NULL;
 	return (node);
 }
 

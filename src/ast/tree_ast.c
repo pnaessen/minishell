@@ -65,6 +65,7 @@ t_ast	*create_redir_args(t_ast *redir_node, char *filename)
 	redir_node->cmd->args = malloc(sizeof(char *) * 2);
 	if (!redir_node->cmd->args)
 	{
+		perror("minishell: malloc create_redir_args");
 		free(redir_node->cmd);
 		free(redir_node);
 		return (NULL);
@@ -72,11 +73,13 @@ t_ast	*create_redir_args(t_ast *redir_node, char *filename)
 	redir_node->cmd->args[0] = ft_strdup(filename);
 	if (!redir_node->cmd->args[0])
 	{
+		perror("minishell: strdup create_redir_args");
 		free(redir_node->cmd->args);
 		free(redir_node->cmd);
 		free(redir_node);
 		return (NULL);
 	}
+	filename = NULL;
 	redir_node->cmd->args[1] = NULL;
 	return (redir_node);
 }

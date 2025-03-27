@@ -92,7 +92,7 @@ t_ast	*process_right_side(t_stack *start, t_stack *end,
 	cmd_token = find_valid_cmd_token(start, end);
 	redir_tokens = collect_redirections(start, end, &cmd_token, &redir_count);
 	if (!cmd_token || cmd_token->token != CMD || !cmd_token->cmd)
-		cmd_node = create_cmd_node(NULL);
+		cmd_node = create_cmd_node(NULL); // si pas de cmd after pipe
 	else
 		cmd_node = create_cmd_node(cmd_token);
 	if (!cmd_node)
