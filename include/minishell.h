@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
+/*   By: vicperri <vicperri@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/26 20:23:02 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/03/27 14:03:48 by vicperri         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -318,14 +318,14 @@ void					cleanup_heredoc_files(t_ast *node);
 void					print_ast(t_ast *node, int level);
 // void					print_redirections(t_redir *redirs, int level);
 
-// vivi
+///////////////////////ENV VIVI/////////////////////////////////
 char					*find_and_replace_var(char *args, t_env **env);
 t_stack					*parsing_input(char *input, t_env **env);
 char					*get_env_value(char *var_name, t_env **env);
-// replace env
 char					*replace_without_dollar(char *args, int pos, int quote);
 char					*replace_with_value(char *args, int pos, char *value);
 char					*replace_without_dollar(char *args, int pos, int quote);
 char					*replace_with_empty(char *args, int pos);
+int						size_of_exp(t_env **env, char *var_name);
 
 #endif

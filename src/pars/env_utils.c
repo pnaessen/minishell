@@ -3,15 +3,18 @@
 
 int	is_valid_var_char(char *args, int i)
 {
-	if (args[i - 2] == '<' && args[i - 3] == '<')
+	if ((i > 2 && args[i - 2] == '<') && (i > 3 && args[i - 3] == '<'))
 		return (ERROR);
-	if (args[i + 1] == '?')
-		return (SUCCESS);
-	if (args[i + 1] == '_')
-		return (SUCCESS);
-	if ((args[i + 1] >= 'a' && args[i + 1] <= 'z') || (args[i + 1] >= 'A'
-			&& args[i + 1] <= 'Z'))
-		return (SUCCESS);
+	if (args[i + 1] != '\0')
+	{
+		if (args[i + 1] == '?')
+			return (SUCCESS);
+		if (args[i + 1] == '_')
+			return (SUCCESS);
+		if ((args[i + 1] >= 'a' && args[i + 1] <= 'z') || (args[i + 1] >= 'A'
+				&& args[i + 1] <= 'Z'))
+			return (SUCCESS);
+	}
 	return (ERROR);
 }
 
@@ -24,7 +27,7 @@ int	size_of_var(char *args, int i)
 	{
 		len++;
 		i++;
-		if (args[i] == ' ' || args[i] == '"')
+		if (args[i] == ' ' || ft_is_quotes(args[i]) == SUCCESS)
 			break ;
 	}
 	return (len);
@@ -66,11 +69,34 @@ char	*extract_variable_name(char *args, int i)
 		var_name[j] = args[i];
 		j++;
 		i++;
-		if (args[i] == ' ' || args[i] == '"')
+		if (args[i] == ' ' || ft_is_quotes(args[i]) == SUCCESS)
 			break ;
 	}
 	var_name[j] = '\0';
 	return (var_name);
+}
+
+int	size_of_exp(t_env **env, char *var_name)
+{
+	int		len;
+	int		count;
+	t_env	*temp;
+
+	count = 0;
+	temp = *env;
+	len = ft_strlen(var_name);
+	while (1)
+	{
+		if (ft_strncmp(temp->str, var_name, len) == SUCCESS)
+		{
+			count = ft_strlen(temp->str);
+			return (count);
+		}
+		temp = temp->next;
+		if (temp == NULL)
+			break ;
+	}
+	return (0);
 }
 
 char	*get_env_value(char *var_name, t_env **env)
@@ -84,7 +110,9 @@ char	*get_env_value(char *var_name, t_env **env)
 		return (NULL);
 	temp = *env;
 	len = ft_strlen(var_name);
-	len_str = ft_strlen(temp->str);
+	len_str = size_of_exp(env, var_name);
+	if (len_str == 0)
+		return (NULL);
 	while (1)
 	{
 		if (ft_strncmp(temp->str, var_name, len) == SUCCESS)
