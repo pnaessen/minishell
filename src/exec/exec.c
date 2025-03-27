@@ -58,13 +58,22 @@ void	execute_cmd_node(t_ast *node, t_env *env)
 void	execute_ast(t_ast *node, t_env *env)
 {
 	static int	heredocs_processed = 0;
+	int			tmp;
 
 	if (!node)
 		return ;
 	if (!heredocs_processed)
 	{
-		process_all_heredocs(node);
+		tmp = process_all_heredocs(node);
 		heredocs_processed = 1;
+		if (tmp == 0)
+		{
+			env->error_code = 130;
+			heredocs_processed = 0;
+			cleanup_heredoc_files(node);
+			clean_fd_garbage(&node->garbage);
+			return ;
+		}
 	}
 	if (node->token == CMD)
 		execute_cmd_node(node, env);

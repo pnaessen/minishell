@@ -96,7 +96,7 @@ int	setup_heredoc_file(t_ast *node, char *delimiter)
 		free(delimiter);
 		return (0);
 	}
-	if (write_to_temp_file(delimiter, temp_filename) == -1)
+	if (write_to_temp_file(delimiter, temp_filename) <= -1)
 	{
 		free(delimiter);
 		free(temp_filename);
