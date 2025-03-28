@@ -46,15 +46,19 @@ char	*replace_with_value(char *args, int pos, char *value)
 	{
 		if (data.i == pos)
 		{
-			 new_args[data.count++] = '"';
+			new_args[data.count++] = '"';
 			while (*value)
 				new_args[data.count++] = *value++;
-			 new_args[data.count++] = '"';
 			while (args[data.i] && args[data.i] != ' ')
 			{
 				if (args[data.i] == ' '
 					|| (ft_is_quotes(args[data.i]) == SUCCESS && data.i > 0))
+				{
+					if ((ft_is_quotes(args[data.i]) == SUCCESS && data.i > 0))
+						new_args[data.count++] = args[data.i++];
+					new_args[data.count++] = '"';
 					break ;
+				}
 				data.i++;
 			}
 		}

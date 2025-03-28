@@ -90,8 +90,8 @@ void				define_type(t_stack *temp, char *cmd, int quotes);
 
 // minishell_split
 char				**pre_tokenisation(char const *s);
-int					lines_in_node(const char *s1);
 char				**tokenisation(char const *s);
+char				**split_var(char const *s);
 
 // pre_token_utils
 int					handle_multi_operators(const char *s1, int i);

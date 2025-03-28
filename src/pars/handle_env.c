@@ -63,14 +63,13 @@ char	*find_and_replace_var(char *args, t_env **env)
 	char	**tab;
 	t_data	data;
 
-	tab = tokenisation(args);
+	tab = split_var(args);
 	data.i = 0;
 	while (tab[data.i])
 	{
 		data.quote_type = '\0';
 		data.quote_num = 0;
 		data.quotes = ERROR;
-		printf("tab[%d] : %s\n", data.i, tab[data.i]);
 		process_variable_replacement(tab, &data, env);
 		data.i++;
 	}

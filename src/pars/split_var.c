@@ -1,6 +1,6 @@
 #include "pars.h"
 
-int	lines_in_node(const char *s1)
+static int	lines_in_node(const char *s1)
 {
 	int		i;
 	int		count;
@@ -9,11 +9,13 @@ int	lines_in_node(const char *s1)
 	i = 0;
 	count = 0;
 	data.quotes = ERROR;
+	data.quote_type = '\0';
+	data.quote_num = 0;
 	while (s1[i])
 	{
-		check_quotes(s1[i], &data);
+		handle_quotes(s1[i], &data);
 		if ((s1[i] != ' ' && s1[i] != '$') && (s1[i + 1] == ' ' || (s1[i
-					+ 1] == '\0' && data.quotes != SUCCESS)))
+					+ 1] == '\0' && data.quotes == ERROR)))
 		{
 			if (data.quotes == ERROR)
 				count++;
@@ -25,21 +27,28 @@ int	lines_in_node(const char *s1)
 	return (count);
 }
 
-int	cnt_words(const char *s1, int i)
+static int	cnt_words(const char *s1, int i)
 {
 	int		count;
 	t_data	data;
 
 	count = 0;
 	data.quotes = ERROR;
+	data.quote_type = '\0';
+	data.quote_num = 0;
 	while (s1[i] == ' ')
 		i++;
 	while (s1[i])
 	{
-		check_quotes(s1[i], &data);
-		if ((s1[i] == ' ' || (s1[i] == '$' && count > 0))
-			&& data.quotes == ERROR)
+		handle_quotes(s1[i], &data);
+		if (s1[i] == ' ' && data.quotes == ERROR)
 			return (count);
+		if ((data.quotes == ERROR || data.quote_type == '"') && (s1[i
+				+ 1] == '$' && count > 0))
+		{
+			count++;
+			return (count);
+		}
 		else
 			count++;
 		i++;
@@ -47,7 +56,7 @@ int	cnt_words(const char *s1, int i)
 	return (count);
 }
 
-char	*create_tab(const char *s1, int size, int i)
+static char	*create_tab(const char *s1, int size, int i)
 {
 	char	*dup;
 	int		j;
@@ -66,7 +75,7 @@ char	*create_tab(const char *s1, int size, int i)
 	return (dup);
 }
 
-char	**tokenisation(char const *s)
+char	**split_var(char const *s)
 {
 	char	**res;
 	t_data	data;
@@ -77,10 +86,11 @@ char	**tokenisation(char const *s)
 	res = malloc((lines_in_node(s) + 1) * sizeof(char *));
 	if (!(res))
 		return (0);
-	while (s[data.i] && data.count < lines_in_node(s))
+	while (s[data.i] && data.count <= lines_in_node(s))
 	{
 		check_quotes(s[data.i], &data);
 		res[data.count] = create_tab(s, cnt_words(s, data.i), data.i);
+		printf("res[%d] : %s\n", data.count, res[data.count]);
 		if (!(res[data.count]))
 			return (ft_free_all(res));
 		data.i += cnt_words(s, data.i);
