@@ -90,6 +90,7 @@ char	**split_var(char const *s)
 	{
 		check_quotes(s[data.i], &data);
 		res[data.count] = create_tab(s, cnt_words(s, data.i), data.i);
+		printf("split var res[%d] : %s\n", data.count, res[data.count]);
 		if (!(res[data.count]))
 			return (ft_free_all(res));
 		data.i += cnt_words(s, data.i);

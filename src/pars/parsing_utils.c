@@ -21,7 +21,7 @@ int	ft_is_operator(int c)
 
 int	ft_is_quotes(char c)
 {
-	if (c == 39 || c == '"')
+	if (c == '\'' || c == '"')
 		return (SUCCESS);
 	return (ERROR);
 }

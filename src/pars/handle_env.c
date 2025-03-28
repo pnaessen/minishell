@@ -1,7 +1,7 @@
 #include "minishell.h"
 #include "pars.h"
 
-char	*handle_variable_replacement(char *args, int i, t_data *data,
+char	*handle_variable_replacement(char *args, int i, char quote_type,
 		t_env **env)
 {
 	char	*var_name;
@@ -14,14 +14,14 @@ char	*handle_variable_replacement(char *args, int i, t_data *data,
 		value = ft_itoa((*env)->error_code);
 	if (!value)
 	{
-		if (data->quote_type == '"')
+		if (quote_type == '"')
 			new_args = replace_with_empty(args, i - 1);
 		else
 			new_args = replace_with_empty(args, i);
 	}
 	else
 	{
-		if (data->quote_type == '"')
+		if (quote_type == '"')
 			new_args = replace_value(args, i, value);
 		else
 			new_args = replace_value_quotes(args, i, value);
@@ -50,14 +50,17 @@ void	process_variable_replacement(char **tab, t_data *data, t_env **env)
 		{
 			data->temp = tab[data->i];
 			if (is_valid_var_char(tab[data->i], data->j) == SUCCESS
-				&& data->quote_type != 39)
+				&& data->quote_type != '\'')
+			{
 				tab[data->i] = handle_variable_replacement(tab[data->i],
-						data->j, data, env);
+						data->j, data->quote_type, env);
+			}
 			else
 				tab[data->i] = handle_invalid_variable(tab[data->i], data->j);
 			free(data->temp);
 		}
-		data->j++;
+		else
+			data->j++;
 	}
 }
 

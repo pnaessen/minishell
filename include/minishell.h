@@ -6,7 +6,7 @@
 /*   By: vicperri <vicperri@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/27 14:03:48 by vicperri         ###   ########lyon.fr   */
+/*   Updated: 2025/03/28 17:40:31 by vicperri         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -323,7 +323,8 @@ char					*find_and_replace_var(char *args, t_env **env);
 t_stack					*parsing_input(char *input, t_env **env);
 char					*get_env_value(char *var_name, t_env **env);
 char					*replace_without_dollar(char *args, int pos, int quote);
-char					*replace_with_value(char *args, int pos, char *value);
+char					*handle_variable_replacement(char *args, int i,
+							char quote_type, t_env **env);
 char					*replace_without_dollar(char *args, int pos, int quote);
 char					*replace_with_empty(char *args, int pos);
 int						size_of_exp(t_env **env, char *var_name);
