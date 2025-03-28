@@ -101,7 +101,8 @@ int					is_operator_sequence(const char *s1, int index,
 						t_data *data);
 // replace env
 char				*replace_without_dollar(char *args, int pos, int quote);
-char				*replace_with_value(char *args, int pos, char *value);
+char	*replace_value_quotes(char *args, int pos, char *value);
+char	*replace_value(char *args, int pos, char *value);
 char				*replace_without_dollar(char *args, int pos, int quote);
 char				*replace_with_empty(char *args, int pos);
 

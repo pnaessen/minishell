@@ -21,7 +21,10 @@ char	*handle_variable_replacement(char *args, int i, t_data *data,
 	}
 	else
 	{
-		new_args = replace_with_value(args, i, value);
+		if (data->quote_type == '"')
+			new_args = replace_value(args, i, value);
+		else
+			new_args = replace_value_quotes(args, i, value);
 	}
 	free(value);
 	return (new_args);

@@ -14,8 +14,8 @@ static int	lines_in_node(const char *s1)
 	while (s1[i])
 	{
 		handle_quotes(s1[i], &data);
-		if ((s1[i] != ' ' && s1[i] != '$') && (s1[i + 1] == ' ' || (s1[i
-					+ 1] == '\0' && data.quotes == ERROR)))
+		if ((s1[i] != ' ' && s1[i] != '$') && (s1[i + 1] && (s1[i + 1] == ' '
+					|| (s1[i + 1] == '\0' && data.quotes == ERROR))))
 		{
 			if (data.quotes == ERROR)
 				count++;
@@ -43,7 +43,7 @@ static int	cnt_words(const char *s1, int i)
 		handle_quotes(s1[i], &data);
 		if (s1[i] == ' ' && data.quotes == ERROR)
 			return (count);
-		if ((data.quotes == ERROR || data.quote_type == '"') && (s1[i
+		if ((data.quotes == ERROR || data.quote_type == '"') && (s1[i] && s1[i
 				+ 1] == '$' && count > 0))
 		{
 			count++;
@@ -90,7 +90,6 @@ char	**split_var(char const *s)
 	{
 		check_quotes(s[data.i], &data);
 		res[data.count] = create_tab(s, cnt_words(s, data.i), data.i);
-		printf("res[%d] : %s\n", data.count, res[data.count]);
 		if (!(res[data.count]))
 			return (ft_free_all(res));
 		data.i += cnt_words(s, data.i);

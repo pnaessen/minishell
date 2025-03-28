@@ -56,6 +56,7 @@ t_stack	*parsing_input(char *input, t_env **env)
 		return (NULL);
 	if (check_num_of_quotes(args_cleaned) == ERROR)
 	{
+		printf("[DEBUG] num of quotes\n");
 		free(args_cleaned);
 		return (NULL);
 	}

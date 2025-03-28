@@ -33,17 +33,15 @@ int	final_len(char *args)
 	while (args[i])
 	{
 		handle_quotes(args[i], &data);
-		if (data.quotes == SUCCESS && ft_is_quotes(args[i]) == SUCCESS)
+		if (data.quotes == SUCCESS && data.quote_type == args[i])
+			i++;
+		if (args[i + 1] == '\0' && ft_is_quotes(args[i]) == SUCCESS)
+			i++;
+		if (args[i])
 		{
-			if (data.quote_type != args[i])
-			{
-				len++;
-				i++;
-			}
-		}
-		if (ft_is_quotes(args[i]) == ERROR)
+			i++;
 			len++;
-		i++;
+		}
 	}
 	return (len);
 }
@@ -66,12 +64,16 @@ char	*handling_quotes(char *args, int size)
 	while (args[i])
 	{
 		handle_quotes(args[i], &data);
-		if (data.quotes == SUCCESS && ft_is_quotes(args[i]) == SUCCESS)
-			if (data.quote_type != args[i])
-				str[j++] = args[i++];
-		if (ft_is_quotes(args[i]) == ERROR)
-			str[j++] = args[i];
-		i++;
+		if (data.quotes == SUCCESS && data.quote_type == args[i])
+			i++;
+		if (args[i + 1] == '\0' && ft_is_quotes(args[i]) == SUCCESS)
+			i++;
+		if (args[i])
+		{
+			str[j] = args[i];
+			i++;
+			j++;
+		}
 	}
 	str[j] = '\0';
 	return (str);
