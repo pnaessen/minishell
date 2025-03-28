@@ -165,6 +165,5 @@ Commandes intégrées au shell :
 
 refacto for 25 lignes
 secu all malloc
-quand plusieur expand
 export ==
-unset export leaks 
+pas sure de secu unlink

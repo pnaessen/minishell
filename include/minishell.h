@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/27 15:02:35 by pnaessen         ###   ########lyon.fr   */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2025/03/28 15:33:16 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,9 +186,17 @@ int						ft_is_valid_number(char *str);
 int						handle_numeric_exit(t_ast *cmd, t_env *env, char *arg);
 void					ft_exit(t_ast *cmd, t_env *env);
 
-////////////////////////ft_export.c////////////////////////////
-int						is_valid_identifier(char *str);
+////////////////////////ft_export_tools.c//////////////////////////
 void					update_env_var(t_env **env, char *var_str);
+void					handle_export_arg(t_env **env, char *arg,
+							int *error_code);
+int						check_env_match(t_env *current, char *name,
+							int name_len);
+
+////////////////////////ft_export.c////////////////////////////
+void					update_var_export(t_env *env, char *name, int name_len,
+							char *var_str);
+int						is_valid_identifier(char *str);
 void					ft_export(t_ast *cmd, t_env **env);
 void					print_sorted_env(t_env **env);
 
@@ -225,11 +233,13 @@ char					*find_in_path(char *cmd, char **env_array);
 char					*search_command_in_path(char *cmd, char **path_dirs);
 char					**env_to_tab(t_env **env);
 
+////////////////////////signal_tools.c//////////////////////////
+void					reset_signals(void);
+void					handle_signals_child(void);
+void					handle_signals(void);
+
 ////////////////////////signal.c///////////////////////////////
 void					handle_sig(int sig);
-void					handle_signals(void);
-void					handle_signals_child(void);
-void					reset_signals(void);
 void					handle_signals_heredoc(void);
 void					heredoc_sig_handler(int sig);
 int						check_heredoc_signals(void);
@@ -319,14 +329,14 @@ void					cleanup_heredoc_files(t_ast *node);
 void					print_ast(t_ast *node, int level);
 // void					print_redirections(t_redir *redirs, int level);
 
-// vivi
+///////////////////////ENV VIVI/////////////////////////////////
 char					*find_and_replace_var(char *args, t_env **env);
 t_stack					*parsing_input(char *input, t_env **env);
 char					*get_env_value(char *var_name, t_env **env);
-// replace env
 char					*replace_without_dollar(char *args, int pos, int quote);
 char					*replace_with_value(char *args, int pos, char *value);
 char					*replace_without_dollar(char *args, int pos, int quote);
 char					*replace_with_empty(char *args, int pos);
+int						size_of_exp(t_env **env, char *var_name);
 
 #endif

@@ -30,6 +30,7 @@ CORE_SRC := $(addprefix $(CORE_DIR), \
 	mini_env.c \
 	path_env.c \
 	stack.c \
+	signal_tools.c \
 )
 
 EXEC_SRC := $(addprefix $(EXEC_DIR), \
@@ -86,6 +87,7 @@ BUILTINS_SRC := $(addprefix $(BUILTINS_DIR), \
 	print_export.c \
 	ft_pwd.c \
 	ft_unset.c \
+	ft_export_tools.c \
 )
 
 # -------------------------- Combine All Sources ------------------------------ #

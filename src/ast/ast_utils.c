@@ -25,7 +25,6 @@ t_ast	*init_cmd_node_alloc(t_ast *node, int args_count)
 		free(node);
 		return (NULL);
 	}
-	// node->cmd->redirs = NULL;
 	return (node);
 }
 

@@ -51,3 +51,14 @@ t_ast	*create_pipe_node(t_ast *left_cmd, t_ast *right_cmd)
 		return (NULL);
 	return (pipe_node);
 }
+
+void	update_current_position(t_stack **current, t_stack *cmd_token,
+		t_stack *start, t_stack *end)
+{
+	if (cmd_token)
+		*current = cmd_token;
+	else
+		*current = start;
+	while (*current != end && (*current)->next != end)
+		*current = (*current)->next;
+}

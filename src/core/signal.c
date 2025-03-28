@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
+/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 14:11:14 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/26 20:54:15 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/03/28 15:27:59 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,24 +24,6 @@ void	handle_sig(int sig)
 		rl_replace_line("", 0);
 		rl_redisplay();
 	}
-}
-
-void	handle_signals(void)
-{
-	signal(SIGINT, handle_sig); // CTRL+C
-	signal(SIGQUIT, SIG_IGN);   // CTRL+ backslash
-}
-
-void	handle_signals_child(void)
-{
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
-}
-
-void	reset_signals(void)
-{
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
 }
 
 int	check_heredoc_signals(void)

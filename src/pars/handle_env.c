@@ -21,10 +21,7 @@ char	*handle_variable_replacement(char *args, int i, t_data *data,
 	}
 	else
 	{
-		if (data->quote_type == '"')
-			new_args = replace_with_value(args, i - 1, value);
-		else
-			new_args = replace_with_value(args, i, value);
+		new_args = replace_with_value(args, i, value);
 	}
 	free(value);
 	return (new_args);
@@ -32,6 +29,8 @@ char	*handle_variable_replacement(char *args, int i, t_data *data,
 
 char	*handle_invalid_variable(char *args, int i)
 {
+	if (ft_is_quotes(args[i + 1]) == SUCCESS && args[i] == '$')
+		return (ft_strdup(args));
 	if (ft_is_quotes(args[i + 1]) == SUCCESS || (args[i + 1] >= '0' && args[i
 			+ 1] <= '9'))
 		return (replace_without_dollar(args, i, ft_is_quotes(args[i + 1])));
@@ -71,6 +70,7 @@ char	*find_and_replace_var(char *args, t_env **env)
 		data.quote_type = '\0';
 		data.quote_num = 0;
 		data.quotes = ERROR;
+		printf("tab[%d] : %s\n", data.i, tab[data.i]);
 		process_variable_replacement(tab, &data, env);
 		data.i++;
 	}
@@ -151,6 +151,6 @@ char	*join_tabs(char **tab_args, int space)
 		}
 		data.i++;
 	}
-	new_args[data.count] = '\0'; // Null-terminate the string
+	new_args[data.count] = '\0';
 	return (new_args);
 }

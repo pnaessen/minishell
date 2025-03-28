@@ -11,24 +11,23 @@ char	*replace_with_empty(char *args, int pos)
 	i = 0;
 	j = 0;
 	len_args = size_of_args(args);
-	new_args = malloc((len_args + 4) * sizeof(char));
+	new_args = malloc((len_args + 3) * sizeof(char));
 	if (!new_args)
 		return (NULL);
 	while (args[i])
 	{
 		if (i == pos)
 		{
-			new_args[j++] = 39;
-			new_args[j++] = ' ';
-			new_args[j++] = 39;
-			while (args[i] && (args[i] != ' ' || args[i] != '"'))
+			new_args[j++] = '"';
+			new_args[j++] = '"';
+			while (args[i] && (args[i] != ' '
+					|| ft_is_quotes(args[i]) == ERROR))
 				i++;
 		}
 		new_args[j++] = args[i++];
 	}
 	return (new_args);
 }
-
 char	*replace_with_value(char *args, int pos, char *value)
 {
 	char	*new_args;
@@ -47,14 +46,20 @@ char	*replace_with_value(char *args, int pos, char *value)
 	{
 		if (data.i == pos)
 		{
-			new_args[data.count++] = 39;
+			 new_args[data.count++] = '"';
 			while (*value)
 				new_args[data.count++] = *value++;
-			new_args[data.count++] = 39;
+			 new_args[data.count++] = '"';
 			while (args[data.i] && args[data.i] != ' ')
+			{
+				if (args[data.i] == ' '
+					|| (ft_is_quotes(args[data.i]) == SUCCESS && data.i > 0))
+					break ;
 				data.i++;
+			}
 		}
-		new_args[data.count++] = args[data.i++];
+		if (args[data.i] != '\0')
+			new_args[data.count++] = args[data.i++];
 	}
 	new_args[data.count] = '\0';
 	return (new_args);
@@ -62,10 +67,10 @@ char	*replace_with_value(char *args, int pos, char *value)
 
 char	*replace_without_dollar(char *args, int pos, int quote)
 {
-	char *new_args;
-	int len;
-	int i;
-	int j;
+	char	*new_args;
+	int		len;
+	int		i;
+	int		j;
 
 	i = 0;
 	j = 0;
