@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vicperri <vicperri@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/28 17:40:31 by vicperri         ###   ########lyon.fr   */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2025/03/28 17:53:56 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <unistd.h>
 
 # define PATH_MAX 4096
+# define PROCESS_LIMIT 1025
 
 typedef struct s_ast
 {
@@ -185,9 +186,17 @@ int						ft_is_valid_number(char *str);
 int						handle_numeric_exit(t_ast *cmd, t_env *env, char *arg);
 void					ft_exit(t_ast *cmd, t_env *env);
 
-////////////////////////ft_export.c////////////////////////////
-int						is_valid_identifier(char *str);
+////////////////////////ft_export_tools.c//////////////////////////
 void					update_env_var(t_env **env, char *var_str);
+void					handle_export_arg(t_env **env, char *arg,
+							int *error_code);
+int						check_env_match(t_env *current, char *name,
+							int name_len);
+
+////////////////////////ft_export.c////////////////////////////
+void					update_var_export(t_env *env, char *name, int name_len,
+							char *var_str);
+int						is_valid_identifier(char *str);
 void					ft_export(t_ast *cmd, t_env **env);
 void					print_sorted_env(t_env **env);
 
@@ -224,11 +233,13 @@ char					*find_in_path(char *cmd, char **env_array);
 char					*search_command_in_path(char *cmd, char **path_dirs);
 char					**env_to_tab(t_env **env);
 
+////////////////////////signal_tools.c//////////////////////////
+void					reset_signals(void);
+void					handle_signals_child(void);
+void					handle_signals(void);
+
 ////////////////////////signal.c///////////////////////////////
 void					handle_sig(int sig);
-void					handle_signals(void);
-void					handle_signals_child(void);
-void					reset_signals(void);
 void					handle_signals_heredoc(void);
 void					heredoc_sig_handler(int sig);
 int						check_heredoc_signals(void);

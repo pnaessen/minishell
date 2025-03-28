@@ -44,7 +44,8 @@ int	write_to_temp_file(char *delimiter, char *filename)
 		write(temp_fd, "\n", 1);
 		free(line);
 	}
-	close(temp_fd);
+	if(close(temp_fd) == -1)
+		perror("minishell: close");
 	rl_event_hook = NULL;
 	if (g_signal_status == 131)
 	{
@@ -69,7 +70,10 @@ char	*ft_strjoin_free(char *s1, char *s2)
 	i = 0;
 	str = (char *)malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
 	if (!str)
+	{
+		free(s1);
 		return (NULL);
+	}
 	while (s1[i] != '\0')
 	{
 		str[i] = s1[i];
@@ -105,11 +109,13 @@ int	setup_heredoc_file(t_ast *node, char *delimiter)
 	fd = open(temp_filename, O_RDONLY);
 	if (fd == -1)
 	{
+		perror("minishell: open setup_heredoc_file");
 		free(delimiter);
 		free(temp_filename);
 		return (0);
 	}
-	close(fd);
+	if(close(fd) == -1)
+		perror("minishell: close");
 	free(delimiter);
 	free(node->cmd->args[0]);
 	node->cmd->args[0] = temp_filename;
@@ -127,7 +133,10 @@ int	process_all_heredocs(t_ast *node)
 	{
 		delimiter = ft_strdup(node->cmd->args[0]);
 		if (!delimiter)
+		{
+			perror("minishell: strdup process_all_heredocs");
 			return (0);
+		}
 		if (!setup_heredoc_file(node, delimiter))
 			return (0);
 	}

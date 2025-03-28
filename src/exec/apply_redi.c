@@ -35,9 +35,12 @@ int	save_std_fds(int *saved_stdin, int *saved_stdout, t_ast *node)
 
 void	restore_std_fds(int saved_stdin, int saved_stdout)
 {
-	dup2(saved_stdin, STDIN_FILENO);
-	dup2(saved_stdout, STDOUT_FILENO);
-	// clean_fd_garbage(&node->garbage);
-	close(saved_stdin);
-	close(saved_stdout);
+	if (dup2(saved_stdin, STDIN_FILENO) < 0)
+		perror("minishell: dup2");
+	if (dup2(saved_stdout, STDOUT_FILENO) < 0)
+		perror("minishell: dup2");
+	if (close(saved_stdin) == -1)
+		perror("minishell: close");
+	if (close(saved_stdout) == -1)
+		perror("minishell: close");
 }

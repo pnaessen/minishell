@@ -163,9 +163,7 @@ Commandes intégrées au shell :
 
 ## 🛠 To do
 
-secu for 1024 PROCESUS
-signal dans here_doc
 refacto for 25 lignes
 secu all malloc
-quand plusieur expand
 export ==
+pas sure de secu unlink

@@ -27,6 +27,7 @@ void	handle_redirection(t_ast **current_node, t_stack **current,
 	redir_node = malloc(sizeof(t_ast));
 	if (!redir_node)
 	{
+		perror("minishell: malloc handle_redirection");
 		free_ast(*root);
 		*root = NULL;
 		return ;
@@ -35,6 +36,7 @@ void	handle_redirection(t_ast **current_node, t_stack **current,
 	redir_node->cmd = malloc(sizeof(t_cmd));
 	if (!redir_node->cmd)
 	{
+		perror("minishell: malloc handle_redirection");
 		free(redir_node);
 		free_ast(*root);
 		*root = NULL;
@@ -66,11 +68,12 @@ void	init_redir_node(t_ast *redir_node, char *filename, t_ast **current_node,
 		free(redir_node->cmd->args);
 		free(redir_node->cmd);
 		free(redir_node);
-		return (free_ast(*root));
+		free_ast(*root);
+		*root = NULL;
+		return ;
 	}
 	redir_node->cmd->args[1] = NULL;
 	redir_node->cmd->path = NULL;
-	//redir_node->cmd->redirs = NULL;
 	redir_node->cmd->has_heredoc = 0;
 	redir_node->left = *current_node;
 	redir_node->right = NULL;
@@ -81,7 +84,6 @@ void	init_redir_node(t_ast *redir_node, char *filename, t_ast **current_node,
 void	init_redir_properties(t_ast *redir_node, t_ast *cmd_node)
 {
 	redir_node->cmd->path = NULL;
-	//redir_node->cmd->redirs = NULL;
 	redir_node->cmd->has_heredoc = 0;
 	redir_node->left = cmd_node;
 	redir_node->right = NULL;
@@ -96,11 +98,15 @@ t_ast	*create_redir_node(t_node_type token, char *filename, t_ast *cmd_node)
 
 	redir_node = malloc(sizeof(t_ast));
 	if (!redir_node)
+	{
+		perror("minishell: malloc create_redir_node");
 		return (NULL);
+	}
 	redir_node->token = token;
 	redir_node->cmd = malloc(sizeof(t_cmd));
 	if (!redir_node->cmd)
 	{
+		perror("minishell: malloc create_redir_node");
 		free(redir_node);
 		return (NULL);
 	}

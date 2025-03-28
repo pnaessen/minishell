@@ -55,17 +55,6 @@ t_ast	*process_redirections_ast(t_ast *result, t_stack **redir_tokens,
 	return (result);
 }
 
-void	update_current_position(t_stack **current, t_stack *cmd_token,
-		t_stack *start, t_stack *end)
-{
-	if (cmd_token)
-		*current = cmd_token;
-	else
-		*current = start;
-	while (*current != end && (*current)->next != end)
-		*current = (*current)->next;
-}
-
 t_stack	*find_valid_cmd_token(t_stack *start, t_stack *end)
 {
 	t_stack	*temp;
@@ -80,8 +69,7 @@ t_stack	*find_valid_cmd_token(t_stack *start, t_stack *end)
 	return (NULL);
 }
 
-t_ast	*process_right_side(t_stack *start, t_stack *end,
-		t_stack **current)
+t_ast	*process_right_side(t_stack *start, t_stack *end, t_stack **current)
 {
 	t_stack	*cmd_token;
 	t_ast	*cmd_node;
