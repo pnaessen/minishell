@@ -44,7 +44,7 @@ int	write_to_temp_file(char *delimiter, char *filename)
 		write(temp_fd, "\n", 1);
 		free(line);
 	}
-	if(close(temp_fd) == -1)
+	if (close(temp_fd) == -1)
 		perror("minishell: close");
 	rl_event_hook = NULL;
 	if (g_signal_status == 131)
@@ -114,7 +114,7 @@ int	setup_heredoc_file(t_ast *node, char *delimiter)
 		free(temp_filename);
 		return (0);
 	}
-	if(close(fd) == -1)
+	if (close(fd) == -1)
 		perror("minishell: close");
 	free(delimiter);
 	free(node->cmd->args[0]);

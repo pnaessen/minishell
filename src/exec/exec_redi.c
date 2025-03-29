@@ -6,8 +6,9 @@ void	exec_with_redirects(t_ast *node, t_env *env)
 	int		saved_stdin;
 	int		saved_stdout;
 	t_ast	*cmd_node;
-	int		error = -1;
+	int		error;
 
+	error = -1;
 	if (save_std_fds(&saved_stdin, &saved_stdout, node))
 		return ;
 	if (apply_all_redirections(node))
@@ -25,7 +26,7 @@ void	exec_with_redirects(t_ast *node, t_env *env)
 		return ;
 	}
 	execute_cmd_with_redir(cmd_node, node, env);
-	 restore_std_fds(saved_stdin, saved_stdout);
+	restore_std_fds(saved_stdin, saved_stdout);
 }
 
 int	is_cmd_invalid(t_ast *cmd_node)
