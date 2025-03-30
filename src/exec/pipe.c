@@ -48,7 +48,6 @@ void	execute_pipe(t_ast *cmd, t_env *env)
 		fork_fail(&cmd, pipefd);
 		waitpid(pid1, NULL, 0);
 		process_finished(env);
-		// kill(pid1, SIGTERM);
 		return ;
 	}
 	if (pid2 == 0)
