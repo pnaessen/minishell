@@ -69,6 +69,22 @@ t_stack	*find_valid_cmd_token(t_stack *start, t_stack *end)
 	return (NULL);
 }
 
+t_ast	*init_process_result(t_stack *cmd_token, t_stack **redir_tokens)
+{
+	t_ast	*cmd_node;
+
+	if (!cmd_token || cmd_token->token != CMD || !cmd_token->cmd)
+		cmd_node = create_cmd_node(NULL);
+	else
+		cmd_node = create_cmd_node(cmd_token);
+	if (!cmd_node)
+	{
+		free(redir_tokens);
+		return (NULL);
+	}
+	return (cmd_node);
+}
+
 t_ast	*process_right_side(t_stack *start, t_stack *end, t_stack **current)
 {
 	t_stack	*cmd_token;
@@ -79,15 +95,9 @@ t_ast	*process_right_side(t_stack *start, t_stack *end, t_stack **current)
 
 	cmd_token = find_valid_cmd_token(start, end);
 	redir_tokens = collect_redirections(start, end, &cmd_token, &redir_count);
-	if (!cmd_token || cmd_token->token != CMD || !cmd_token->cmd)
-		cmd_node = create_cmd_node(NULL);
-	else
-		cmd_node = create_cmd_node(cmd_token);
+	cmd_node = init_process_result(cmd_token, redir_tokens);
 	if (!cmd_node)
-	{
-		free(redir_tokens);
 		return (NULL);
-	}
 	result = cmd_node;
 	result = process_redirections_ast(result, redir_tokens, redir_count);
 	free(redir_tokens);

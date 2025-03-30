@@ -47,34 +47,43 @@ char	*find_in_path(char *cmd, char **env_array)
 	return (search_command_in_path(cmd, path_dirs));
 }
 
+static char	*try_command_path(char *dir_path, char *cmd)
+{
+	char	*temp;
+	char	*full_path;
+
+	temp = ft_strjoin(dir_path, "/");
+	if (!temp)
+		return (NULL);
+	full_path = ft_strjoin(temp, cmd);
+	free(temp);
+	if (!full_path)
+		return (NULL);
+	if (access(full_path, F_OK | X_OK) == 0)
+		return (full_path);
+	free(full_path);
+	return (NULL);
+}
+
 char	*search_command_in_path(char *cmd, char **path_dirs)
 {
 	int		i;
-	char	*temp;
-	char	*full_path;
+	char	*result;
 
 	i = 0;
 	while (path_dirs[i])
 	{
-		temp = ft_strjoin(path_dirs[i], "/");
-		if (!temp)
+		result = try_command_path(path_dirs[i], cmd);
+		if (!result && path_dirs[i + 1])
+		{
+			i++;
+			continue ;
+		}
+		if (result)
 		{
 			ft_free_ta(path_dirs);
-			return (NULL);
+			return (result);
 		}
-		full_path = ft_strjoin(temp, cmd);
-		free(temp);
-		if (!full_path)
-		{
-			ft_free_ta(path_dirs);
-			return (NULL);
-		}
-		if (access(full_path, F_OK | X_OK) == 0)
-		{
-			ft_free_ta(path_dirs);
-			return (full_path);
-		}
-		free(full_path);
 		i++;
 	}
 	ft_free_ta(path_dirs);

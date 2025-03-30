@@ -1,22 +1,6 @@
 #include "minishell.h"
 #include "pars.h"
 
-// void	free_redirections(t_redir *redirs)
-// {
-// 	t_redir	*current;
-// 	t_redir	*next;
-
-// 	current = redirs;
-// 	while (current)
-// 	{
-// 		next = current->next;
-// 		if (current->file)
-// 			free(current->file);
-// 		free(current);
-// 		current = next;
-// 	}
-// }
-
 void	free_ast_cmd(t_ast *node)
 {
 	if (!node || !node->cmd)

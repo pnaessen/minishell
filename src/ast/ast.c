@@ -73,12 +73,7 @@ void	init_redir_node(t_ast *redir_node, char *filename, t_ast **current_node,
 		return ;
 	}
 	redir_node->cmd->args[1] = NULL;
-	redir_node->cmd->path = NULL;
-	redir_node->cmd->has_heredoc = 0;
-	redir_node->left = *current_node;
-	redir_node->right = NULL;
-	redir_node->head = redir_node;
-	redir_node->error_code = 0;
+	init_redir_properties(redir_node, *current_node);
 }
 
 void	init_redir_properties(t_ast *redir_node, t_ast *cmd_node)

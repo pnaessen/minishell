@@ -1,6 +1,22 @@
 #include "minishell.h"
 #include "pars.h"
 
+void	free_cmd_true(t_ast **root)
+{
+	if ((*root)->cmd)
+	{
+		if ((*root)->cmd->args)
+		{
+			if ((*root)->cmd->args[0])
+				free((*root)->cmd->args[0]);
+			free((*root)->cmd->args);
+		}
+		free((*root)->cmd);
+	}
+	free(*root);
+	*root = NULL;
+}
+
 void	init_cmd_true(t_ast **root)
 {
 	*root = malloc(sizeof(t_ast));
@@ -10,25 +26,19 @@ void	init_cmd_true(t_ast **root)
 	(*root)->cmd = malloc(sizeof(t_cmd));
 	if (!(*root)->cmd)
 	{
-		free(*root);
-		*root = NULL;
+		free_cmd_true(root);
 		return ;
 	}
 	(*root)->cmd->args = malloc(sizeof(char *) * 2);
 	if (!(*root)->cmd->args)
 	{
-		free((*root)->cmd);
-		free(*root);
-		*root = NULL;
+		free_cmd_true(root);
 		return ;
 	}
 	(*root)->cmd->args[0] = ft_strdup("true");
 	if (!(*root)->cmd->args[0])
 	{
-		free((*root)->cmd->args);
-		free((*root)->cmd);
-		free(*root);
-		*root = NULL;
+		free_cmd_true(root);
 		return ;
 	}
 	(*root)->cmd->args[1] = NULL;
