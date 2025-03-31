@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/03/28 15:33:16 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/03/28 17:53:56 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -334,7 +334,8 @@ char					*find_and_replace_var(char *args, t_env **env);
 t_stack					*parsing_input(char *input, t_env **env);
 char					*get_env_value(char *var_name, t_env **env);
 char					*replace_without_dollar(char *args, int pos, int quote);
-char					*replace_with_value(char *args, int pos, char *value);
+char					*handle_variable_replacement(char *args, int i,
+							char quote_type, t_env **env);
 char					*replace_without_dollar(char *args, int pos, int quote);
 char					*replace_with_empty(char *args, int pos);
 int						size_of_exp(t_env **env, char *var_name);

@@ -90,8 +90,8 @@ void				define_type(t_stack *temp, char *cmd, int quotes);
 
 // minishell_split
 char				**pre_tokenisation(char const *s);
-int					lines_in_node(const char *s1);
 char				**tokenisation(char const *s);
+char				**split_var(char const *s);
 
 // pre_token_utils
 int					handle_multi_operators(const char *s1, int i);
@@ -101,7 +101,8 @@ int					is_operator_sequence(const char *s1, int index,
 						t_data *data);
 // replace env
 char				*replace_without_dollar(char *args, int pos, int quote);
-char				*replace_with_value(char *args, int pos, char *value);
+char	*replace_value_quotes(char *args, int pos, char *value);
+char	*replace_value(char *args, int pos, char *value);
 char				*replace_without_dollar(char *args, int pos, int quote);
 char				*replace_with_empty(char *args, int pos);
 
