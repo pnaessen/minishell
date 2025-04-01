@@ -32,15 +32,15 @@ char	*handle_variable_replacement(char *args, int i, char quote_type,
 
 char	*handle_invalid_variable(char *args, int i, char quote)
 {
-	write(1, "ici\n", 5);
-	write(1, &args[i], 1);
+	write(1, &args[i + 1], 1);
 	// if (ft_is_quotes(args[i + 1]) == SUCCESS && args[i] == '$')
 	// 	return (ft_strdup(args));
 	if (quote != '\'' && (args[i + 1] >= '0' && args[i + 1] <= '9'))
 	{
 		if (quote == '"')
 			return (replace_without_dollar(args, i - 1, SUCCESS));
-		return (replace_without_dollar(args, i, ERROR));
+		else
+			return (replace_without_dollar(args, i, ERROR));
 	}
 	return (ft_strdup(args));
 }
