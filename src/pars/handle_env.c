@@ -30,19 +30,23 @@ char	*handle_variable_replacement(char *args, int i, char quote_type,
 	return (new_args);
 }
 
-char	*handle_invalid_variable(char *args, int i)
+char	*handle_invalid_variable(char *args, int i, char quote)
 {
-	if (ft_is_quotes(args[i + 1]) == SUCCESS && args[i] == '$')
-		return (ft_strdup(args));
-	if (ft_is_quotes(args[i + 1]) == SUCCESS || (args[i + 1] >= '0' && args[i
-			+ 1] <= '9'))
-		return (replace_without_dollar(args, i, ft_is_quotes(args[i + 1])));
+	write(1, "ici\n", 5);
+	write(1, &args[i], 1);
+	// if (ft_is_quotes(args[i + 1]) == SUCCESS && args[i] == '$')
+	// 	return (ft_strdup(args));
+	if (quote != '\'' && (args[i + 1] >= '0' && args[i + 1] <= '9'))
+	{
+		if (quote == '"')
+			return (replace_without_dollar(args, i - 1, SUCCESS));
+		return (replace_without_dollar(args, i, ERROR));
+	}
 	return (ft_strdup(args));
 }
 
-void	process_variable_replacement(char **tab, t_data *data, t_env **env)
+char	*process_variable_replacement(char **tab, t_data *data, t_env **env)
 {
-	data->j = 0;
 	while (tab[data->i][data->j])
 	{
 		handle_quotes(tab[data->i][data->j], data);
@@ -56,31 +60,40 @@ void	process_variable_replacement(char **tab, t_data *data, t_env **env)
 						data->j, data->quote_type, env);
 			}
 			else
-				tab[data->i] = handle_invalid_variable(tab[data->i], data->j);
+			{
+				tab[data->i] = handle_invalid_variable(tab[data->i], data->j,
+						data->quote_type);
+			}
+			return (tab[data->i]);
 			free(data->temp);
 		}
 		else
 			data->j++;
 	}
+	return (tab[data->i]);
 }
 
 char	*find_and_replace_var(char *args, t_env **env)
 {
 	char	**tab;
+	char	*res;
 	t_data	data;
 
 	tab = split_var(args);
+	if (!tab)
+		return (NULL);
 	data.i = 0;
 	while (tab[data.i])
 	{
 		data.quote_type = '\0';
 		data.quote_num = 0;
 		data.quotes = ERROR;
-		process_variable_replacement(tab, &data, env);
+		data.j = 0;
+		tab[data.i] = process_variable_replacement(tab, &data, env);
 		data.i++;
 	}
-	data.temp = return_env(args, tab);
-	return (data.temp);
+	res = return_env(args, tab);
+	return (res);
 }
 char	*return_env(char *args, char **tab_args)
 {
@@ -148,10 +161,15 @@ char	*join_tabs(char **tab_args, int space)
 	{
 		data.j = 0;
 		while (tab_args[data.i][data.j])
-			new_args[data.count++] = tab_args[data.i][data.j++];
+		{
+			new_args[data.count] = tab_args[data.i][data.j];
+			data.count++;
+			data.j++;
+		}
 		if (space > 0)
 		{
-			new_args[data.count++] = ' ';
+			new_args[data.count] = ' ';
+			data.count++;
 			space--;
 		}
 		data.i++;

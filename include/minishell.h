@@ -6,7 +6,7 @@
 /*   By: vicperri <vicperri@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/28 17:40:31 by vicperri         ###   ########lyon.fr   */
+/*   Updated: 2025/03/31 14:17:07 by vicperri         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,7 @@ t_ast					*free_cmd_node(t_ast *node, int i);
 void					free_stack_node(t_stack *node);
 void					free_stack(t_stack *stack);
 void					free_args_array(char **args);
+void					print_env_debug(t_env **head);
 int						is_redirection(t_node_type token);
 
 ///////////////////////TREE_AST.C//////////////////////////////

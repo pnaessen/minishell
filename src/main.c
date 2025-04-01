@@ -22,7 +22,7 @@ int	main(int argc, char **argv, char **env)
 	handle_env(env, &head);
 	while (1)
 	{
-		input = readline("minishell$ ");
+		input = readline("minishell$> ");
 		if (!input)
 		{
 			printf("exit\n");
@@ -60,7 +60,7 @@ void	print_ast(t_ast *node, int level)
 	switch (node->token)
 	{
 	case CMD:
-		printf("CMD: ");
+		 printf("CMD: ");
 		if (node->cmd && node->cmd->args)
 		{
 			i = 0;

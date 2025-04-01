@@ -2,6 +2,7 @@
     "files.associations": {
         "pars.h": "c",
         "minishell.h": "c",
-        "unistd.h": "c"
+        "unistd.h": "c",
+        "type_traits": "c"
     }
 }

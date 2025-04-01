@@ -73,6 +73,7 @@ PARS_SRC := $(addprefix $(PARS_DIR), \
 	handle_env.c \
 	env_utils.c \
 	replace_env.c \
+	split_var.c \
 )
 
 BUILTINS_SRC := $(addprefix $(BUILTINS_DIR), \

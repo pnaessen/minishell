@@ -33,15 +33,28 @@ int	final_len(char *args)
 	while (args[i])
 	{
 		handle_quotes(args[i], &data);
-		if (data.quotes == SUCCESS && data.quote_type == args[i])
-			i++;
-		else if (ft_is_quotes(args[i]) == SUCCESS && args[i + 1] == '\0')
-			i++;
-		else if (data.quotes == SUCCESS && data.quote_type == args[i + 1])
+		if (args[i + 1] && data.quote_type == args[i + 1]
+			&& data.quote_type != args[i])
 		{
 			i++;
 			len++;
+			if (args[i] && ft_is_quotes(args[i]) == SUCCESS
+				&& data.quote_type == args[i])
+			{
+				data.quote_type = '\0';
+				i++;
+			}
+		}
+		else if (args[i] && ft_is_quotes(args[i]) == SUCCESS
+			&& data.quote_type == args[i])
+		{
 			i++;
+			if (args[i] && ft_is_quotes(args[i]) == SUCCESS
+				&& data.quote_type == args[i])
+			{
+				data.quote_type = '\0';
+				i++;
+			}
 		}
 		else if (args[i])
 		{
@@ -70,16 +83,29 @@ char	*handling_quotes(char *args, int size)
 	while (args[i])
 	{
 		handle_quotes(args[i], &data);
-		if (data.quotes == SUCCESS && data.quote_type == args[i])
-			i++;
-		else if (ft_is_quotes(args[i]) == SUCCESS && args[i + 1] == '\0')
-			i++;
-		else if (data.quotes == SUCCESS && data.quote_type == args[i + 1])
+		if (args[i + 1] && data.quote_type == args[i + 1]
+			&& data.quote_type != args[i])
 		{
 			str[j] = args[i];
 			i++;
 			j++;
+			if (args[i] && ft_is_quotes(args[i]) == SUCCESS
+				&& data.quote_type == args[i])
+			{
+				data.quote_type = '\0';
+				i++;
+			}
+		}
+		else if (args[i] && ft_is_quotes(args[i]) == SUCCESS
+			&& data.quote_type == args[i])
+		{
 			i++;
+			if (args[i] && ft_is_quotes(args[i]) == SUCCESS
+				&& data.quote_type == args[i])
+			{
+				data.quote_type = '\0';
+				i++;
+			}
 		}
 		else if (args[i])
 		{
