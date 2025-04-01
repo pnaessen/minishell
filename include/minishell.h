@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
+/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/03/28 17:53:56 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/04/01 08:53:40 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,6 +230,7 @@ void					create_mini_env(t_env **head);
 ////////////////////////path_env.c/////////////////////////////
 char					*get_path(char *cmd, char **env_array);
 char					*find_in_path(char *cmd, char **env_array);
+char					*try_command_path(char *dir_path, char *cmd);
 char					*search_command_in_path(char *cmd, char **path_dirs);
 char					**env_to_tab(t_env **env);
 
@@ -244,15 +245,15 @@ void					handle_signals_heredoc(void);
 void					heredoc_sig_handler(int sig);
 int						check_heredoc_signals(void);
 
-/////////////////////////stack.c///////////////////////////////
+/////////////////////////tools.c///////////////////////////////
 int						can_create_process(t_env *env);
 void					process_finished(t_env *env);
-
+void					free_env_fail(char **env_array, int count);
 ////////////////////////utils_lst.c////////////////////////////
 void					handle_env(char **env, t_env **head);
 void					lstadd_back(t_env **head, t_env *new_node);
 void					free_env_list(t_env *env);
-
+int						count_env_nodes(t_env *env);
 ////////////////////////utils.c////////////////////////////////
 int						ft_strrcmp(char *src, char *cmp);
 void					free_env_array(char **env_array);
@@ -267,6 +268,14 @@ int						save_std_fds(int *saved_stdin, int *saved_stdout,
 							t_ast *node);
 void					restore_std_fds(int saved_stdin, int saved_stdout);
 
+////////////////////////cmd_tools.c////////////////////////////
+void					handle_path_error(t_ast *cmd, char **env_array);
+char					*prepare_command_path(t_ast *cmd, char **env_array);
+char					**prepare_command_args(t_ast *cmd, char **env_array);
+void					prepare_execution(t_ast *cmd, char **env_array,
+							char **args_copy, char *path_copy);
+void					child_process(t_ast *cmd, t_env *env);
+
 ////////////////////////command.c//////////////////////////////
 char					**create_args_copy(t_ast *cmd, char **env_array);
 void					copy_args(t_ast *cmd, char **args_copy,
@@ -274,7 +283,6 @@ void					copy_args(t_ast *cmd, char **args_copy,
 void					execute_command(char *path, char **args,
 							char **env_array);
 void					handle_command_not_found(t_ast *cmd, char **env_array);
-void					child_process(t_ast *cmd, t_env *env);
 
 ////////////////////////exec_redi.c////////////////////////////
 void					exec_with_redirects(t_ast *node, t_env *env);
@@ -282,6 +290,13 @@ int						is_cmd_invalid(t_ast *cmd_node);
 t_ast					*find_cmd_node(t_ast *node, int *has_error);
 void					execute_cmd_with_redir(t_ast *cmd_node, t_ast *node,
 							t_env *env);
+
+////////////////////////exec_tools.c//////////////////////////
+int						setup_pipe(t_ast *cmd, int pipefd[2]);
+void					cleanup_pipe(int pipefd[2]);
+void					handle_ast_node(t_ast *node, t_env *env);
+void					update_error_codes(t_ast *node, t_env *env);
+void					fork_fail(t_ast **cmd, int *pipefd);
 
 ////////////////////////exec.c////////////////////////////////
 int						parent_process(pid_t pid, t_ast *cmd);
@@ -313,10 +328,15 @@ int						get_right_exit_code(t_ast *cmd);
 void					pipe_child_right(t_ast *cmd, t_env *env, int *pipefd);
 
 ////////////////////////pipe.c////////////////////////////////
+int						handle_first_fork(t_ast *cmd, t_env *env, int pipefd[2],
+							pid_t *pid1);
+int						check_second_process(t_ast *cmd, t_env *env,
+							int pipefd[2], pid_t pid1);
+int						create_second_fork(t_ast *cmd, t_env *env,
+							int pipefd[2], pid_t pid1);
 void					execute_pipe(t_ast *cmd, t_env *env);
 void					handle_pipe_parent(t_ast *cmd, pid_t pid1, pid_t pid2,
 							int *pipefd);
-void					fork_fail(t_ast **cmd, int *pipefd);
 
 ////////////////////////redirection.c//////////////////////////
 int						apply_input_redirection(t_ast *redir);
@@ -327,7 +347,6 @@ void					cleanup_heredoc_files(t_ast *node);
 
 ///////////////////////main.c/////////////////////////////////
 void					print_ast(t_ast *node, int level);
-// void					print_redirections(t_redir *redirs, int level);
 
 ///////////////////////ENV VIVI/////////////////////////////////
 char					*find_and_replace_var(char *args, t_env **env);

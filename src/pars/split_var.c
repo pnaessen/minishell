@@ -101,3 +101,5 @@ char	**split_var(char const *s)
 	res[data.count] = NULL;
 	return (res);
 }
+
+//add

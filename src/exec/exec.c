@@ -55,36 +55,36 @@ void	execute_cmd_node(t_ast *node, t_env *env)
 		execute_cmd(node, env);
 }
 
-void	execute_ast(t_ast *node, t_env *env)
+int	process_heredocs_if_needed(t_ast *node, t_env *env, int *heredocs_processed)
 {
-	static int	heredocs_processed = 0;
-	int			tmp;
+	int	tmp;
 
-	if (!node)
-		return ;
-	if (!heredocs_processed)
+	if (!*heredocs_processed)
 	{
 		tmp = process_all_heredocs(node);
-		heredocs_processed = 1;
+		*heredocs_processed = 1;
 		if (tmp == 0)
 		{
 			env->error_code = 130;
-			heredocs_processed = 0;
+			*heredocs_processed = 0;
 			cleanup_heredoc_files(node);
 			clean_fd_garbage(&node->garbage);
-			return ;
+			return (0);
 		}
 	}
-	if (node->token == CMD)
-		execute_cmd_node(node, env);
-	else if (node->token == PIPE)
-		execute_pipe(node, env);
-	else if (node->token == REDIR_IN || node->token == REDIR_OUT
-		|| node->token == APPEND || node->token == REDIR_HEREDOC)
-		exec_with_redirects(node, env);
-	if (node->head != node && node->head)
-		node->head->error_code = node->error_code;
-	env->error_code = node->error_code;
+	return (1);
+}
+
+void	execute_ast(t_ast *node, t_env *env)
+{
+	static int	heredocs_processed = 0;
+
+	if (!node)
+		return ;
+	if (!process_heredocs_if_needed(node, env, &heredocs_processed))
+		return ;
+	handle_ast_node(node, env);
+	update_error_codes(node, env);
 	if (node->head == node)
 	{
 		heredocs_processed = 0;

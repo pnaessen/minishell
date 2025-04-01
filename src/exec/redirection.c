@@ -89,10 +89,7 @@ void	cleanup_heredoc_files(t_ast *node)
 	if (node->token == REDIR_HEREDOC && node->cmd && node->cmd->args)
 	{
 		if (node->cmd->args[0])
-		{
-			if (unlink(node->cmd->args[0]) == -1)
-				perror("minishell: unlink");
-		}
+			unlink(node->cmd->args[0]);
 	}
 	if (node->left)
 		cleanup_heredoc_files(node->left);

@@ -47,7 +47,7 @@ char	*find_in_path(char *cmd, char **env_array)
 	return (search_command_in_path(cmd, path_dirs));
 }
 
-static char	*try_command_path(char *dir_path, char *cmd)
+char	*try_command_path(char *dir_path, char *cmd)
 {
 	char	*temp;
 	char	*full_path;
@@ -95,15 +95,10 @@ char	**env_to_tab(t_env **env)
 	t_env	*current;
 	char	**env_array;
 	int		i;
+	int		count;
 
-	i = 0;
-	current = *env;
-	while (current)
-	{
-		i++;
-		current = current->next;
-	}
-	env_array = malloc(sizeof(char *) * (i + 1));
+	count = count_env_nodes(*env);
+	env_array = malloc(sizeof(char *) * (count + 1));
 	if (!env_array)
 		return (NULL);
 	i = 0;
@@ -113,9 +108,7 @@ char	**env_to_tab(t_env **env)
 		env_array[i] = ft_strdup(current->str);
 		if (!env_array[i])
 		{
-			while (i > 0)
-				free(env_array[--i]);
-			free(env_array);
+			free_env_fail(env_array, i);
 			return (NULL);
 		}
 		i++;

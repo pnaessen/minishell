@@ -79,7 +79,7 @@ char	*handling_quotes(char *args, int size)
 			str[j] = args[i];
 			i++;
 			j++;
-			i++;
+			//i++;
 		}
 		else if (args[i])
 		{

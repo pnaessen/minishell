@@ -29,7 +29,7 @@ CORE_SRC := $(addprefix $(CORE_DIR), \
 	utils_lst.c \
 	mini_env.c \
 	path_env.c \
-	stack.c \
+	tools.c \
 	signal_tools.c \
 )
 
@@ -44,6 +44,8 @@ EXEC_SRC := $(addprefix $(EXEC_DIR), \
 	exec_redi.c \
 	here_doc.c \
 	fd_garbage.c \
+	cmd_tools.c \
+	exec_tools.c \
 )
 
 AST_SRC := $(addprefix $(AST_DIR), \
@@ -186,7 +188,7 @@ VALGRIND_SUPPRESS_FILE := $(abspath readline.supp)
 
 valgrind: $(NAME) readline.supp
 	@echo "$(CYAN)🔍 Running Valgrind leak check...$(DEF_COLOR)"
-	@valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --trace-children=yes --track-fds=yes \
+	@valgrind --leak-check=full -s --show-leak-kinds=all --track-origins=yes --trace-children=yes --track-fds=yes \
 		--suppressions="$(VALGRIND_SUPPRESS_FILE)" \
 		./$(NAME)
 

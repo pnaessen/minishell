@@ -71,37 +71,3 @@ void	handle_command_not_found(t_ast *cmd, char **env_array)
 	free_env_array(env_array);
 	exit(127);
 }
-
-void	child_process(t_ast *cmd, t_env *env)
-{
-	char	**env_array;
-	char	**args_copy;
-	char	*path_copy;
-
-	handle_signals_child();
-	env_array = env_to_tab(&env);
-	if (!env_array)
-	{
-		free_env_list(env);
-		free_ast(cmd->root);
-		exit(1);
-	}
-	free_env_list(env);
-	cmd->cmd->path = get_path(cmd->cmd->args[0], env_array);
-	if (!cmd->cmd->path)
-		handle_command_not_found(cmd, env_array);
-	args_copy = create_args_copy(cmd, env_array);
-	copy_args(cmd, args_copy, env_array);
-	path_copy = ft_strdup(cmd->cmd->path);
-	if (!path_copy)
-	{
-		free_args_array(args_copy);
-		free_ast(cmd->root);
-		free_env_array(env_array);
-		exit(1);
-	}
-	if (cmd->root && cmd->root->garbage)
-		clean_fd_garbage(&cmd->root->garbage);
-	free_ast(cmd->root);
-	execute_command(path_copy, args_copy, env_array);
-}

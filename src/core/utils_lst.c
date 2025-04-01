@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_lst.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
+/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 14:44:37 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/25 18:42:35 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/04/01 08:43:02 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,4 +68,19 @@ void	free_env_list(t_env *env)
 			free(temp->str);
 		free(temp);
 	}
+}
+
+int	count_env_nodes(t_env *env)
+{
+	t_env	*current;
+	int		i;
+
+	i = 0;
+	current = env;
+	while (current)
+	{
+		i++;
+		current = current->next;
+	}
+	return (i);
 }
