@@ -47,8 +47,11 @@ int	size_of_args(char *args)
 			while (args[i] && args[i] != '"')
 				i++;
 		}
-		i++;
-		len++;
+		if (args[i])
+		{
+			i++;
+			len++;
+		}
 	}
 	return (len);
 }

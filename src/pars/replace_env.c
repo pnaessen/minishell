@@ -24,8 +24,10 @@ char	*replace_with_empty(char *args, int pos)
 					|| ft_is_quotes(args[i]) == ERROR))
 				i++;
 		}
-		new_args[j++] = args[i++];
+		if (args[i])
+			new_args[j++] = args[i++];
 	}
+	new_args[j] = '\0';
 	return (new_args);
 }
 char	*replace_value(char *args, int pos, char *value)
@@ -84,16 +86,9 @@ char	*replace_value_quotes(char *args, int pos, char *value)
 			new_args[data.count++] = '"';
 			while (*value)
 				new_args[data.count++] = *value++;
+			new_args[data.count++] = '"';
 			while (args[data.i] && args[data.i] != ' ')
 			{
-				if (args[data.i] == ' '
-					|| (ft_is_quotes(args[data.i]) == SUCCESS && data.i > 0))
-				{
-					if ((ft_is_quotes(args[data.i]) == SUCCESS && data.i > 0))
-						new_args[data.count++] = args[data.i++];
-					new_args[data.count++] = '"';
-					break ;
-				}
 				data.i++;
 			}
 		}
@@ -114,17 +109,24 @@ char	*replace_without_dollar(char *args, int pos, int quote)
 	i = 0;
 	j = 0;
 	if (quote == SUCCESS)
-		len = size_of_args(args) - 3;
+		len = size_of_args(args) - 4;
 	else
 		len = size_of_args(args) - 2;
 	new_args = malloc((len + 1) * sizeof(char));
 	if (!new_args)
 		return (NULL);
+	write(1, "in without dollar\n", 19);
 	while (args[i])
 	{
 		if (i == pos)
-			i += 2;
+		{
+			if (quote == SUCCESS)
+				i += 3;
+			else
+				i += 2;
+		}
 		new_args[j] = args[i];
+		printf("args[%d] = %c\n", i, args[i]);
 		i++;
 		j++;
 	}
