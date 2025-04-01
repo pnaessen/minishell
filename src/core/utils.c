@@ -36,8 +36,10 @@ void	free_env_array(char **env_array)
 
 int	ft_isdigiter(int c)
 {
-	if (c > 47 && c < 58)
+	if ((c > 47 && c < 58) || c == 61)
+	{
 		return (1);
+	}
 	else
 		return (0);
 }
