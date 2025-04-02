@@ -164,6 +164,4 @@ Commandes intégrées au shell :
 ## 🛠 To do
 
 refacto for 25 lignes
-secu all malloc
-export ==
-pas sure de secu unlink
+leak avec echo $user et aussi plus de leak avec une var not real
