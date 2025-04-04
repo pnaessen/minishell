@@ -36,6 +36,19 @@ int	count_redirections(t_stack *start, t_stack *end)
 	return (count);
 }
 
+t_stack	**init_redir_tokens(int *redir_count, t_stack *start, t_stack *end)
+{
+	t_stack	**redir_tokens;
+
+	*redir_count = count_redirections(start, end);
+	if (*redir_count == 0)
+		return (NULL);
+	redir_tokens = malloc(sizeof(t_stack *) * (*redir_count));
+	if (!redir_tokens)
+		return (NULL);
+	return (redir_tokens);
+}
+
 t_stack	**collect_redirections(t_stack *start, t_stack *end,
 		t_stack **cmd_token, int *redir_count)
 {
@@ -43,10 +56,7 @@ t_stack	**collect_redirections(t_stack *start, t_stack *end,
 	t_stack	*temp;
 	int		i;
 
-	*redir_count = count_redirections(start, end);
-	if (*redir_count == 0)
-		return (NULL);
-	redir_tokens = malloc(sizeof(t_stack *) * (*redir_count));
+	redir_tokens = init_redir_tokens(redir_count, start, end);
 	if (!redir_tokens)
 		return (NULL);
 	temp = start;
