@@ -15,34 +15,44 @@ t_ast	*parse_and_build_ast(char *input, t_env **env)
 	return (ast_result);
 }
 
-void	handle_redirection(t_ast **current_node, t_stack **current,
-		t_ast **root)
+void	init_redirection_data(t_ast **redir_node, t_ast **current_node,
+		t_stack **current, t_ast **root)
 {
-	t_ast	*redir_node;
 	char	*filename;
 
 	filename = (*current)->next->cmd[0];
 	if (!filename)
 		return ;
-	redir_node = malloc(sizeof(t_ast));
-	if (!redir_node)
+	*redir_node = malloc(sizeof(t_ast));
+	if (!*redir_node)
 	{
 		perror("minishell: malloc handle_redirection");
 		free_ast(*root);
 		*root = NULL;
 		return ;
 	}
-	redir_node->token = (*current)->token;
-	redir_node->cmd = malloc(sizeof(t_cmd));
-	if (!redir_node->cmd)
+	(*redir_node)->token = (*current)->token;
+	(*redir_node)->cmd = malloc(sizeof(t_cmd));
+	if (!(*redir_node)->cmd)
 	{
 		perror("minishell: malloc handle_redirection");
-		free(redir_node);
+		free(*redir_node);
 		free_ast(*root);
 		*root = NULL;
 		return ;
 	}
-	init_redir_node(redir_node, filename, current_node, root);
+	init_redir_node(*redir_node, filename, current_node, root);
+}
+
+void	handle_redirection(t_ast **current_node, t_stack **current,
+		t_ast **root)
+{
+	t_ast	*redir_node;
+
+	redir_node = NULL;
+	init_redirection_data(&redir_node, current_node, current, root);
+	if (!redir_node || !redir_node->cmd)
+		return ;
 	if ((*current)->token == REDIR_HEREDOC && (*current_node)->token != CMD)
 		handle_heredoc_case(current_node, root, redir_node);
 	else

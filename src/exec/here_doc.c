@@ -3,20 +3,21 @@
 
 char	*create_temp_filename(void)
 {
-	char	*filename;
-	char	*pid_str;
+	char		*filename;
+	char		*counter_str;
+	static int	counter = 0;
 
 	filename = ft_strdup("/tmp/minishell_heredoc_");
 	if (!filename)
 		return (NULL);
-	pid_str = ft_itoa(getpid());
-	if (!pid_str)
+	counter_str = ft_itoa(counter++);
+	if (!counter_str)
 	{
 		free(filename);
 		return (NULL);
 	}
-	filename = ft_strjoin_free(filename, pid_str);
-	free(pid_str);
+	filename = ft_strjoin_free(filename, counter_str);
+	free(counter_str);
 	return (filename);
 }
 
