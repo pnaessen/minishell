@@ -3,21 +3,51 @@
 
 char	*create_temp_filename(void)
 {
-	char	*filename;
-	char	*pid_str;
+	char		*filename;
+	char		*counter_str;
+	static int	counter = 0;
 
 	filename = ft_strdup("/tmp/minishell_heredoc_");
 	if (!filename)
 		return (NULL);
-	pid_str = ft_itoa(getpid());
-	if (!pid_str)
+	counter_str = ft_itoa(counter++);
+	if (!counter_str)
 	{
 		free(filename);
 		return (NULL);
 	}
-	filename = ft_strjoin_free(filename, pid_str);
-	free(pid_str);
+	filename = ft_strjoin_free(filename, counter_str);
+	free(counter_str);
 	return (filename);
+}
+
+int	handle_heredoc_line(char *delimiter, char *line, int temp_fd)
+{
+	if (!line || g_signal_status == 131 || ft_strcmp(line, delimiter) == 0)
+	{
+		free(line);
+		return (1);
+	}
+	write(temp_fd, line, ft_strlen(line));
+	write(temp_fd, "\n", 1);
+	free(line);
+	return (0);
+}
+
+int	check_signal_status(int status)
+{
+	rl_event_hook = NULL;
+	if (g_signal_status == 131)
+	{
+		g_signal_status = 130;
+		signal(SIGINT, handle_sig);
+		signal(SIGQUIT, SIG_IGN);
+		return (-2);
+	}
+	handle_signals();
+	if (status != 0)
+		g_signal_status = status;
+	return (0);
 }
 
 int	write_to_temp_file(char *delimiter, char *filename)
@@ -35,29 +65,12 @@ int	write_to_temp_file(char *delimiter, char *filename)
 	while (1)
 	{
 		line = readline("> ");
-		if (!line || g_signal_status == 131 || ft_strcmp(line, delimiter) == 0)
-		{
-			free(line);
+		if (handle_heredoc_line(delimiter, line, temp_fd))
 			break ;
-		}
-		write(temp_fd, line, ft_strlen(line));
-		write(temp_fd, "\n", 1);
-		free(line);
 	}
 	if (close(temp_fd) == -1)
 		perror("minishell: close");
-	rl_event_hook = NULL;
-	if (g_signal_status == 131)
-	{
-		g_signal_status = 130;
-		signal(SIGINT, handle_sig);
-		signal(SIGQUIT, SIG_IGN);
-		return (-2);
-	}
-	handle_signals();
-	if (status != 0)
-		g_signal_status = status;
-	return (0);
+	return (check_signal_status(status));
 }
 
 char	*ft_strjoin_free(char *s1, char *s2)
@@ -89,10 +102,37 @@ char	*ft_strjoin_free(char *s1, char *s2)
 	return (str);
 }
 
+int	handle_temp_file_error(char *delimiter, char *temp_filename)
+{
+	if (!delimiter)
+		free(delimiter);
+	if (!temp_filename)
+		free(temp_filename);
+	return (0);
+}
+
+int	setup_temp_file(char *delimiter, char *temp_filename)
+{
+	int	fd;
+	int	write_result;
+
+	write_result = write_to_temp_file(delimiter, temp_filename);
+	if (write_result <= -1)
+		return (handle_temp_file_error(delimiter, temp_filename));
+	fd = open(temp_filename, O_RDONLY);
+	if (fd == -1)
+	{
+		perror("minishell: open setup_heredoc_file");
+		return (handle_temp_file_error(delimiter, temp_filename));
+	}
+	if (close(fd) == -1)
+		perror("minishell: close");
+	return (1);
+}
+
 int	setup_heredoc_file(t_ast *node, char *delimiter)
 {
 	char	*temp_filename;
-	int		fd;
 
 	temp_filename = create_temp_filename();
 	if (!temp_filename)
@@ -100,22 +140,8 @@ int	setup_heredoc_file(t_ast *node, char *delimiter)
 		free(delimiter);
 		return (0);
 	}
-	if (write_to_temp_file(delimiter, temp_filename) <= -1)
-	{
-		free(delimiter);
-		free(temp_filename);
+	if (!setup_temp_file(delimiter, temp_filename))
 		return (0);
-	}
-	fd = open(temp_filename, O_RDONLY);
-	if (fd == -1)
-	{
-		perror("minishell: open setup_heredoc_file");
-		free(delimiter);
-		free(temp_filename);
-		return (0);
-	}
-	if (close(fd) == -1)
-		perror("minishell: close");
 	free(delimiter);
 	free(node->cmd->args[0]);
 	node->cmd->args[0] = temp_filename;
