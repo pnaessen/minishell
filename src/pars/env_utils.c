@@ -64,7 +64,7 @@ char	*extract_variable_name(char *args, int i)
 
 	j = 0;
 	len = size_of_var(args, i);
-	var_name = malloc((len + 1) * sizeof(char));
+	var_name = malloc((len + 1) * sizeof(char)); //maybe leaks
 	if (!var_name)
 		return (NULL);
 	while (args[i])

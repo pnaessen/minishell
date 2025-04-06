@@ -27,7 +27,7 @@ t_stack	*node_init(char **cmd)
 {
 	t_stack	*new_node;
 
-	new_node = (t_stack *)malloc(sizeof(t_stack));
+	new_node = (t_stack *)malloc(sizeof(t_stack)); //Leaks
 	if (!(new_node))
 		return (NULL);
 	new_node->cmd = cmd;

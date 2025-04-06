@@ -64,7 +64,7 @@ static char	*ft_newtab(const char *s1, int size, int i)
 	char	*dup;
 	int		j;
 
-	dup = malloc((size + 1) * sizeof(char));
+	dup = malloc((size + 1) * sizeof(char)); //leaks
 	j = 0;
 	if (!(dup))
 		return (0);
@@ -86,7 +86,7 @@ char	**pre_tokenisation(char const *s)
 
 	i = 0;
 	j = 0;
-	res = malloc((num_of_lines(s) + 1) * sizeof(char *));
+	res = malloc((num_of_lines(s) + 1) * sizeof(char *)); //leaks
 	if (!(res))
 		return (0);
 	while (s[i] && j < num_of_lines(s))

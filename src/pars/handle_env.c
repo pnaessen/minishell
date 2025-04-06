@@ -154,9 +154,10 @@ char	*join_tabs(char **tab_args, int space)
 	data.i = 0;
 	data.count = 0;
 	len = len_tab_of_tab(tab_args);
-	new_args = malloc((len + 1) * sizeof(char));
+	new_args = malloc((len + 1) * sizeof(char)); //maybe leaks
 	if (!new_args)
 		return (NULL);
+	len += 1;
 	while (tab_args[data.i])
 	{
 		data.j = 0;

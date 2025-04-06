@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 12:04:20 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/18 10:57:59 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/04/06 18:32:19 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static int	ft_count_word(char const *s, char c);
 static int	ft_len(char const *s, int i, char c);
 static char	*ft_strndup(char const *s, int i, int size, char c);
-char	**ft_free(char **tab);
+char		**ft_free(char **tab);
 
 char	**ft_split(char const *s, char c)
 {
