@@ -80,7 +80,6 @@ char	*handling_quotes(char *args, int size)
 	str = malloc(size * sizeof(char)); //leaks
 	if (!str)
 		return (NULL);
-	size += 1;
 	while (args[i])
 	{
 		handle_quotes(args[i], &data);

@@ -30,7 +30,9 @@ void	remove_env_var(t_env **env, char *var_name)
 			if (prev)
 				prev->next = current->next;
 			else
+			{
 				*env = current->next;
+			}
 			free(current->str);
 			free(current);
 			break ;
