@@ -92,7 +92,6 @@ char	**pre_tokenisation(char const *s)
 	while (s[i] && j < num_of_lines(s))
 	{
 		res[j] = ft_newtab(s, num_of_words(s, i), i);
-		printf("res[%d] in pre token : %s\n", j, res[j]);
 		if (!res[j])
 			return (ft_free_all(res));
 		i += num_of_words(s, i);

@@ -43,8 +43,6 @@ static int	cnt_words(const char *s1, int i)
 		handle_quotes(s1[i], &data);
 		if (s1[i] == ' ' && data.quotes == ERROR)
 			return (count);
-		// else if (s1[i] == 39 && data.quote_type != 39)
-		//  	return (count);
 		else if ((data.quotes == ERROR || data.quote_type != 39) && (s1[i] && s1[i
 				+ 1] == '$' && count > 0))
 		{
@@ -93,7 +91,6 @@ char	**split_var(char const *s)
 	{
 		check_quotes(s[data.i], &data);
 		res[data.count] = create_tab(s, cnt_words(s, data.i), data.i);
-		printf("split var res[%d] : |%s|\n", data.count, res[data.count]);
 		if (!(res[data.count]))
 			return (ft_free_all(res));
 		data.i += cnt_words(s, data.i);
@@ -102,6 +99,5 @@ char	**split_var(char const *s)
 			data.i++;
 	}
 	res[data.count] = NULL;
-	printf("split var res[%d] : %s\n", data.count, res[data.count]);
 	return (res);
 }

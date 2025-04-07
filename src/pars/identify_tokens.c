@@ -48,3 +48,35 @@ int	identify_token_type(t_stack **stack)
 	}
 	return (SUCCESS);
 }
+
+int	check_errors(t_stack **stack)
+{
+	t_stack *temp;
+	int i;
+
+	temp = *stack;
+	while (1)
+	{
+		i = 0;
+		while (temp->cmd[i])
+		{
+			if (temp->cmd[0][0] == '|' || (temp->cmd[0][0] == '>'
+					&& temp->cmd[0][1] == '<'))
+			{
+				write(2, "syntax error\n", 14);
+				return (ERROR);
+			}
+			if ((temp->cmd[0][0] == '>' && temp->cmd[0][1] == '>')
+				|| (temp->cmd[0][0] == '<' && temp->cmd[0][1] == '>'))
+			{
+				write(2, "syntax error\n", 14);
+				return (ERROR);
+			}
+			i++;
+		}
+		temp = temp->next;
+		if (temp == *stack)
+			break ;
+	}
+	return (SUCCESS);
+}

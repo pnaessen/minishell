@@ -85,7 +85,6 @@ char	**tokenisation(char const *s)
 		if (s[data.i] != ' ' || data.quotes == SUCCESS)
 		{
 			res[data.count] = create_tab(s, cnt_words(s, data.i), data.i);
-			printf("res[%d] in token : %s\n", data.count, res[data.count]);
 			if (!(res[data.count]))
 				return (ft_free_all(res));
 			data.i += cnt_words(s, data.i);

@@ -84,6 +84,7 @@ void				print_stack(t_stack **stack);
 // identify tokens
 int					identify_token_type(t_stack **stack);
 void				define_type(t_stack *temp, char *cmd, int quotes);
+int					check_errors(t_stack **stack);
 
 // minishell_split
 char				**pre_tokenisation(char const *s);

@@ -143,5 +143,5 @@ int	quoting(t_stack **stack)
 		if (temp == *stack)
 			break ;
 	}
-	return (0);
+	return (SUCCESS);
 }
