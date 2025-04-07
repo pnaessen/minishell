@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	handle_first_fork(t_ast *cmd, t_env *env, int pipefd[2], pid_t *pid1)
+int	handle_first_fork(t_ast *cmd, t_env **env, int pipefd[2], pid_t *pid1)
 {
 	if (!can_create_process(env))
 	{
@@ -20,7 +20,7 @@ int	handle_first_fork(t_ast *cmd, t_env *env, int pipefd[2], pid_t *pid1)
 	return (1);
 }
 
-int	check_second_process(t_ast *cmd, t_env *env, int pipefd[2], pid_t pid1)
+int	check_second_process(t_ast *cmd, t_env **env, int pipefd[2], pid_t pid1)
 {
 	if (!can_create_process(env))
 	{
@@ -33,7 +33,7 @@ int	check_second_process(t_ast *cmd, t_env *env, int pipefd[2], pid_t pid1)
 	return (1);
 }
 
-int	create_second_fork(t_ast *cmd, t_env *env, int pipefd[2], pid_t pid1)
+int	create_second_fork(t_ast *cmd, t_env **env, int pipefd[2], pid_t pid1)
 {
 	pid_t	pid2;
 
@@ -52,7 +52,7 @@ int	create_second_fork(t_ast *cmd, t_env *env, int pipefd[2], pid_t pid1)
 	return (1);
 }
 
-void	execute_pipe(t_ast *cmd, t_env *env)
+void	execute_pipe(t_ast *cmd, t_env **env)
 {
 	int		pipefd[2];
 	pid_t	pid1;

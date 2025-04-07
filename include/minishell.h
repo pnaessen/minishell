@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vicperri <vicperri@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/04/01 16:17:26 by vicperri         ###   ########lyon.fr   */
+/*   Updated: 2025/04/07 22:30:48 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ typedef struct s_cmd
 {
 	char				**args;
 	char				*path;
-	// t_redir				*redirs;
 	int					has_heredoc;
 }						t_cmd;
 
@@ -92,7 +91,6 @@ t_ast					*init_first_node(t_stack *stack, t_stack *end,
 							t_ast **current_node);
 
 ///////////////////////AST_FREE.C//////////////////////////////
-// void					free_redirections(t_redir *redirs);
 void					free_ast_cmd(t_ast *node);
 void					free_ast(t_ast *node);
 void					free_ast_cmd_args(t_ast *node);
@@ -184,8 +182,8 @@ void					print_env(t_env **head, t_ast *cmd);
 
 ////////////////////////ft_exit.c//////////////////////////////
 int						ft_is_valid_number(char *str);
-int						handle_numeric_exit(t_ast *cmd, t_env *env, char *arg);
-void					ft_exit(t_ast *cmd, t_env *env);
+int						handle_numeric_exit(t_ast *cmd, t_env **env, char *arg);
+void					ft_exit(t_ast *cmd, t_env **env);
 
 ////////////////////////ft_export_tools.c//////////////////////////
 void					update_env_var(t_env **env, char *var_str);
@@ -210,7 +208,7 @@ void					remove_env_var(t_env **env, char *var_name);
 void					ft_unset(t_ast *input, t_env **env);
 
 ////////////////////////handle.c///////////////////////////////
-void					check_builtin(t_ast *input, t_env *env);
+void					check_builtin(t_ast *input, t_env **env);
 
 ////////////////////////print_export.c/////////////////////////
 void					sort_env_array(t_env **sorted, int env_size);
@@ -247,8 +245,8 @@ void					heredoc_sig_handler(int sig);
 int						check_heredoc_signals(void);
 
 /////////////////////////tools.c///////////////////////////////
-int						can_create_process(t_env *env);
-void					process_finished(t_env *env);
+int						can_create_process(t_env **env);
+void					process_finished(t_env **env);
 void					free_env_fail(char **env_array, int count);
 ////////////////////////utils_lst.c////////////////////////////
 void					handle_env(char **env, t_env **head);
@@ -275,7 +273,7 @@ char					*prepare_command_path(t_ast *cmd, char **env_array);
 char					**prepare_command_args(t_ast *cmd, char **env_array);
 void					prepare_execution(t_ast *cmd, char **env_array,
 							char **args_copy, char *path_copy);
-void					child_process(t_ast *cmd, t_env *env);
+void					child_process(t_ast *cmd, t_env **env);
 
 ////////////////////////command.c//////////////////////////////
 char					**create_args_copy(t_ast *cmd, char **env_array);
@@ -286,24 +284,24 @@ void					execute_command(char *path, char **args,
 void					handle_command_not_found(t_ast *cmd, char **env_array);
 
 ////////////////////////exec_redi.c////////////////////////////
-void					exec_with_redirects(t_ast *node, t_env *env);
+void					exec_with_redirects(t_ast *node, t_env **env);
 int						is_cmd_invalid(t_ast *cmd_node);
 t_ast					*find_cmd_node(t_ast *node, int *has_error);
 void					execute_cmd_with_redir(t_ast *cmd_node, t_ast *node,
-							t_env *env);
+							t_env **env);
 
 ////////////////////////exec_tools.c//////////////////////////
 int						setup_pipe(t_ast *cmd, int pipefd[2]);
 void					cleanup_pipe(int pipefd[2]);
-void					handle_ast_node(t_ast *node, t_env *env);
-void					update_error_codes(t_ast *node, t_env *env);
+void					handle_ast_node(t_ast *node, t_env **env);
+void					update_error_codes(t_ast *node, t_env **env);
 void					fork_fail(t_ast **cmd, int *pipefd);
 
 ////////////////////////exec.c////////////////////////////////
 int						parent_process(pid_t pid, t_ast *cmd);
-void					execute_cmd(t_ast *cmd_node, t_env *env);
-void					execute_cmd_node(t_ast *node, t_env *env);
-void					execute_ast(t_ast *node, t_env *env);
+void					execute_cmd(t_ast *cmd_node, t_env **env);
+void					execute_cmd_node(t_ast *node, t_env **env);
+void					execute_ast(t_ast *node, t_env **env);
 
 // ////////////////////////fd_garbage.c///////////////////////////
 void					clean_fd_garbage(t_fd_garbage **head);
@@ -320,22 +318,22 @@ int						process_all_heredocs(t_ast *node);
 
 void					setup_pipe_left(int *pipefd);
 int						get_exit_code(t_ast *cmd);
-void					clean_and_exit(t_ast *cmd, t_env *env, int exit_code);
-void					pipe_child_left(t_ast *cmd, t_env *env, int *pipefd);
+void					clean_and_exit(t_ast *cmd, t_env **env, int exit_code);
+void					pipe_child_left(t_ast *cmd, t_env **env, int *pipefd);
 
 ////////////////////////pipe_right.c///////////////////////////
 void					setup_pipe_right(int *pipefd);
 int						get_right_exit_code(t_ast *cmd);
-void					pipe_child_right(t_ast *cmd, t_env *env, int *pipefd);
+void					pipe_child_right(t_ast *cmd, t_env **env, int *pipefd);
 
 ////////////////////////pipe.c////////////////////////////////
-int						handle_first_fork(t_ast *cmd, t_env *env, int pipefd[2],
+int						handle_first_fork(t_ast *cmd, t_env **env, int pipefd[2],
 							pid_t *pid1);
-int						check_second_process(t_ast *cmd, t_env *env,
+int						check_second_process(t_ast *cmd, t_env **env,
 							int pipefd[2], pid_t pid1);
-int						create_second_fork(t_ast *cmd, t_env *env,
+int						create_second_fork(t_ast *cmd, t_env **env,
 							int pipefd[2], pid_t pid1);
-void					execute_pipe(t_ast *cmd, t_env *env);
+void					execute_pipe(t_ast *cmd, t_env **env);
 void					handle_pipe_parent(t_ast *cmd, pid_t pid1, pid_t pid2,
 							int *pipefd);
 

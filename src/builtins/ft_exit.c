@@ -6,7 +6,7 @@
 /*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 12:23:40 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/03/25 19:38:24 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/04/07 22:23:50 by pn               ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,17 +30,17 @@ int	ft_is_valid_number(char *str)
 	return (1);
 }
 
-void	exit_with_message(t_ast *cmd, t_env *env, char *arg, int code)
+void	exit_with_message(t_ast *cmd, t_env **env, char *arg, int code)
 {
 	ft_putstr_fd("minishell: exit: ", 2);
 	ft_putstr_fd(arg, 2);
 	ft_putstr_fd(": numeric argument required\n", 2);
 	free_ast(cmd->root);
-	free_env_list(env);
+	free_env_list(*env);
 	exit(code);
 }
 
-int	handle_numeric_exit(t_ast *cmd, t_env *env, char *arg)
+int	handle_numeric_exit(t_ast *cmd, t_env **env, char *arg)
 {
 	int	exit_code;
 	int	is_invalid;
@@ -58,15 +58,15 @@ int	handle_numeric_exit(t_ast *cmd, t_env *env, char *arg)
 	return (exit_code);
 }
 
-void	exit_without_args(t_ast *cmd, t_env *env)
+void	exit_without_args(t_ast *cmd, t_env **env)
 {
 	cmd->error_code = 0;
 	free_ast(cmd->root);
-	free_env_list(env);
+	free_env_list(*env);
 	exit(0);
 }
 
-void	ft_exit(t_ast *cmd, t_env *env)
+void	ft_exit(t_ast *cmd, t_env **env)
 {
 	int	exit_code;
 
@@ -83,6 +83,6 @@ void	ft_exit(t_ast *cmd, t_env *env)
 		return ;
 	}
 	free_ast(cmd->root);
-	free_env_list(env);
+	free_env_list(*env);
 	exit(exit_code);
 }

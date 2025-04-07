@@ -24,7 +24,7 @@ int	get_right_exit_code(t_ast *cmd)
 	return (exit_code);
 }
 
-void	pipe_child_right(t_ast *cmd, t_env *env, int *pipefd)
+void	pipe_child_right(t_ast *cmd, t_env **env, int *pipefd)
 {
 	int	exit_code;
 

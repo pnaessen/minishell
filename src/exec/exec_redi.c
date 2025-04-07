@@ -1,7 +1,7 @@
 #include "minishell.h"
 #include "pars.h"
 
-void	exec_with_redirects(t_ast *node, t_env *env)
+void	exec_with_redirects(t_ast *node, t_env **env)
 {
 	int		saved_stdin;
 	int		saved_stdout;
@@ -61,7 +61,7 @@ t_ast	*find_cmd_node(t_ast *node, int *has_error)
 	return (NULL);
 }
 
-void	execute_cmd_with_redir(t_ast *cmd_node, t_ast *node, t_env *env)
+void	execute_cmd_with_redir(t_ast *cmd_node, t_ast *node, t_env **env)
 {
 	if (!cmd_node || cmd_node->token != CMD)
 		return ;

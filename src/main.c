@@ -35,7 +35,7 @@ int	main(int argc, char **argv, char **env)
 			cmd = parse_and_build_ast(input, &head);
 			if (cmd)
 			{
-				execute_ast(cmd, head);
+				execute_ast(cmd, &head);
 				free_ast(cmd);
 			}
 		}

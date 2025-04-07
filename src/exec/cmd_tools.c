@@ -40,21 +40,21 @@ void	prepare_execution(t_ast *cmd, char **env_array, char **args_copy,
 	execute_command(path_copy, args_copy, env_array);
 }
 
-void	child_process(t_ast *cmd, t_env *env)
+void	child_process(t_ast *cmd, t_env **env)
 {
 	char	**env_array;
 	char	**args_copy;
 	char	*path_copy;
 
 	handle_signals_child();
-	env_array = env_to_tab(&env);
+	env_array = env_to_tab(env);
 	if (!env_array)
 	{
-		free_env_list(env);
+		free_env_list(*env);
 		free_ast(cmd->root);
 		exit(1);
 	}
-	free_env_list(env);
+	free_env_list(*env);
 	path_copy = prepare_command_path(cmd, env_array);
 	args_copy = prepare_command_args(cmd, env_array);
 	prepare_execution(cmd, env_array, args_copy, path_copy);

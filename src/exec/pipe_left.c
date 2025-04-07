@@ -21,16 +21,16 @@ int	get_exit_code(t_ast *cmd)
 	return (cmd->error_code);
 }
 
-void	clean_and_exit(t_ast *cmd, t_env *env, int exit_code)
+void	clean_and_exit(t_ast *cmd, t_env **env, int exit_code)
 {
 	if (cmd->root && cmd->root->garbage)
 		clean_fd_garbage(&cmd->root->garbage);
 	free_ast(cmd->root);
-	free_env_list(env);
+	free_env_list(*env);
 	exit(exit_code);
 }
 
-void	pipe_child_left(t_ast *cmd, t_env *env, int *pipefd)
+void	pipe_child_left(t_ast *cmd, t_env **env, int *pipefd)
 {
 	int	exit_code;
 

@@ -19,7 +19,7 @@ void	cleanup_pipe(int pipefd[2])
 		perror("minishell: close");
 }
 
-void	handle_ast_node(t_ast *node, t_env *env)
+void	handle_ast_node(t_ast *node, t_env **env)
 {
 	if (node->token == CMD)
 		execute_cmd_node(node, env);
@@ -30,11 +30,13 @@ void	handle_ast_node(t_ast *node, t_env *env)
 		exec_with_redirects(node, env);
 }
 
-void	update_error_codes(t_ast *node, t_env *env)
+void	update_error_codes(t_ast *node, t_env **env)
 {
 	if (node->head != node && node->head)
 		node->head->error_code = node->error_code;
-	env->error_code = node->error_code;
+	if(!env || !*env)
+		return ;
+	(*env)->error_code = node->error_code;
 }
 
 void	fork_fail(t_ast **cmd, int *pipefd)

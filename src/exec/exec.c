@@ -21,7 +21,7 @@ int	parent_process(pid_t pid, t_ast *cmd)
 	return (cmd->error_code);
 }
 
-void	execute_cmd(t_ast *cmd_node, t_env *env)
+void	execute_cmd(t_ast *cmd_node, t_env **env)
 {
 	pid_t	pid;
 
@@ -48,14 +48,14 @@ void	execute_cmd(t_ast *cmd_node, t_env *env)
 	}
 }
 
-void	execute_cmd_node(t_ast *node, t_env *env)
+void	execute_cmd_node(t_ast *node, t_env **env)
 {
 	check_builtin(node, env);
 	if (node->error_code == -1)
 		execute_cmd(node, env);
 }
 
-int	process_heredocs_if_needed(t_ast *node, t_env *env, int *heredocs_processed)
+int	process_heredocs_if_needed(t_ast *node, t_env **env, int *heredocs_processed)
 {
 	int	tmp;
 
@@ -65,7 +65,7 @@ int	process_heredocs_if_needed(t_ast *node, t_env *env, int *heredocs_processed)
 		*heredocs_processed = 1;
 		if (tmp == 0)
 		{
-			env->error_code = 130;
+			(*env)->error_code = 130;
 			*heredocs_processed = 0;
 			cleanup_heredoc_files(node);
 			clean_fd_garbage(&node->garbage);
@@ -75,7 +75,7 @@ int	process_heredocs_if_needed(t_ast *node, t_env *env, int *heredocs_processed)
 	return (1);
 }
 
-void	execute_ast(t_ast *node, t_env *env)
+void	execute_ast(t_ast *node, t_env **env)
 {
 	static int	heredocs_processed = 0;
 
