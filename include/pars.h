@@ -66,9 +66,6 @@ int					quoting(t_stack **stack);
 char				*handling_quotes(char *args, int size);
 int					final_len(char *args);
 int					check_num_of_quotes(char *args);
-// int					check_num_of_quotes(char *args);
-// int					is_closed(char *args, int i, char quote);
-// void				is_in_quotes(char c, t_data *data);
 
 /// parsing_utils
 char				**ft_free_all(char **args);
@@ -101,8 +98,10 @@ int					is_operator_sequence(const char *s1, int index,
 						t_data *data);
 // replace env
 char				*replace_without_dollar(char *args, int pos, int quote);
-char	*replace_value_quotes(char *args, int pos, char *value);
-char	*replace_value(char *args, int pos, char *value);
+char				*replace_value_quotes(char *args, int pos, char *value,
+						char *var_name);
+char				*replace_value(char *args, int pos, char *value,
+						char *var_name);
 char				*replace_without_dollar(char *args, int pos, int quote);
 char				*replace_with_empty(char *args, int pos);
 

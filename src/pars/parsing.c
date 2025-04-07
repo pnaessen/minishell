@@ -41,6 +41,12 @@ t_stack	*parsing_input(char *input, t_env **env)
 	args = handle_whitespaces(input);
 	if (!args)
 		return (NULL);
+	if (check_num_of_quotes(args) == ERROR)
+	{
+		printf("[DEBUG] num of quotes before env\n");
+		free(args);
+		return (NULL);
+	}
 	if (ft_strchr(args, '$'))
 		env_handled = find_and_replace_var(args, env);
 	else
@@ -54,12 +60,6 @@ t_stack	*parsing_input(char *input, t_env **env)
 	free(env_handled);
 	if (!args_cleaned)
 		return (NULL);
-	if (check_num_of_quotes(args_cleaned) == ERROR)
-	{
-		printf("[DEBUG] num of quotes\n");
-		free(args_cleaned);
-		return (NULL);
-	}
 	if (tokenise_args(args_cleaned, &stack) == ERROR)
 		return (NULL);
 	if (!stack)

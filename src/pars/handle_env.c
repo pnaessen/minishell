@@ -22,11 +22,12 @@ char	*handle_variable_replacement(char *args, int i, char quote_type,
 	else
 	{
 		if (quote_type == '"')
-			new_args = replace_value(args, i, value);
+			new_args = replace_value(args, i, value, var_name);
 		else
-			new_args = replace_value_quotes(args, i, value);
+			new_args = replace_value_quotes(args, i, value, var_name);
 	}
 	free(value);
+	free(var_name);
 	return (new_args);
 }
 
@@ -154,7 +155,7 @@ char	*join_tabs(char **tab_args, int space)
 	data.i = 0;
 	data.count = 0;
 	len = len_tab_of_tab(tab_args);
-	new_args = malloc((len + 1) * sizeof(char)); //maybe leaks
+	new_args = malloc((len + 1) * sizeof(char)); // maybe leaks
 	if (!new_args)
 		return (NULL);
 	len += 1;

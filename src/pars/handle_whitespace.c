@@ -59,12 +59,28 @@ char	*rm_whitespaces(char *args, int size)
 	return (str);
 }
 
+int check_empty_str(char *args)
+{
+	int i;
+
+	i = 0;
+	while (args[i])
+	{
+		if(ft_iswhitespace(args[i]) == ERROR)
+			return (SUCCESS);
+		i++;
+	}
+	return (ERROR);
+}
+
 char	*handle_whitespaces(char *args)
 {
 	int		size;
 	char	*args_cleaned;
 	char	*args_trim;
 
+	if (check_empty_str(args) == ERROR)
+		return (NULL);
 	size = len_without_whitespaces(args) + 1;
 	args_cleaned = rm_whitespaces(args, size);
 	if (!args_cleaned)
