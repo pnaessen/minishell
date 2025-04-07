@@ -5,6 +5,7 @@ int	tokenise_args(char *args_cleaned, t_stack **stack)
 {
 	char	**token;
 	int		i;
+	char	**tmp;
 
 	token = pre_tokenisation(args_cleaned);
 	i = 0;
@@ -12,19 +13,24 @@ int	tokenise_args(char *args_cleaned, t_stack **stack)
 		return (ERROR);
 	while (token[i])
 	{
-		if (fill_the_list(tokenisation(token[i]), stack) == ERROR)
+		tmp = tokenisation(token[i]);
+		if (fill_the_list(tmp, stack) == ERROR)
 		{
 			ft_free_all(token);
+			ft_free_all(tmp);
 			return (ERROR);
 		}
 		i++;
 	}
+	ft_free_all(token);
 	if (identify_token_type(stack) == ERROR)
 		return (ERROR);
 	if (quoting(stack) == ERROR)
+	{
+		ft_free_all(tmp);
 		return (ERROR);
-	print_stack(stack);
-	ft_free_all(token);
+	}
+	print_stack(stack); // Debugging
 	return (SUCCESS);
 }
 
@@ -61,7 +67,11 @@ t_stack	*parsing_input(char *input, t_env **env)
 		return (NULL);
 	}
 	if (tokenise_args(args_cleaned, &stack) == ERROR)
+	{
+		free(args_cleaned);
+		free(stack);
 		return (NULL);
+	}
 	if (!stack)
 		return (NULL);
 	free(args_cleaned);

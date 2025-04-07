@@ -27,6 +27,7 @@ char	*handle_variable_replacement(char *args, int i, char quote_type,
 			new_args = replace_value_quotes(args, i, value);
 	}
 	free(value);
+	free(var_name);
 	return (new_args);
 }
 

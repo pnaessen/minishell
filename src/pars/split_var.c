@@ -102,5 +102,3 @@ char	**split_var(char const *s)
 	printf("split var res[%d] : %s\n", data.count, res[data.count]);
 	return (res);
 }
-
-//add

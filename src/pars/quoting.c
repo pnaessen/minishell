@@ -80,6 +80,7 @@ char	*handling_quotes(char *args, int size)
 	str = malloc(size * sizeof(char));
 	if (!str)
 		return (NULL);
+	size = 0;
 	while (args[i])
 	{
 		handle_quotes(args[i], &data);
