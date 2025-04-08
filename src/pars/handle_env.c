@@ -8,6 +8,14 @@ char	*handle_variable_replacement(char *args, int i, char quote_type,
 	char	*value;
 	char	*new_args;
 
+	if (!*env)
+	{
+		if (quote_type == '"')
+			new_args = replace_with_empty(args, i - 1);
+		else
+			new_args = replace_with_empty(args, i);
+		return (new_args);
+	}
 	var_name = extract_variable_name(args, i + 1);
 	value = get_env_value(var_name, env);
 	if (args[i + 1] == '?')
@@ -34,8 +42,6 @@ char	*handle_variable_replacement(char *args, int i, char quote_type,
 char	*handle_invalid_variable(char *args, int i, char quote)
 {
 	write(1, &args[i + 1], 1);
-	// if (ft_is_quotes(args[i + 1]) == SUCCESS && args[i] == '$')
-	// 	return (ft_strdup(args));
 	if (quote != '\'' && (args[i + 1] >= '0' && args[i + 1] <= '9'))
 	{
 		if (quote == '"')
@@ -80,6 +86,8 @@ char	*find_and_replace_var(char *args, t_env **env)
 	char	*res;
 	t_data	data;
 
+	if (!env)
+		*env = NULL;
 	tab = split_var(args);
 	if (!tab)
 		return (NULL);
@@ -179,3 +187,4 @@ char	*join_tabs(char **tab_args, int space)
 	new_args[data.count] = '\0';
 	return (new_args);
 }
+// unset PWD SHLVL _
