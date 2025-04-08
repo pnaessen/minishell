@@ -40,7 +40,7 @@ int	create_second_fork(t_ast *cmd, t_env **env, int pipefd[2], pid_t pid1)
 	pid2 = fork();
 	if (pid2 == -1)
 	{
-		process_finished(env);
+		 process_finished(env);
 		fork_fail(&cmd, pipefd);
 		waitpid(pid1, NULL, 0);
 		process_finished(env);

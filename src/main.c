@@ -43,3 +43,5 @@ int	main(int argc, char **argv, char **env)
 	}
 	return (0);
 }
+
+// unset LD_LIBRARY_PATH GLIBCPP_FORCE_NEW PWD GLIBCXX_FORCE_NEW LD_PRELOAD

@@ -77,9 +77,10 @@ char	*handling_quotes(char *args, int size)
 	data.quotes = 0;
 	data.quote_type = '\0';
 	data.quote_num = 0;
-	str = malloc(size * sizeof(char)); //leaks
+	str = malloc(size * sizeof(char));
 	if (!str)
 		return (NULL);
+	size = 5;
 	while (args[i])
 	{
 		handle_quotes(args[i], &data);
