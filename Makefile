@@ -188,7 +188,7 @@ VALGRIND_SUPPRESS_FILE := $(abspath readline.supp)
 
 valgrind: $(NAME) readline.supp
 	@echo "$(CYAN)🔍 Running Valgrind leak check...$(DEF_COLOR)"
-	@env -i valgrind --leak-check=full -s --show-leak-kinds=all --track-origins=yes --trace-children=yes --track-fds=yes \
+	@valgrind --leak-check=full -s --show-leak-kinds=all --track-origins=yes --trace-children=yes --track-fds=yes \
 		--suppressions="$(VALGRIND_SUPPRESS_FILE)" \
 		./$(NAME)
 

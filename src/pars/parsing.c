@@ -44,7 +44,7 @@ int	tokenise_args(char *args_cleaned, t_stack **stack)
 	return (SUCCESS);
 }
 
-t_stack	*parsing_input(char *input, t_env **env)
+t_stack	*parsing_input(char *input, t_env **env, int tmp_error)
 {
 	char	*args;
 	char	*args_cleaned;
@@ -64,7 +64,7 @@ t_stack	*parsing_input(char *input, t_env **env)
 		return (NULL);
 	}
 	if (ft_strchr(args, '$'))
-		env_handled = find_and_replace_var(args, env);
+		env_handled = find_and_replace_var(args, env, tmp_error);
 	else
 		env_handled = ft_strdup(args);
 	free(args);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pn <pn@student.42lyon.fr>                  +#+  +:+       +#+        */
+/*   By: vicperri <vicperri@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/04/07 22:30:48 by pn               ###   ########lyon.fr   */
+/*   Updated: 2025/04/08 15:25:25 by vicperri         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ t_ast					*init_cmd_node(t_ast *node, char **args,
 char					**create_default_cmd(void);
 
 ///////////////////////AST.C//////////////////////////////////
-t_ast					*parse_and_build_ast(char *input, t_env **env);
+t_ast					*parse_and_build_ast(char *input, t_env **env, int tmp_error);
 void					handle_redirection(t_ast **current_node,
 							t_stack **current, t_ast **root);
 void					init_redir_node(t_ast *redir_node, char *filename,
@@ -327,8 +327,8 @@ int						get_right_exit_code(t_ast *cmd);
 void					pipe_child_right(t_ast *cmd, t_env **env, int *pipefd);
 
 ////////////////////////pipe.c////////////////////////////////
-int						handle_first_fork(t_ast *cmd, t_env **env, int pipefd[2],
-							pid_t *pid1);
+int						handle_first_fork(t_ast *cmd, t_env **env,
+							int pipefd[2], pid_t *pid1);
 int						check_second_process(t_ast *cmd, t_env **env,
 							int pipefd[2], pid_t pid1);
 int						create_second_fork(t_ast *cmd, t_env **env,
@@ -348,13 +348,13 @@ void					cleanup_heredoc_files(t_ast *node);
 void					print_ast(t_ast *node, int level);
 
 ///////////////////////ENV VIVI/////////////////////////////////
-char					*find_and_replace_var(char *args, t_env **env);
-t_stack					*parsing_input(char *input, t_env **env);
+char					*find_and_replace_var(char *args, t_env **env,
+							int tmp_error);
+t_stack					*parsing_input(char *input, t_env **env, int tmp_error);
 char					*get_env_value(char *var_name, t_env **env);
 char					*replace_without_dollar(char *args, int pos, int quote);
 char					*handle_variable_replacement(char *args, int i,
-							char quote_type, t_env **env);
-char					*replace_without_dollar(char *args, int pos, int quote);
+							t_data *data, t_env **env);
 char					*replace_with_empty(char *args, int pos);
 int						size_of_exp(t_env **env, char *var_name);
 

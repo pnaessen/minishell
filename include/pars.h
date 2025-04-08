@@ -19,6 +19,8 @@ typedef struct s_data
 {
 	int				i;
 	int				j;
+	int				error_code;
+	int				start;
 	int				count;
 	int				quotes;
 	int				quote_num;
@@ -99,17 +101,15 @@ int					is_operator_sequence(const char *s1, int index,
 						t_data *data);
 // replace env
 char				*replace_without_dollar(char *args, int pos, int quote);
-char				*replace_value_quotes(char *args, int pos, char *value,
-						char *var_name);
 char				*replace_value(char *args, int pos, char *value,
 						char *var_name);
-char				*replace_without_dollar(char *args, int pos, int quote);
 char				*replace_with_empty(char *args, int pos);
 
 // env utils
 int					is_valid_var_char(char *args, int i);
 int					size_of_var(char *args, int i);
-int					size_of_args(char *args);
+void				size_of_args(char *args, int pos, char *value,
+						t_data *data);
 char				*extract_variable_name(char *args, int i);
 char				*join_tabs(char **tab_args, int space);
 int					len_tab_of_tab(char **tab_args);

@@ -60,8 +60,8 @@ int	check_errors(t_stack **stack)
 		i = 0;
 		while (temp->cmd[i])
 		{
-			if (temp->cmd[0][0] == '|' || (temp->cmd[0][0] == '>'
-					&& temp->cmd[0][1] == '<'))
+			if ((temp->cmd[0][0] == '>' && temp->cmd[0][1] == '<'))
+				// temp->cmd[0][0] == '|' ||
 			{
 				write(2, "syntax error\n", 14);
 				return (ERROR);

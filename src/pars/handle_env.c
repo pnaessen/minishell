@@ -1,7 +1,7 @@
 #include "minishell.h"
 #include "pars.h"
 
-char	*handle_variable_replacement(char *args, int i, char quote_type,
+char	*handle_variable_replacement(char *args, int i, t_data *data,
 		t_env **env)
 {
 	char	*var_name;
@@ -10,7 +10,15 @@ char	*handle_variable_replacement(char *args, int i, char quote_type,
 
 	if (!*env)
 	{
-		if (quote_type == '"')
+		if (args[i + 1] == '?')
+		{
+			var_name = extract_variable_name(args, i + 1);
+			value = ft_itoa(data->error_code);
+			new_args = replace_value(args, i, value, var_name);
+			free(value);
+			free(var_name);
+		}
+		else if (data->quote_type == '"')
 			new_args = replace_with_empty(args, i - 1);
 		else
 			new_args = replace_with_empty(args, i);
@@ -19,21 +27,16 @@ char	*handle_variable_replacement(char *args, int i, char quote_type,
 	var_name = extract_variable_name(args, i + 1);
 	value = get_env_value(var_name, env);
 	if (args[i + 1] == '?')
-		value = ft_itoa((*env)->error_code);
+		value = ft_itoa(data->error_code);
 	if (!value)
 	{
-		if (quote_type == '"')
+		if (data->quote_type == '"')
 			new_args = replace_with_empty(args, i - 1);
 		else
 			new_args = replace_with_empty(args, i);
 	}
 	else
-	{
-		if (quote_type == '"')
-			new_args = replace_value(args, i, value, var_name);
-		else
-			new_args = replace_value_quotes(args, i, value, var_name);
-	}
+		new_args = replace_value(args, i, value, var_name);
 	free(value);
 	free(var_name);
 	return (new_args);
@@ -64,7 +67,7 @@ char	*process_variable_replacement(char **tab, t_data *data, t_env **env)
 				&& data->quote_type != '\'')
 			{
 				tab[data->i] = handle_variable_replacement(tab[data->i],
-						data->j, data->quote_type, env);
+						data->j, data, env);
 			}
 			else
 			{
@@ -80,7 +83,7 @@ char	*process_variable_replacement(char **tab, t_data *data, t_env **env)
 	return (tab[data->i]);
 }
 
-char	*find_and_replace_var(char *args, t_env **env)
+char	*find_and_replace_var(char *args, t_env **env, int tmp_error)
 {
 	char	**tab;
 	char	*res;
@@ -92,6 +95,7 @@ char	*find_and_replace_var(char *args, t_env **env)
 	if (!tab)
 		return (NULL);
 	data.i = 0;
+	data.error_code = tmp_error;
 	while (tab[data.i])
 	{
 		data.quote_type = '\0';
@@ -104,6 +108,7 @@ char	*find_and_replace_var(char *args, t_env **env)
 	res = return_env(args, tab);
 	return (res);
 }
+
 char	*return_env(char *args, char **tab_args)
 {
 	int		space;

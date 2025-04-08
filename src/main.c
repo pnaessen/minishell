@@ -5,7 +5,9 @@ int	main(int argc, char **argv, char **env)
 	char	*input;
 	t_env	*head;
 	t_ast	*cmd;
+	int		tmp_error;
 
+	tmp_error = 0;
 	head = NULL;
 	(void)argv;
 	if (argc != 1)
@@ -32,10 +34,11 @@ int	main(int argc, char **argv, char **env)
 		if (*input)
 		{
 			add_history(input);
-			cmd = parse_and_build_ast(input, &head);
+			cmd = parse_and_build_ast(input, &head, tmp_error);
 			if (cmd)
 			{
 				execute_ast(cmd, &head);
+				tmp_error = cmd->error_code;
 				free_ast(cmd);
 			}
 		}

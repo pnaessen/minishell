@@ -1,33 +1,81 @@
 #include "minishell.h"
 #include "pars.h"
 
+void	size_of_empty_args(char *args, int pos, t_data *data)
+{
+	while (args[data->i])
+	{
+		if (data->i == pos)
+		{
+			data->count++;
+			data->count++;
+			while (args[data->i] && (args[data->i] != ' '
+					|| ft_is_quotes(args[data->i]) == ERROR))
+				data->i++;
+		}
+		if (args[data->i])
+		{
+			data->count++;
+			data->i++;
+		}
+	}
+}
+
+void	size_of_args(char *args, int pos, char *value, t_data *data)
+{
+	int	j;
+
+	j = 0;
+	while (args[data->i])
+	{
+		if (data->i == pos)
+		{
+			while (value[j])
+			{
+				data->count++;
+				j++;
+			}
+			while (args[data->i] && data->start >= 0)
+			{
+				data->start--;
+				data->i++;
+			}
+		}
+		if (args[data->i] != '\0')
+		{
+			data->count++;
+			data->i++;
+		}
+	}
+}
+
 char	*replace_with_empty(char *args, int pos)
 {
 	char	*new_args;
-	int		i;
-	int		j;
-	int		len_args;
+	t_data	data;
 
-	i = 0;
-	j = 0;
-	len_args = size_of_args(args);
-	new_args = malloc((len_args + 3) * sizeof(char)); // invalid read
+	data.i = 0;
+	data.count = 0;
+	size_of_empty_args(args, pos, &data);
+	new_args = malloc((data.count + 1) * sizeof(char));
 	if (!new_args)
 		return (NULL);
-	while (args[i])
+	data.i = 0;
+	data.count = 0;
+	while (args[data.i])
 	{
-		if (i == pos)
+		if (data.i == pos)
 		{
-			new_args[j++] = '"';
-			new_args[j++] = '"';
-			while (args[i] && (args[i] != ' '
-					|| ft_is_quotes(args[i]) == ERROR))
-				i++;
+			new_args[data.count++] = '"';
+			new_args[data.count++] = '"';
+			while (args[data.i] && (args[data.i] != ' '
+					|| ft_is_quotes(args[data.i]) == ERROR))
+				data.i++;
 		}
-		if (args[i])
-			new_args[j++] = args[i++];
+		if (args[data.i])
+			new_args[data.count++] = args[data.i++];
 	}
-	new_args[j] = '\0';
+	new_args[data.count] = '\0';
 	return (new_args);
 }
 
@@ -35,75 +83,31 @@ char	*replace_value(char *args, int pos, char *value, char *var_name)
 {
 	char	*new_args;
 	t_data	data;
-	int		start;
-	int		len_args;
-	int		len_value;
 
 	data.i = 0;
 	data.count = 0;
-	len_value = ft_strlen(value);
-	len_args = size_of_args(args);
-	start = ft_strlen(var_name);
-	new_args = malloc((len_args + len_value + 2) * sizeof(char));
-		// leaks avec echo $USER "$PATH" invalid read
+	data.start = ft_strlen(var_name);
+	size_of_args(args, pos, value, &data);
+	new_args = malloc((data.count + 1) * sizeof(char));
 	if (!new_args)
 		return (NULL);
-	while (args[data.i])
-	{
-		if (data.i == pos)
-		{
-			if (data.i > 0 && args[data.i - 1] != '"')
-				new_args[data.count++] = '"';
-			while (*value)
-				new_args[data.count++] = *value++;
-			while (args[data.i] && start >= 0)
-			{
-				start--;
-				data.i++;
-			}
-		}
-		if (args[data.i] != '\0')
-			new_args[data.count++] = args[data.i++];
-	}
-	new_args[data.count] = '\0';
-	return (new_args);
-}
-
-char	*replace_value_quotes(char *args, int pos, char *value, char *var_name)
-{
-	char	*new_args;
-	t_data	data;
-	int		start;
-	int		len_args;
-	int		len_value;
-
 	data.i = 0;
 	data.count = 0;
-	len_value = ft_strlen(value);
-	len_args = size_of_args(args);
-	start = ft_strlen(var_name);
-	new_args = malloc((len_args + len_value + 3) * sizeof(char)); // leaks
-	if (!new_args)
-		return (NULL);
+	data.start = ft_strlen(var_name);
 	while (args[data.i])
 	{
 		if (data.i == pos)
 		{
 			while (*value)
 				new_args[data.count++] = *value++;
-			while (args[data.i] && start >= 0)
+			while (args[data.i] && data.start >= 0)
 			{
-				start--;
+				data.start--;
 				data.i++;
 			}
 		}
 		if (args[data.i] != '\0')
 			new_args[data.count++] = args[data.i++];
-	}
-	if (pos != 0)
-	{
-		new_args[data.count] = '"';
-		data.count++;
 	}
 	new_args[data.count] = '\0';
 	return (new_args);

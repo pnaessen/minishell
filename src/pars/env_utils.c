@@ -33,29 +33,6 @@ int	size_of_var(char *args, int i)
 	return (len);
 }
 
-int	size_of_args(char *args)
-{
-	int	len;
-	int	i;
-
-	len = 0;
-	i = 0;
-	while (args[i])
-	{
-		if (args[i] == '$')
-		{
-			while (args[i] && args[i] != '"')
-				i++;
-		}
-		if (args[i])
-		{
-			i++;
-			len++;
-		}
-	}
-	return (len);
-}
-
 char	*extract_variable_name(char *args, int i)
 {
 	char	*var_name;
