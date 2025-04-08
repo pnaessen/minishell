@@ -51,7 +51,6 @@ char	*replace_value(char *args, int pos, char *value, char *var_name)
 	{
 		if (data.i == pos)
 		{
-			printf("DEBUG POS : %d\n", pos);
 			if (data.i > 0 && args[data.i - 1] != '"')
 				new_args[data.count++] = '"';
 			while (*value)
