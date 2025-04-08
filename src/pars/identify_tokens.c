@@ -1,3 +1,4 @@
+#include "minishell.h"
 #include "pars.h"
 
 void	define_type(t_stack *temp, char *cmd, int quotes)
@@ -49,33 +50,74 @@ int	identify_token_type(t_stack **stack)
 	return (SUCCESS);
 }
 
+int	check_initial_errors(t_stack *temp, t_stack *first)
+{
+	if (temp->token == PIPE)
+	{
+		ft_putstr_fd("minishell: syntax error  unexpected token `|'\n", 2);
+		return (ERROR);
+	}
+	if (first->prev->token != CMD)
+	{
+		ft_putstr_fd("minishell: syntax error  unexpected token `", 2);
+		ft_putstr_fd(first->prev->cmd[0], 2);
+		ft_putstr_fd("'\n", 2);
+		return (ERROR);
+	}
+	return (SUCCESS);
+}
+
+int	check_redirection_syntax(t_stack *temp)
+{
+	int	i;
+
+	i = 0;
+	while (temp->cmd && temp->cmd[i])
+	{
+		if ((temp->cmd[i][0] == '>' && temp->cmd[i][1] == '<')
+			|| (temp->cmd[i][0] == '<' && temp->cmd[i][1] == '>'))
+		{
+			ft_putstr_fd("minishell: syntax error  unexpected token `", 2);
+			ft_putstr_fd(temp->cmd[i], 2);
+			ft_putstr_fd("'\n", 2);
+			return (ERROR);
+		}
+		i++;
+	}
+	return (SUCCESS);
+}
+
 int	check_errors(t_stack **stack)
 {
-	t_stack *temp;
-	int i;
+	t_stack	*temp;
+	t_stack	*first;
 
+	if (!stack || !*stack)
+		return (ERROR);
 	temp = *stack;
+	first = *stack;
+	if (check_initial_errors(temp, first) == ERROR)
+		return (ERROR);
 	while (1)
 	{
-		i = 0;
-		while (temp->cmd[i])
+		if (is_redirection(temp->token) && (temp->next == first
+				|| temp->next->token != CMD))
 		{
-			if ((temp->cmd[0][0] == '>' && temp->cmd[0][1] == '<'))
-				// temp->cmd[0][0] == '|' ||
-			{
-				write(2, "syntax error\n", 14);
-				return (ERROR);
-			}
-			if ((temp->cmd[0][0] == '>' && temp->cmd[0][1] == '>')
-				|| (temp->cmd[0][0] == '<' && temp->cmd[0][1] == '>'))
-			{
-				write(2, "syntax error\n", 14);
-				return (ERROR);
-			}
-			i++;
+			ft_putstr_fd("minishell: syntax error  unexpected token `", 2);
+			ft_putstr_fd(temp->cmd[0], 2);
+			ft_putstr_fd("'\n", 2);
+			return (ERROR);
 		}
+		if (temp->token == PIPE && temp->next != first
+			&& temp->next->token == PIPE)
+		{
+			ft_putstr_fd("minishell: syntax error  unexpected token `|'\n", 2);
+			return (ERROR);
+		}
+		if (check_redirection_syntax(temp) == ERROR)
+			return (ERROR);
 		temp = temp->next;
-		if (temp == *stack)
+		if (temp == first)
 			break ;
 	}
 	return (SUCCESS);

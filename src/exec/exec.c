@@ -55,7 +55,8 @@ void	execute_cmd_node(t_ast *node, t_env **env)
 		execute_cmd(node, env);
 }
 
-int	process_heredocs_if_needed(t_ast *node, t_env **env, int *heredocs_processed)
+int	process_heredocs_if_needed(t_ast *node, t_env **env,
+		int *heredocs_processed)
 {
 	int	tmp;
 

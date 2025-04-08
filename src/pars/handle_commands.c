@@ -49,7 +49,6 @@ char	*separate_commands(char *args, int size)
 	str = malloc(size * sizeof(char));
 	if (!str)
 		return (NULL);
-	size = 0;
 	while (args[i])
 	{
 		if ((i > 0) && (handle_operators(args, i) == SUCCESS))
