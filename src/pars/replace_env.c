@@ -11,7 +11,7 @@ char	*replace_with_empty(char *args, int pos)
 	i = 0;
 	j = 0;
 	len_args = size_of_args(args);
-	new_args = malloc((len_args + 3) * sizeof(char));
+	new_args = malloc((len_args + 3) * sizeof(char)); // invalid read
 	if (!new_args)
 		return (NULL);
 	while (args[i])
@@ -45,6 +45,7 @@ char	*replace_value(char *args, int pos, char *value, char *var_name)
 	len_args = size_of_args(args);
 	start = ft_strlen(var_name);
 	new_args = malloc((len_args + len_value + 2) * sizeof(char));
+		// leaks avec echo $USER "$PATH" invalid read
 	if (!new_args)
 		return (NULL);
 	while (args[data.i])
@@ -82,7 +83,7 @@ char	*replace_value_quotes(char *args, int pos, char *value, char *var_name)
 	len_value = ft_strlen(value);
 	len_args = size_of_args(args);
 	start = ft_strlen(var_name);
-	new_args = malloc((len_args + len_value + 3) * sizeof(char));
+	new_args = malloc((len_args + len_value + 3) * sizeof(char)); // leaks
 	if (!new_args)
 		return (NULL);
 	while (args[data.i])

@@ -65,8 +65,8 @@ char	*process_variable_replacement(char **tab, t_data *data, t_env **env)
 				tab[data->i] = handle_invalid_variable(tab[data->i], data->j,
 						data->quote_type);
 			}
-			return (tab[data->i]);
 			free(data->temp);
+			return (tab[data->i]);
 		}
 		else
 			data->j++;
@@ -155,7 +155,7 @@ char	*join_tabs(char **tab_args, int space)
 	data.i = 0;
 	data.count = 0;
 	len = len_tab_of_tab(tab_args);
-	new_args = malloc((len + 1) * sizeof(char)); // maybe leaks
+	new_args = malloc((len + 1) * sizeof(char));
 	if (!new_args)
 		return (NULL);
 	len += 1;

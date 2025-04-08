@@ -43,13 +43,12 @@ static int	cnt_words(const char *s1, int i)
 		handle_quotes(s1[i], &data);
 		if (s1[i] == ' ' && data.quotes == ERROR)
 			return (count);
-		else if ((data.quotes == ERROR || data.quote_type != 39) && (s1[i] && s1[i
-				+ 1] == '$' && count > 0))
+		else if ((data.quotes == ERROR || data.quote_type != 39) && (s1[i]
+				&& s1[i + 1] == '$' && count > 0))
 		{
 			count++;
 			return (count);
 		}
-
 		else
 			count++;
 		i++;

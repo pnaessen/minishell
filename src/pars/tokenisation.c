@@ -52,7 +52,7 @@ char	*create_tab(const char *s1, int size, int i)
 	char	*dup;
 	int		j;
 
-	dup = malloc((size + 1) * sizeof(char)); //leaks
+	dup = malloc((size + 1) * sizeof(char));
 	j = 0;
 	if (!(dup))
 		return (0);
@@ -76,7 +76,7 @@ char	**tokenisation(char const *s)
 	data.quote_num = 0;
 	data.i = 0;
 	data.count = 0;
-	res = malloc((lines_in_node(s) + 1) * sizeof(char *)); // leaks
+	res = malloc((lines_in_node(s) + 1) * sizeof(char *));
 	if (!(res))
 		return (0);
 	while (s[data.i] && data.count < lines_in_node(s))

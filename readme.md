@@ -164,4 +164,4 @@ Commandes intégrées au shell :
 ## 🛠 To do
 
 refacto for 25 lignes
-leak avec echo $user et aussi plus de leak avec une var not real
+ADD secu env parsing

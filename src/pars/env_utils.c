@@ -64,7 +64,7 @@ char	*extract_variable_name(char *args, int i)
 
 	j = 0;
 	len = size_of_var(args, i);
-	var_name = malloc((len + 1) * sizeof(char)); // maybe leaks
+	var_name = malloc((len + 1) * sizeof(char));
 	if (!var_name)
 		return (NULL);
 	while (args[i])
@@ -99,7 +99,7 @@ int	size_of_exp(t_env **env, char *var_name)
 	temp = *env;
 	while (1)
 	{
-		len = ft_strlen_c(temp->str,'=');
+		len = ft_strlen_c(temp->str, '=');
 		if (ft_strncmp(var_name, temp->str, len) == SUCCESS)
 		{
 			count = ft_strlen(temp->str);
@@ -127,7 +127,7 @@ char	*get_env_value(char *var_name, t_env **env)
 		return (NULL);
 	while (1)
 	{
-		len = ft_strlen_c(temp->str,'=');
+		len = ft_strlen_c(temp->str, '=');
 		if (ft_strncmp(var_name, temp->str, len) == SUCCESS)
 		{
 			value = ft_substr(temp->str, len + 1, len_str);

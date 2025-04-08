@@ -14,6 +14,11 @@ int	tokenise_args(char *args_cleaned, t_stack **stack)
 	while (token[i])
 	{
 		tmp = tokenisation(token[i]);
+		if (!tmp)
+		{
+			ft_free_all(token);
+			return (ERROR);
+		}
 		if (fill_the_list(tmp, stack) == ERROR)
 		{
 			ft_free_all(token);
@@ -30,11 +35,11 @@ int	tokenise_args(char *args_cleaned, t_stack **stack)
 		ft_free_all(tmp);
 		return (ERROR);
 	}
-	if (check_errors(stack) == ERROR)
-	{
-		ft_free_all(tmp);
-		return (ERROR);
-	}
+	// if (check_errors(stack) == ERROR)
+	// {
+	// 	ft_free_all(tmp);
+	// 	return (ERROR);
+	// }
 	print_stack(stack); // Debugging
 	return (SUCCESS);
 }
