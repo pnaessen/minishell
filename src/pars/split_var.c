@@ -26,7 +26,7 @@ static int	lines_in_node(const char *s1)
 			count++;
 		i++;
 	}
-	return (count);
+	return (count + 1);
 }
 
 static int	cnt_words(const char *s1, int i)
