@@ -194,7 +194,7 @@ valgrind: $(NAME) readline.supp
 
 readline.supp:
 	@echo "$(YELLOW)Creating readline suppression file...$(DEF_COLOR)"
-	@echo "{\n    Readline\n    Memcheck:Leak\n    match-leak-kinds: reachable\n    ...\n    fun:readline\n}" > readline.supp
+	@echo "{\n    Readline\n    Memcheck:Leak\n    ...\n    fun:readline\n}" > readline.supp
 	@echo "{\n    leak add_history\n    Memcheck:Leak\n    ...\n    fun:add_history\n}" >> readline.supp
 	@echo "$(GREEN)Created readline.supp file$(DEF_COLOR)"
 

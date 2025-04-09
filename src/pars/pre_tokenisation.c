@@ -19,11 +19,12 @@ int	num_of_lines(const char *s1)
 			data.count++;
 		else if (is_operator_sequence(s1, data.i, &data))
 		{
-			while (ft_is_operator(s1[data.i]) == SUCCESS)
+			while (s1[data.i] && ft_is_operator(s1[data.i]) == SUCCESS)
 				data.i++;
 			data.count++;
 		}
-		data.i++;
+		if (s1[data.i] != '\0')
+			data.i++;
 	}
 	return (data.count);
 }
@@ -83,13 +84,15 @@ char	**pre_tokenisation(char const *s)
 	char	**res;
 	int		i;
 	int		j;
+	int		tmp;
 
 	i = 0;
 	j = 0;
-	res = malloc((num_of_lines(s) + 1) * sizeof(char *));
+	tmp = num_of_lines(s);
+	res = malloc((tmp + 1) * sizeof(char *));
 	if (!(res))
 		return (0);
-	while (s[i] && j < num_of_lines(s))
+	while (s[i] && j < tmp)
 	{
 		res[j] = ft_newtab(s, num_of_words(s, i), i);
 		if (!res[j])
