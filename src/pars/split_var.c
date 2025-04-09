@@ -40,6 +40,8 @@ static int	cnt_words(const char *s1, int i)
 		i++;
 	while (s1[i])
 	{
+		printf("cnt_words at i=%d gives count=%d | char='%c'\n", i, count,
+			s1[i]);
 		handle_quotes(s1[i], &data);
 		if (s1[i] == ' ' && data.quotes == ERROR)
 			return (count);
@@ -61,12 +63,16 @@ static char	*create_tab(const char *s1, int size, int i)
 	char	*dup;
 	int		j;
 
+	if (size <= 0)
+		return (NULL);
 	dup = malloc((size + 1) * sizeof(char));
 	j = 0;
 	if (!(dup))
 		return (0);
 	while (s1[i] && j < size)
 	{
+		if (s1[i] == '\0')
+			break ;
 		dup[j] = s1[i];
 		j++;
 		i++;
@@ -84,12 +90,17 @@ char	**split_var(char const *s)
 	data.i = 0;
 	data.count = 0;
 	res = malloc((lines_in_node(s) + 1) * sizeof(char *));
+	printf("size : %d\n", lines_in_node(s) + 1);
 	if (!(res))
 		return (0);
 	while (s[data.i] && data.count <= lines_in_node(s))
 	{
 		check_quotes(s[data.i], &data);
+		printf("------------cnt words : %d | i : %d-----------\n", cnt_words(s,
+				data.i), data.i);
 		res[data.count] = create_tab(s, cnt_words(s, data.i), data.i);
+		printf("---------------res[%d] : %s------------------\n", data.count,
+			res[data.count]);
 		if (!(res[data.count]))
 			return (ft_free_all(res));
 		data.i += cnt_words(s, data.i);
