@@ -26,7 +26,7 @@ int	ft_is_quotes(char c)
 	return (ERROR);
 }
 
-void check_quotes(char argv, t_data *data)
+void	check_quotes(char argv, t_data *data)
 {
 	if (ft_is_quotes(argv) == SUCCESS)
 	{
@@ -64,12 +64,14 @@ char	**ft_free_all(char **args)
 	int	i;
 
 	i = 0;
-	while (args[i])
+	if (args)
 	{
-		free(args[i]);
-		args[i] = NULL;
-		i++;
+		while (args[i])
+		{
+			free(args[i]);
+			i++;
+		}
+		free(args);
 	}
-	free(args);
 	return (SUCCESS);
 }
