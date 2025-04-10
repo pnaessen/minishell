@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vicperri <vicperri@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/04/10 11:41:19 by vicperri         ###   ########lyon.fr   */
+/*   Updated: 2025/04/10 15:03:30 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,7 +152,6 @@ t_ast					*free_cmd_node(t_ast *node, int i);
 void					free_stack_node(t_stack *node);
 void					free_stack(t_stack *stack);
 void					free_args_array(char **args);
-void					print_env_debug(t_env **head);
 int						is_redirection(t_node_type token);
 
 ///////////////////////TREE_AST.C//////////////////////////////
