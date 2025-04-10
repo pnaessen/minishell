@@ -1,63 +1,63 @@
 #include "pars.h"
 
+void	init_data_split_var(t_data *data)
+{
+	data->i = 0;
+	data->count = 0;
+	data->quotes = ERROR;
+	data->quote_type = '\0';
+	data->quote_num = 0;
+}
+
 static int	lines_in_node(const char *s1)
 {
-	int		i;
-	int		count;
 	t_data	data;
 
-	i = 0;
-	count = 0;
-	data.quotes = ERROR;
-	data.quote_type = '\0';
-	data.quote_num = 0;
-	while (s1[i])
+	init_data_split_var(&data);
+	while (s1[data.i])
 	{
-		handle_quotes(s1[i], &data);
-		if (s1[i + 1] == '\0')
+		handle_quotes(s1[data.i], &data);
+		if (s1[data.i + 1] == '\0')
 			break ;
-		if ((s1[i] != ' ' && s1[i] != '$') && (s1[i + 1] && (s1[i + 1] == ' '
-					|| (s1[i + 1] == '\0' && data.quotes == ERROR))))
+		if ((s1[data.i] != ' ' && s1[data.i] != '$') && (s1[data.i + 1]
+				&& (s1[data.i + 1] == ' ' || (s1[data.i + 1] == '\0'
+						&& data.quotes == ERROR))))
 		{
 			if (data.quotes == ERROR)
-				count++;
+				data.count++;
 		}
-		if (s1[i] == '$' && (i == 0 || s1[i - 1] != '$'))
-			count++;
-		i++;
+		if (s1[data.i] == '$' && (data.i == 0 || s1[data.i - 1] != '$'))
+			data.count++;
+		data.i++;
 	}
-	return (count + 1);
+	return (data.count + 1);
 }
 
 static int	cnt_words(const char *s1, int i)
 {
-	int		count;
 	t_data	data;
 
-	count = 0;
-	data.quotes = ERROR;
-	data.quote_type = '\0';
-	data.quote_num = 0;
+	init_data_split_var(&data);
 	while (s1[i] == ' ')
 		i++;
 	while (s1[i])
 	{
 		handle_quotes(s1[i], &data);
 		if (s1[i] == ' ' && data.quotes == ERROR)
-			return (count);
+			return (data.count);
 		else if ((data.quotes == ERROR || data.quote_type != 39) && s1[i]
-			&& s1[i + 1] && s1[i + 1] == '$' && count > 0)
+			&& s1[i + 1] && s1[i + 1] == '$' && data.count > 0)
 		{
 			if (s1[i + 1] == '\0')
 				break ;
-			count++;
-			return (count);
+			data.count++;
+			return (data.count);
 		}
 		else
-			count++;
+			data.count++;
 		i++;
 	}
-	return (count);
+	return (data.count);
 }
 
 static char	*create_tab(const char *s1, int size, int i)
@@ -90,9 +90,7 @@ char	**split_var(char const *s)
 	int		word_len;
 	int		lines;
 
-	data.quotes = ERROR;
-	data.i = 0;
-	data.count = 0;
+	init_data_split_var(&data);
 	lines = lines_in_node(s);
 	res = malloc((lines + 1) * sizeof(char *));
 	if (!res)

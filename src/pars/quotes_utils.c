@@ -40,3 +40,32 @@ void	handle_quotes(char argv, t_data *data)
 	}
 }
 
+void	define_data_quoting(t_data *data)
+{
+	data->quote_type = '\0';
+	data->i++;
+}
+
+int	calculate_len(char *args, t_data *data)
+{
+	if (args[data->i + 1] && data->quote_type == args[data->i + 1]
+		&& data->quote_type != args[data->i])
+	{
+		data->i++;
+		data->count++;
+		if (args[data->i] && ft_is_quotes(args[data->i]) == SUCCESS
+			&& data->quote_type == args[data->i])
+			define_data_quoting(data);
+		return (SUCCESS);
+	}
+	else if (args[data->i] && ft_is_quotes(args[data->i]) == SUCCESS
+		&& data->quote_type == args[data->i])
+	{
+		data->i++;
+		if (args[data->i] && ft_is_quotes(args[data->i]) == SUCCESS
+			&& data->quote_type == args[data->i])
+			define_data_quoting(data);
+		return (SUCCESS);
+	}
+	return (ERROR);
+}

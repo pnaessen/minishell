@@ -21,101 +21,75 @@ int	check_num_of_quotes(char *args)
 
 int	final_len(char *args)
 {
-	int		i;
-	int		len;
 	t_data	data;
 
-	i = 0;
-	len = 0;
+	data.i = 0;
+	data.count = 0;
 	data.quotes = ERROR;
 	data.quote_type = '\0';
 	data.quote_num = 0;
-	while (args[i])
+	while (args[data.i])
 	{
-		handle_quotes(args[i], &data);
-		if (args[i + 1] && data.quote_type == args[i + 1]
-			&& data.quote_type != args[i])
+		handle_quotes(args[data.i], &data);
+		if (calculate_len(args, &data) == ERROR)
 		{
-			i++;
-			len++;
-			if (args[i] && ft_is_quotes(args[i]) == SUCCESS
-				&& data.quote_type == args[i])
+			if (args[data.i])
 			{
-				data.quote_type = '\0';
-				i++;
+				data.i++;
+				data.count++;
 			}
-		}
-		else if (args[i] && ft_is_quotes(args[i]) == SUCCESS
-			&& data.quote_type == args[i])
-		{
-			i++;
-			if (args[i] && ft_is_quotes(args[i]) == SUCCESS
-				&& data.quote_type == args[i])
-			{
-				data.quote_type = '\0';
-				i++;
-			}
-		}
-		else if (args[i])
-		{
-			i++;
-			len++;
 		}
 	}
-	return (len);
+	return (data.count);
+}
+
+void	handle_quote_transitions(char *args, t_data *data)
+{
+	if (args[data->i + 1] && data->quote_type == args[data->i + 1]
+		&& data->quote_type != args[data->i])
+	{
+		data->temp[data->j++] = args[data->i++];
+		if (args[data->i] && ft_is_quotes(args[data->i]) == SUCCESS
+			&& data->quote_type == args[data->i])
+		{
+			data->quote_type = '\0';
+			data->i++;
+		}
+	}
+	else if (args[data->i] && ft_is_quotes(args[data->i]) == SUCCESS
+		&& data->quote_type == args[data->i])
+	{
+		data->i++;
+		if (args[data->i] && ft_is_quotes(args[data->i]) == SUCCESS
+			&& data->quote_type == args[data->i])
+		{
+			data->quote_type = '\0';
+			data->i++;
+		}
+	}
+	else if (args[data->i])
+		data->temp[data->j++] = args[data->i++];
 }
 
 char	*handling_quotes(char *args, int size)
 {
-	char	*str;
-	int		i;
-	int		j;
 	t_data	data;
 
-	i = 0;
-	j = 0;
+	data.i = 0;
+	data.j = 0;
 	data.quotes = 0;
 	data.quote_type = '\0';
 	data.quote_num = 0;
-	str = malloc(size * sizeof(char));
-	if (!str)
+	data.temp = malloc(size * sizeof(char));
+	if (!data.temp)
 		return (NULL);
-	while (args[i])
+	while (args[data.i])
 	{
-		handle_quotes(args[i], &data);
-		if (args[i + 1] && data.quote_type == args[i + 1]
-			&& data.quote_type != args[i])
-		{
-			str[j] = args[i];
-			i++;
-			j++;
-			if (args[i] && ft_is_quotes(args[i]) == SUCCESS
-				&& data.quote_type == args[i])
-			{
-				data.quote_type = '\0';
-				i++;
-			}
-		}
-		else if (args[i] && ft_is_quotes(args[i]) == SUCCESS
-			&& data.quote_type == args[i])
-		{
-			i++;
-			if (args[i] && ft_is_quotes(args[i]) == SUCCESS
-				&& data.quote_type == args[i])
-			{
-				data.quote_type = '\0';
-				i++;
-			}
-		}
-		else if (args[i])
-		{
-			str[j] = args[i];
-			i++;
-			j++;
-		}
+		handle_quotes(args[data.i], &data);
+		handle_quote_transitions(args, &data);
 	}
-	str[j] = '\0';
-	return (str);
+	data.temp[data.j] = '\0';
+	return (data.temp);
 }
 
 int	quoting(t_stack **stack)
