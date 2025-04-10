@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vicperri <vicperri@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/04/10 09:10:25 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/04/10 11:41:19 by vicperri         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -354,15 +354,25 @@ void					cleanup_heredoc_files(t_ast *node);
 ///////////////////////main.c/////////////////////////////////
 void					print_ast(t_ast *node, int level);
 
-///////////////////////ENV VIVI/////////////////////////////////
+///////////////////////parsing/////////////////////////////////
+t_stack					*parsing_input(char *input, t_env **env, int tmp_error);
+char					*prepare_args(char *input, t_env **env, int tmp_error);
+
 char					*find_and_replace_var(char *args, t_env **env,
 							int tmp_error);
-t_stack					*parsing_input(char *input, t_env **env, int tmp_error);
 char					*get_env_value(char *var_name, t_env **env);
 char					*replace_without_dollar(char *args, int pos, int quote);
-char					*handle_variable_replacement(char *args, int i,
-							t_data *data, t_env **env);
 char					*replace_with_empty(char *args, int pos);
 int						size_of_exp(t_env **env, char *var_name);
+
+/////////////////////////var_replacement///////////////////////
+char					*process_variable_replacement(char **tab, t_data *data,
+							t_env **env);
+char					*handle_invalid_variable(char *args, int i, char quote);
+char					*handle_variable_replacement(char *args, t_data *data,
+							t_env **env);
+
+//////////////////////get env utils/////////////////////////////
+char					*get_env_value(char *var_name, t_env **env);
 
 #endif

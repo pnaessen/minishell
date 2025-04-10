@@ -1,4 +1,3 @@
-
 #include "pars.h"
 
 void	rot_lstadd_back(t_stack **stack, t_stack *new_node)
