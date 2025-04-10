@@ -86,20 +86,3 @@ t_ast	*find_cmd_for_input(t_ast *result)
 		target_cmd = target_cmd->left;
 	return (target_cmd);
 }
-
-void	replace_cmd_with_redir(t_ast **result, t_ast *target_cmd,
-		t_ast *redir_node)
-{
-	t_ast	*parent;
-
-	if (*result == target_cmd)
-		*result = redir_node;
-	else
-	{
-		parent = *result;
-		while (parent->left && parent->left != target_cmd)
-			parent = parent->left;
-		if (parent->left == target_cmd)
-			parent->left = redir_node;
-	}
-}

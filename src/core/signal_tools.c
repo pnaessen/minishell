@@ -23,3 +23,19 @@ void	reset_signals(void)
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 }
+
+int	check_signal_status(int status)
+{
+	rl_event_hook = NULL;
+	if (g_signal_status == 131)
+	{
+		g_signal_status = 130;
+		signal(SIGINT, handle_sig);
+		signal(SIGQUIT, SIG_IGN);
+		return (-2);
+	}
+	handle_signals();
+	if (status != 0)
+		g_signal_status = status;
+	return (0);
+}

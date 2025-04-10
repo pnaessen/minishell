@@ -40,7 +40,6 @@ int	tokenise_args(char *args_cleaned, t_stack **stack)
 		ft_free_all(tmp);
 		return (ERROR);
 	}
-	print_stack(stack); // Debugging
 	return (SUCCESS);
 }
 

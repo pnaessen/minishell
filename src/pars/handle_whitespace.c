@@ -59,14 +59,14 @@ char	*rm_whitespaces(char *args, int size)
 	return (str);
 }
 
-int check_empty_str(char *args)
+int	check_empty_str(char *args)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (args[i])
 	{
-		if(ft_iswhitespace(args[i]) == ERROR)
+		if (ft_iswhitespace(args[i]) == ERROR)
 			return (SUCCESS);
 		i++;
 	}

@@ -46,6 +46,7 @@ EXEC_SRC := $(addprefix $(EXEC_DIR), \
 	fd_garbage.c \
 	cmd_tools.c \
 	exec_tools.c \
+	here_doc_tools.c \
 )
 
 AST_SRC := $(addprefix $(AST_DIR), \
@@ -60,6 +61,7 @@ AST_SRC := $(addprefix $(AST_DIR), \
 	free_tools.c \
 	ast_pipe.c \
 	ast_case.c \
+	ast_init.c \
 )
 
 PARS_SRC := $(addprefix $(PARS_DIR), \

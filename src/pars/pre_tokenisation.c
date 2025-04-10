@@ -1,4 +1,3 @@
-
 #include "pars.h"
 
 int	num_of_lines(const char *s1)

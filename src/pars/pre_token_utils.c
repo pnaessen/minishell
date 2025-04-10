@@ -24,8 +24,9 @@ int	is_redirection_operator(const char *s1, int index)
 
 int	is_end_of_word(const char *s1, int index, t_data *data)
 {
-	return (((ft_is_operator(s1[index]) == ERROR && ft_is_operator(s1[index
-					+ 1]) == SUCCESS) || s1[index + 1] == '\0')
+	return (((ft_is_operator(s1[index]) == ERROR
+				&& ft_is_operator(s1[index + 1]) == SUCCESS)
+			|| s1[index + 1] == '\0')
 		&& data->quotes == ERROR);
 }
 

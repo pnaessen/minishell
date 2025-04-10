@@ -31,13 +31,13 @@ typedef struct s_data
 typedef enum e_node_type
 {
 	CMD,
-	PIPE,          // |
-	AND,           // &&
-	OR,            // ||
-	REDIR_IN,      // <
-	REDIR_OUT,     // >
-	REDIR_HEREDOC, // <<
-	APPEND         // >>
+	PIPE,
+	AND,
+	OR,
+	REDIR_IN,
+	REDIR_OUT,
+	REDIR_HEREDOC,
+	APPEND
 }					t_node_type;
 
 typedef struct s_stack
@@ -115,4 +115,5 @@ char				*join_tabs(char **tab_args, int space);
 int					len_tab_of_tab(char **tab_args);
 int					spaces_to_add(const char *s1);
 char				*return_env(char *args, char **tab_args);
+
 #endif

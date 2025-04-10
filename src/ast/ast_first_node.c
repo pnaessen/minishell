@@ -17,43 +17,6 @@ void	free_cmd_true(t_ast **root)
 	*root = NULL;
 }
 
-void	init_cmd_true(t_ast **root)
-{
-	*root = malloc(sizeof(t_ast));
-	if (!*root)
-		return ;
-	(*root)->token = CMD;
-	(*root)->cmd = malloc(sizeof(t_cmd));
-	if (!(*root)->cmd)
-	{
-		free_cmd_true(root);
-		return ;
-	}
-	(*root)->cmd->args = malloc(sizeof(char *) * 2);
-	if (!(*root)->cmd->args)
-	{
-		free_cmd_true(root);
-		return ;
-	}
-	(*root)->cmd->args[0] = ft_strdup("true");
-	if (!(*root)->cmd->args[0])
-	{
-		free_cmd_true(root);
-		return ;
-	}
-	(*root)->cmd->args[1] = NULL;
-	(*root)->cmd->path = NULL;
-	(*root)->cmd->has_heredoc = 0;
-}
-
-void	init_cmd_node_base(t_ast *root)
-{
-	root->left = NULL;
-	root->right = NULL;
-	root->head = root;
-	root->error_code = 0;
-}
-
 t_ast	*check_cmd_after_redir(t_stack *stack, t_stack *end)
 {
 	t_ast	*root;

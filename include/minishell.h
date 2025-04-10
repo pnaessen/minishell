@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vicperri <vicperri@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 15:39:11 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/04/08 15:25:25 by vicperri         ###   ########lyon.fr   */
+/*   Updated: 2025/04/10 09:10:25 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,11 +89,16 @@ void					init_cmd_node_base(t_ast *root);
 t_ast					*check_cmd_after_redir(t_stack *stack, t_stack *end);
 t_ast					*init_first_node(t_stack *stack, t_stack *end,
 							t_ast **current_node);
+void					free_cmd_true(t_ast **root);
 
 ///////////////////////AST_FREE.C//////////////////////////////
 void					free_ast_cmd(t_ast *node);
 void					free_ast(t_ast *node);
 void					free_ast_cmd_args(t_ast *node);
+
+/////////////////////////AST_INIT.C////////////////////////////
+t_ast					*init_process_result(t_stack *cmd_token,
+							t_stack **redir_tokens);
 
 ///////////////////////AST_PIPE.C//////////////////////////////
 t_ast					*create_cmd_node(t_stack *cmd_token);
@@ -131,7 +136,8 @@ t_ast					*init_cmd_node(t_ast *node, char **args,
 char					**create_default_cmd(void);
 
 ///////////////////////AST.C//////////////////////////////////
-t_ast					*parse_and_build_ast(char *input, t_env **env, int tmp_error);
+t_ast					*parse_and_build_ast(char *input, t_env **env,
+							int tmp_error);
 void					handle_redirection(t_ast **current_node,
 							t_stack **current, t_ast **root);
 void					init_redir_node(t_ast *redir_node, char *filename,
@@ -237,6 +243,7 @@ char					**env_to_tab(t_env **env);
 void					reset_signals(void);
 void					handle_signals_child(void);
 void					handle_signals(void);
+int						check_signal_status(int status);
 
 ////////////////////////signal.c///////////////////////////////
 void					handle_sig(int sig);

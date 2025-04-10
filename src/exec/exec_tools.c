@@ -34,7 +34,7 @@ void	update_error_codes(t_ast *node, t_env **env)
 {
 	if (node->head != node && node->head)
 		node->head->error_code = node->error_code;
-	if(!env || !*env)
+	if (!env || !*env)
 		return ;
 	(*env)->error_code = node->error_code;
 }
