@@ -6,13 +6,12 @@
 /*   By: vicperri <vicperri@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:00:04 by vicperri          #+#    #+#             */
-/*   Updated: 2025/04/10 15:00:07 by vicperri         ###   ########lyon.fr   */
+/*   Updated: 2025/04/10 15:05:28 by vicperri         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "pars.h"
-
 
 int	is_valid_var_char(char *args, int i)
 {
