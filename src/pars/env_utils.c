@@ -55,3 +55,51 @@ char	*extract_variable_name(char *args, int i)
 	var_name[j] = '\0';
 	return (var_name);
 }
+
+void	size_of_empty_args(char *args, int pos, t_data *data)
+{
+	while (args[data->i])
+	{
+		if (data->i == pos)
+		{
+			data->count++;
+			data->count++;
+			while (args[data->i] && (args[data->i] != ' '
+					|| ft_is_quotes(args[data->i]) == ERROR))
+				data->i++;
+		}
+		if (args[data->i])
+		{
+			data->count++;
+			data->i++;
+		}
+	}
+}
+
+void	size_of_args(char *args, int pos, char *value, t_data *data)
+{
+	int	j;
+
+	j = 0;
+	while (args[data->i])
+	{
+		if (data->i == pos)
+		{
+			while (value[j])
+			{
+				data->count++;
+				j++;
+			}
+			while (args[data->i] && data->start >= 0)
+			{
+				data->start--;
+				data->i++;
+			}
+		}
+		if (args[data->i] != '\0')
+		{
+			data->count++;
+			data->i++;
+		}
+	}
+}

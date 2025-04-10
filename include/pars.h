@@ -49,15 +49,18 @@ typedef struct s_stack
 }					t_stack;
 
 ///////////////////////parsing////////////////////////////////////
+
 int					tokenise_args(char *args_cleaned, t_stack **stack);
 
-/// handle commands
+///////////////////////handle commands//////////////////////////////
+
 char				*handle_commands(char *args);
 char				*separate_commands(char *args, int size);
 int					len_to_sep_commands(char *args);
 int					handle_operators(char *args, int i);
 
-/// handle whitespace
+//////////////////////handle whitespace//////////////////////////////
+
 char				*handle_whitespaces(char *args);
 char				*rm_whitespaces(char *args, int size);
 int					len_without_whitespaces(char *args);
@@ -73,21 +76,22 @@ int					check_num_of_quotes(char *args);
 //////////////////////quotes_utils///////////////////////////
 
 int					ft_is_quotes(char c);
+int					calculate_len(char *args, t_data *data);
 void				check_quotes(char argv, t_data *data);
 void				handle_quotes(char argv, t_data *data);
 
-/// parsing_utils
+//////////////////////////parsing_utils//////////////////////////////////////////////
 char				**ft_free_all(char **args);
 int					ft_iswhitespace(int c);
 int					ft_is_operator(int c);
 
-////////////////////////list_utils////////////////////////////
+///////////////////////////////list_utils////////////////////////////
 
 t_stack				*node_init(char **cmd);
 int					fill_the_list(char **cmd, t_stack **stack);
 void				rot_lstadd_back(t_stack **stack, t_stack *new_node);
 
-////////////////////////identify tokens//////////////////////////
+//////////////////////////////identify tokens//////////////////////////
 
 void				define_type(t_stack *temp, char *cmd, int quotes);
 int					check_errors(t_stack **stack);
@@ -99,7 +103,8 @@ int					identify_token_type(t_stack **stack);
 int					check_initial_errors(t_stack *temp, t_stack *first);
 int					check_redirection_syntax(t_stack *temp);
 
-// minishell_split
+///////////////////////////////////splits/////////////////////////////////////////////
+
 char				**pre_tokenisation(char const *s);
 char				**tokenisation(char const *s);
 char				**split_var(char const *s);
@@ -111,7 +116,8 @@ int					is_redirection_operator(const char *s1, int index);
 int					is_end_of_word(const char *s1, int index, t_data *data);
 int					is_operator_sequence(const char *s1, int index,
 						t_data *data);
-// replace env
+//////////////////////////////////////replace env//////////////////////////////////
+
 char				*replace_without_dollar(char *args, int pos, int quote);
 char				*replace_value(char *args, int pos, char *value,
 						char *var_name);
@@ -125,6 +131,9 @@ void				init_data(t_data *data);
 int					is_valid_var_char(char *args, int i);
 int					size_of_var(char *args, int i);
 char				*extract_variable_name(char *args, int i);
+void				size_of_empty_args(char *args, int pos, t_data *data);
+void				size_of_args(char *args, int pos, char *value,
+						t_data *data);
 
 ////////////////////////////var_replacement////////////////////////////////
 
