@@ -71,11 +71,8 @@ char	**tokenisation(char const *s)
 	char	**res;
 	t_data	data;
 
-	data.quotes = ERROR;
-	data.quote_type = '\0';
-	data.quote_num = 0;
+	init_data(&data);
 	data.i = 0;
-	data.count = 0;
 	res = malloc((lines_in_node(s) + 1) * sizeof(char *));
 	if (!(res))
 		return (0);

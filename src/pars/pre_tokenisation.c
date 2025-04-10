@@ -28,13 +28,19 @@ int	num_of_lines(const char *s1)
 	return (data.count);
 }
 
+void	init_data(t_data *data)
+{
+	data->count = 0;
+	data->quotes = ERROR;
+	data->quote_num = 0;
+	data->quote_type = '\0';
+}
+
 int	num_of_words(const char *s1, int i)
 {
 	t_data	data;
 
-	data.quotes = ERROR;
-	data.quote_type = '\0';
-	data.quote_num = 0;
+	init_data(&data);
 	data.count = handle_multi_operators(s1, i);
 	if (data.count != 0)
 		return (data.count);

@@ -118,6 +118,7 @@ char				*replace_value(char *args, int pos, char *value,
 char				*replace_with_empty(char *args, int pos);
 void				size_of_args(char *args, int pos, char *value,
 						t_data *data);
+void				init_data(t_data *data);
 
 ////////////////////////////////env utils//////////////////////////////////
 

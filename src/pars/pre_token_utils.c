@@ -34,4 +34,3 @@ int	is_operator_sequence(const char *s1, int index, t_data *data)
 {
 	return (ft_is_operator(s1[index]) == SUCCESS && data->quotes == ERROR);
 }
-

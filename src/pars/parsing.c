@@ -59,7 +59,6 @@ t_stack	*parsing_input(char *input, t_env **env, int tmp_error)
 	if (token_status == ERROR || !stack)
 	{
 		free(args_cleaned);
-		free(stack);
 		return (NULL);
 	}
 	free(args_cleaned);
