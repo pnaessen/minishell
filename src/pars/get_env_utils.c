@@ -6,7 +6,7 @@
 /*   By: vicperri <vicperri@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:00:27 by vicperri          #+#    #+#             */
-/*   Updated: 2025/04/10 15:00:30 by vicperri         ###   ########lyon.fr   */
+/*   Updated: 2025/04/11 14:40:13 by vicperri         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,4 +73,29 @@ char	*get_env_value(char *var_name, t_env **env)
 	}
 	free(var_name);
 	return (NULL);
+}
+
+int	check_heredoc(char **tab)
+{
+	int	i;
+	int	j;
+	int	heredoc;
+
+	i = 0;
+	j = 0;
+	heredoc = 0;
+	while (tab[i])
+	{
+		j = 0;
+		while (tab[i][j])
+		{
+			if (tab[i][j + 1] && tab[i][j] == '<' && tab[i][j + 1] == '<')
+				heredoc = 1;
+			if (tab[i][j] == '$' && heredoc == 1)
+				return (SUCCESS);
+			j++;
+		}
+		i++;
+	}
+	return (ERROR);
 }

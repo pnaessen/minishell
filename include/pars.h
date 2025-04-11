@@ -6,7 +6,7 @@
 /*   By: vicperri <vicperri@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:05:04 by vicperri          #+#    #+#             */
-/*   Updated: 2025/04/10 15:05:05 by vicperri         ###   ########lyon.fr   */
+/*   Updated: 2025/04/11 14:40:54 by vicperri         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int					calculate_len(char *args, t_data *data);
 void				check_quotes(char argv, t_data *data);
 void				handle_quotes(char argv, t_data *data);
 
-//////////////////////////parsing_utils//////////////////////////////////////////////
+//////////////////////////parsing_utils//////////////////////
 char				**ft_free_all(char **args);
 int					ft_iswhitespace(int c);
 int					ft_is_operator(int c);
@@ -109,26 +109,26 @@ void				define_type(t_stack *temp, char *cmd, int quotes);
 int					check_errors(t_stack **stack);
 int					loop_through_stack(t_stack *tmp, t_stack *frst);
 
-////////////////////////////////identify_tokens_utils//////////////////////////////////
+////////////////////////////////identify_tokens_utils/////////////
 
 int					identify_token_type(t_stack **stack);
 int					check_initial_errors(t_stack *temp, t_stack *first);
 int					check_redirection_syntax(t_stack *temp);
 
-///////////////////////////////////splits/////////////////////////////////////////////
+///////////////////////////////////splits////////////////////////
 
 char				**pre_tokenisation(char const *s);
 char				**tokenisation(char const *s);
 char				**split_var(char const *s);
 
-////////////////////////////////////pre_token_utils///////////////////////////////////
+////////////////////////////////////pre_token_utils//////////////
 
 int					handle_multi_operators(const char *s1, int i);
 int					is_redirection_operator(const char *s1, int index);
 int					is_end_of_word(const char *s1, int index, t_data *data);
 int					is_operator_sequence(const char *s1, int index,
 						t_data *data);
-//////////////////////////////////////replace env//////////////////////////////////
+//////////////////////////////////////replace env////////////////
 
 char				*replace_without_dollar(char *args, int pos, int quote);
 char				*replace_value(char *args, int pos, char *value,
@@ -138,23 +138,24 @@ void				size_of_args(char *args, int pos, char *value,
 						t_data *data);
 void				init_data(t_data *data);
 
-////////////////////////////////env utils//////////////////////////////////
+////////////////////////////////env utils/////////////////////
 
 int					is_valid_var_char(char *args, int i);
 int					size_of_var(char *args, int i);
+int					check_heredoc(char **tab);
 char				*extract_variable_name(char *args, int i);
 void				size_of_empty_args(char *args, int pos, t_data *data);
 void				size_of_args(char *args, int pos, char *value,
 						t_data *data);
 
-////////////////////////////var_replacement////////////////////////////////
+////////////////////////////var_replacement////////////////////
 
 char				*handle_invalid_variable(char *args, int i, char quote);
 char				*handle_no_env_case(char *args, t_data *data);
 char				*handle_value_replacement(char *args, t_data *data,
 						char *var_name, char *value);
 
-/////////////////////////handle_env/////////////////////////////////
+/////////////////////////handle_env//////////////
 
 char				*join_tabs(char **tab_args, int space);
 char				*return_env(char *args, char **tab_args);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc_tools.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vicperri <vicperri@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:03:22 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/04/10 09:08:16 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/04/11 14:15:35 by vicperri         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ char	*create_temp_filename(void)
 		return (NULL);
 	}
 	filename = ft_strjoin_free(filename, counter_str);
-	free(counter_str);
 	return (filename);
 }
 

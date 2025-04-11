@@ -6,7 +6,7 @@
 /*   By: vicperri <vicperri@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:00:43 by vicperri          #+#    #+#             */
-/*   Updated: 2025/04/10 15:00:46 by vicperri         ###   ########lyon.fr   */
+/*   Updated: 2025/04/11 14:32:14 by vicperri         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,16 +24,19 @@ char	*find_and_replace_var(char *args, t_env **env, int tmp_error)
 	tab = split_var(args);
 	if (!tab)
 		return (NULL);
-	data.i = 0;
-	data.error_code = tmp_error;
-	while (tab[data.i])
+	if (check_heredoc(tab) == ERROR)
 	{
-		data.quote_type = '\0';
-		data.quote_num = 0;
-		data.quotes = ERROR;
-		data.j = 0;
-		tab[data.i] = process_variable_replacement(tab, &data, env);
-		data.i++;
+		data.i = 0;
+		data.error_code = tmp_error;
+		while (tab[data.i])
+		{
+			data.quote_type = '\0';
+			data.quote_num = 0;
+			data.quotes = ERROR;
+			data.j = 0;
+			tab[data.i] = process_variable_replacement(tab, &data, env);
+			data.i++;
+		}
 	}
 	res = return_env(args, tab);
 	return (res);

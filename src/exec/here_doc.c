@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vicperri <vicperri@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:01:43 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/04/10 15:01:43 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/04/11 14:14:42 by vicperri         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	*ft_strjoin_free(char *s1, char *s2)
 	int		j;
 	char	*str;
 
-	j = 0;
+	j = -1;
 	i = 0;
 	str = (char *)malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
 	if (!str)
@@ -31,12 +31,10 @@ char	*ft_strjoin_free(char *s1, char *s2)
 		str[i] = s1[i];
 		i++;
 	}
-	while (s2[j] != '\0')
-	{
+	while (s2[++j] != '\0')
 		str[i + j] = s2[j];
-		j++;
-	}
 	free(s1);
+	free(s2);
 	str[i + j] = '\0';
 	return (str);
 }
