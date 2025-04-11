@@ -6,7 +6,7 @@
 /*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:01:43 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/04/11 15:12:55 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/04/11 15:19:40 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ char	*ft_strjoin_free(char *s1, char *s2)
 	int		j;
 	char	*str;
 
-	j = -1;
 	j = -1;
 	i = 0;
 	str = (char *)malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
@@ -33,10 +32,8 @@ char	*ft_strjoin_free(char *s1, char *s2)
 		i++;
 	}
 	while (s2[++j] != '\0')
-	while (s2[++j] != '\0')
 		str[i + j] = s2[j];
 	free(s1);
-	free(s2);
 	free(s2);
 	str[i + j] = '\0';
 	return (str);
