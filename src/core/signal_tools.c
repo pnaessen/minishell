@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal_tools.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vicperri <vicperri@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:04:06 by vicperri          #+#    #+#             */
-/*   Updated: 2025/04/10 15:04:07 by vicperri         ###   ########lyon.fr   */
+/*   Updated: 2025/04/11 15:04:22 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
