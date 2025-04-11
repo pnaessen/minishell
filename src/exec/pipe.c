@@ -6,7 +6,7 @@
 /*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:01:56 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/04/10 15:01:57 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/04/11 15:08:42 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ void	execute_pipe(t_ast *cmd, t_env **env)
 	int		pipefd[2];
 	pid_t	pid1;
 
+	handle_signals_child();
 	if (!setup_pipe(cmd, pipefd))
 		return ;
 	if (!handle_first_fork(cmd, env, pipefd, &pid1))

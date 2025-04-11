@@ -6,7 +6,7 @@
 /*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:01:43 by pnaessen          #+#    #+#             */
-/*   Updated: 2025/04/10 15:01:43 by pnaessen         ###   ########lyon.fr   */
+/*   Updated: 2025/04/11 14:38:43 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	*ft_strjoin_free(char *s1, char *s2)
 	int		j;
 	char	*str;
 
-	j = 0;
+	j = -1;
 	i = 0;
 	str = (char *)malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
 	if (!str)
@@ -31,12 +31,10 @@ char	*ft_strjoin_free(char *s1, char *s2)
 		str[i] = s1[i];
 		i++;
 	}
-	while (s2[j] != '\0')
-	{
+	while (s2[++j] != '\0')
 		str[i + j] = s2[j];
-		j++;
-	}
 	free(s1);
+	free(s2);
 	str[i + j] = '\0';
 	return (str);
 }
@@ -57,7 +55,9 @@ int	setup_temp_file(char *delimiter, char *temp_filename)
 
 	write_result = write_to_temp_file(delimiter, temp_filename);
 	if (write_result <= -1)
+	{
 		return (handle_temp_file_error(delimiter, temp_filename));
+	}
 	fd = open(temp_filename, O_RDONLY);
 	if (fd == -1)
 	{
@@ -80,7 +80,11 @@ int	setup_heredoc_file(t_ast *node, char *delimiter)
 		return (0);
 	}
 	if (!setup_temp_file(delimiter, temp_filename))
+	{
+		free(temp_filename);
+		free(delimiter);
 		return (0);
+	}
 	free(delimiter);
 	free(node->cmd->args[0]);
 	node->cmd->args[0] = temp_filename;

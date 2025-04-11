@@ -3,14 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vicperri <vicperri@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pnaessen <pnaessen@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:04:53 by vicperri          #+#    #+#             */
-/*   Updated: 2025/04/10 15:04:54 by vicperri         ###   ########lyon.fr   */
+/*   Updated: 2025/04/11 14:55:34 by pnaessen         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	err_sig(int *tmp_error)
+{
+	if (g_signal_status == 130)
+	{
+		g_signal_status = 0;
+		*tmp_error = 130;
+	}
+}
 
 void	exit_cleanly(t_env *head)
 {
@@ -34,6 +43,8 @@ void	minishell_loop(t_env **head)
 		if (*input)
 		{
 			add_history(input);
+			if (g_signal_status == 130)
+				err_sig(&tmp_error);
 			cmd = parse_and_build_ast(input, head, tmp_error);
 			if (cmd)
 			{
